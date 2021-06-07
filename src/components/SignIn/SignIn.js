@@ -4,7 +4,7 @@ import {googleSignInStart, emailSignInStart} from '../../redux/user/userActions'
 
 import './SignIn.scss'
 import FormInput from '../FormInput/FormInput.js'
-import Button from '../Button/Button.js'
+import Button from '../CustomButton/CustomButton.js'
 
 class SignIn extends React.Component{
 

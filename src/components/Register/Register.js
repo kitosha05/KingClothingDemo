@@ -3,7 +3,7 @@ import {auth, createUserProfileDocument} from '../../firebase/firebase.utils.js'
 
 import './Register.scss'
 import FormInput from '../FormInput/FormInput.js'
-import Button from '../Button/Button.js'
+import Button from '../CustomButton/CustomButton.js'
 
 class Register extends React.Component{
     state={displayName:"",email:'',password:'',confirmPassword:''}

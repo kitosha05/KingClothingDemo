@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 
 import CartItem from '../CartItem/CartItem'
-import Button from '../Button/Button.js'
+import Button from '../CustomButton/CustomButton.js'
 import {selectCartItems} from '../../redux/cart/cartSelectors'
 import {toggleCartHidden} from '../../redux/cart/cartActions'
  import './CartDropDown.scss'

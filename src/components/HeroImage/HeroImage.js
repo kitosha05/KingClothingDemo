@@ -2,13 +2,13 @@ import React from 'react'
 import './HeroImage.scss'
 import  BackgroundHero from '../../assets/homepageHero.jpg'
 import Card from 'react-bootstrap/Card'
-import Button from '../Button/Button'
+import CustomButton from '../CustomButton/CustomButton'
 import Container from 'react-bootstrap/Container'
 import Image from 'react-bootstrap/Image'
 import LazyHero from 'react-lazy-hero'
 import styled from 'styled-components'
 import {ReactComponent as Logo} from '../../assets/crown.svg'
-
+import Button from 'react-bootstrap/Button'
 
 const HeroImage = () =>{
     return(

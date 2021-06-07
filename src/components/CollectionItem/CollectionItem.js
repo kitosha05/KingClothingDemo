@@ -3,7 +3,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {addItem} from '../../redux/cart/cartActions'
-import Button from '../Button/Button'
+import Button from '../CustomButton/CustomButton'
 
 
 const CollectionItem = ({item, addItem, collectionRoute}) => {
