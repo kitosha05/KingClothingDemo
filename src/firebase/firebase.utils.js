@@ -38,6 +38,8 @@ export const createUserProfileDocument = async(userAuth, ...additionalData)=>{
     return userRef;
 
 }
+
+
  
  export const convertCollectionsSnapshotToMap=(collections)=>{
         ///convert snapshot array of objects to object with extra props
@@ -55,6 +57,8 @@ export const createUserProfileDocument = async(userAuth, ...additionalData)=>{
             return accumulator;
         },{})
  }
+
+ 
  
 export const getCurrentUser = () => {
     return new Promise((resolve, reject) => {

@@ -13,6 +13,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import ProductAccordion from '../../components/ProductAccordion/ProductAccordion'
+import ReviewList from '../../components/ReviewList/ReviewList'
+
 
 import './ProductPage.scss'
 
@@ -25,6 +27,8 @@ const ProductPage =({ product, addItem, match}) =>{
         setQuantity(e)
         
     }
+   
+    
     return(
         <Container className='mt-3 col-md-8 offset-md-2 justify-content-center align-content-center'>
                 
@@ -80,6 +84,12 @@ const ProductPage =({ product, addItem, match}) =>{
                              </Card.Body>
                          </Col>
                         
+                     </Row>
+                     <Row className='mt-4 mb-4'>
+                         <Col className="col-md-8 offset-md-2">
+                             <ReviewList productName={product.name}/>
+                         </Col>
+                         
                      </Row>
                  </Card>
             

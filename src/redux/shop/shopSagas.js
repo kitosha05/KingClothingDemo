@@ -4,10 +4,7 @@ import {fetchCollectionsSuccess, fetchCollectionsFailure} from './shopActions'
 
 import shopActionTypes from './shopActionTypes';
 
-export function* fetchCollectionsAsync(){
-    yield console.log('i am fired');
-
-    
+export function* fetchCollectionsAsync(){    
     try {
 
         const collectionRef= firestore.collection('collections');
@@ -22,5 +19,6 @@ export function* fetchCollectionsAsync(){
 
 
 export function* fetchCollectionsStart(){
+   
     yield takeLatest(shopActionTypes.FETCH_COLLECTIONS_START, fetchCollectionsAsync);
 }
