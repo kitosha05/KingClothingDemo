@@ -24,6 +24,11 @@ const reviewsReducer = (state=INITIAL_STATE, action)=> {
                 errorMessage: action.payload
                 
             }
+        case reviewActionTypes.USER_VERIFIED:
+            return {
+                ...state,
+                currentUser: action.payload
+            }
         default:
             return state
     }

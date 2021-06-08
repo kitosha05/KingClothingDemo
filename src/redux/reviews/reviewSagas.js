@@ -1,8 +1,18 @@
-import {takeEvery, call, put, takeLatest} from 'redux-saga/effects';
+import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {firestore} from '../../firebase/firebase.utils'
-import {fetchReviewsFailure, fetchReviewsSuccess} from './reviewActions'
-
+import {addReviewFailure, fetchReviewsFailure, fetchReviewsSuccess, userVerified} from './reviewActions'
+import {signInSuccess} from '../user/userActions'
 import reviewActionTypes from './reviewActionTypes'
+import userActionTypes from '../user/userActionTypes'
+
+export function* onSignInSuccess(){
+    yield takeLatest(userActionTypes.SIGN_IN_SUCCESS, getUser)
+}
+
+export function* getUser(action){
+    const user = action.payload
+    yield put(userVerified(user))
+}
 
 export function* fetchReviewsStart(){
   
@@ -27,4 +37,23 @@ export function* fetchReviewsAsync(action){
     } catch (error) {
         yield put(fetchReviewsFailure(error.message))
     }
+}
+
+export function* addReviewStart(){
+    yield takeLatest(reviewActionTypes.ADD_REVIEW_START, addReview)
+}
+
+export function* addReview(action){
+    try {
+        
+    } catch (error) {
+        yield put(addReviewFailure(error.message))
+    }
+}
+
+export function* reviewSagas(){
+    yield all([
+        call(addReviewStart), 
+        call(fetchReviewsStart)
+    ])
 }

@@ -1,27 +1,42 @@
 import React, {useState,useEffect} from 'react'
-import {connect} from 'react-redux'
+import {connect, useSelector} from 'react-redux'
 import Review from '../Review/Review'
 import './ReviewList.scss'
 import {fetchReviewsStart} from '../../redux/reviews/reviewActions'
 import {selectReviewsToDisplay} from '../../redux/reviews/reviewSelectors'
+import {checkUserSession} from '../../redux/user/userActions'
 import {createStructuredSelector} from 'reselect'
 import WriteReviewForm from '../WriteReviewForm/WriteReviewForm'
+import {selectCurrentUser} from '../../redux/user/userSelectors'
 
-const ReviewList = ({reviews, fetchReviewsStart, productName})=>{
+
+
+
+const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
     
     useEffect(()=>{
         fetchReviewsStart(productName)
+       checkUserSession()
+       
     }, [])
-      
-     
+       
+    const {currentUser} = useSelector((state) => state.user)
+    
       return(
            <div>
                <h1>Reviews</h1>
-               <WriteReviewForm/>
+               {
+                    currentUser ? (
+                    <WriteReviewForm/>
+                   )
+                   :
+                   null
+               }
+               
                {
                    reviews ? 
                     reviews.map(review=>{
-                        return <Review reviewAuthor={review.reviewAuthor} reviewBody={review.reviewBody} reviewRating={review.reviewRating}/>
+                        return <Review reviewAuthor={review.reviewAuthor} reviewAuthor={user} reviewBody={review.reviewBody} reviewRating={review.reviewRating}/>
                     })
                    :
                    null
@@ -33,7 +48,8 @@ const ReviewList = ({reviews, fetchReviewsStart, productName})=>{
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    fetchReviewsStart: ()=>dispatch(fetchReviewsStart(ownProps.productName))
+    fetchReviewsStart: ()=>dispatch(fetchReviewsStart(ownProps.productName)),
+    checkUserSession: ()=>dispatch(checkUserSession())
   })
 
   const mapStateToProps = createStructuredSelector({
