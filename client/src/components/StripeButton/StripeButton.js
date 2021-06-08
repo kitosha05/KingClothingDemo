@@ -4,8 +4,9 @@ import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
 import {useHistory} from 'react-router-dom'
 import {newOrderStart} from '../../redux/orders/orderActions'
+import {clearCart} from '../../redux/cart/cartActions'
 
-const StripeCheckoutButton = ({price, newOrderStart, orderConfirmed}) =>{
+const StripeCheckoutButton = ({price, newOrderStart, orderConfirmed, clearCart}) =>{
 
     const history = useHistory()
     const priceForStripe = price * 100
@@ -27,6 +28,7 @@ const StripeCheckoutButton = ({price, newOrderStart, orderConfirmed}) =>{
             }
         }).then(response=>{
             newOrderStart(order)
+            clearCart()
             history.push({
                 pathname: '/thank-you',
                 customNameData: order,
@@ -54,7 +56,8 @@ const StripeCheckoutButton = ({price, newOrderStart, orderConfirmed}) =>{
     )
 }
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    newOrderStart: (order)=>dispatch(newOrderStart(order))
+    newOrderStart: (order)=>dispatch(newOrderStart(order)),
+    clearCart: ()=>dispatch(clearCart())
   })
 
 const mapStateToProps = (state) =>({
