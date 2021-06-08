@@ -11,6 +11,7 @@ import CheckoutPage from './pages/checkout/Checkout'
 import { createStructuredSelector } from 'reselect';
 import {checkUserSession} from './redux/user/userActions'
 import AdminDash from './pages/AdminDash/AdminDash'
+import ThankYou from './pages/ThankYou/ThankYou'
 class App extends React.Component {
   unsubscribeFromAuth = null;
   
@@ -38,6 +39,7 @@ class App extends React.Component {
             <Route  path='/shop' component={ShopPage}/>
             <Route exact path='/checkout' component={CheckoutPage} />
             <Route exact path='/admin' component={AdminDash}/>
+            <Route exact path='/thank-you' component={ThankYou}/>
             <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<LoginAndRegister/>)}/>
         </Switch>
         </BrowserRouter>

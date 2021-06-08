@@ -7,7 +7,7 @@ import cartReducer from './cart/cartReducers.js'
 import directoryReducer from './directory/directoryReducer'
 import shopReducer from './shop/shopReducer'
 import reviewsReducer from './reviews/reviewsReducer'
-
+import orderReducers from './orders/orderReducers'
 
 const persistConfig = {
     key: 'root',
@@ -19,6 +19,7 @@ const persistConfig = {
     cart: cartReducer,
     directory: directoryReducer,
     shop: shopReducer,
-    reviews: reviewsReducer
+    reviews: reviewsReducer,
+    order: orderReducers
 })
 export default persistReducer(persistConfig, rootReducer)

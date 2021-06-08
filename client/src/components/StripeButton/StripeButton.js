@@ -1,12 +1,23 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {connect} from 'react-redux'
 import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
+import {useHistory} from 'react-router-dom'
+import {newOrderStart} from '../../redux/orders/orderActions'
 
-const StripeCheckoutButton = ({price}) =>{
+const StripeCheckoutButton = ({price, newOrderStart, orderConfirmed}) =>{
+
+    const history = useHistory()
     const priceForStripe = price * 100
     const publishableKey = 'pk_test_51IxaOhAmFIyQdv340WmDturzFP1wHLaPzDhlRDSa8C1g62Qg3jFVX3dD8MVXrUxtasMWlgcZpqHDk3eS7VUavMOw00vo3QzKzT'
     
-    const onToken = token => {
+
+    const onToken = (token, orderDetails) => {
+        const order = {
+            orderTotal: price,
+            orderDate: new Date(),
+            ...orderDetails
+        }
         axios({
             url:'payment',
             method: 'post',
@@ -15,9 +26,15 @@ const StripeCheckoutButton = ({price}) =>{
                 token
             }
         }).then(response=>{
-            alert('payment successful')
+            newOrderStart(order)
+            history.push({
+                pathname: '/thank-you',
+                customNameData: order,
+              });
+            
+
         }).catch(error=>{
-            console.log(JSON.parse(error))
+            console.log(error)
             alert('there was a payment issue')
         })
     }
@@ -36,5 +53,12 @@ const StripeCheckoutButton = ({price}) =>{
         />
     )
 }
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    newOrderStart: (order)=>dispatch(newOrderStart(order))
+  })
 
-export default StripeCheckoutButton
+const mapStateToProps = (state) =>({
+    orderConfirmed: state.orderConfirmed
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(StripeCheckoutButton)
