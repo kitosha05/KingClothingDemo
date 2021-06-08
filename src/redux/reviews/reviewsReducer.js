@@ -29,6 +29,16 @@ const reviewsReducer = (state=INITIAL_STATE, action)=> {
                 ...state,
                 currentUser: action.payload
             }
+        case reviewActionTypes.ADD_REVIEW_START:
+            return{
+                ...state,
+                review: action.payload
+            }
+        case reviewActionTypes.FETCH_REVIEWS_FAILURE:
+            return{
+                ...state,
+                errorMessage: action.payload
+            }
         default:
             return state
     }

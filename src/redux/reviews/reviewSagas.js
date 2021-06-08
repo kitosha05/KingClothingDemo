@@ -1,6 +1,6 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {firestore} from '../../firebase/firebase.utils'
-import {addReviewFailure, fetchReviewsFailure, fetchReviewsSuccess, userVerified} from './reviewActions'
+import {addReviewFailure, fetchReviewsFailure, fetchReviewsSuccess, userVerified, addReviewSuccess} from './reviewActions'
 import {signInSuccess} from '../user/userActions'
 import reviewActionTypes from './reviewActionTypes'
 import userActionTypes from '../user/userActionTypes'
@@ -44,8 +44,10 @@ export function* addReviewStart(){
 }
 
 export function* addReview(action){
-    try {
-        
+     try {
+       const review = yield action.payload
+        const response = yield firestore.collection('reviews').add(review)
+        yield put(addReviewSuccess())
     } catch (error) {
         yield put(addReviewFailure(error.message))
     }

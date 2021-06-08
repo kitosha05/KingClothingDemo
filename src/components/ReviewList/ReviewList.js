@@ -7,7 +7,7 @@ import {selectReviewsToDisplay} from '../../redux/reviews/reviewSelectors'
 import {checkUserSession} from '../../redux/user/userActions'
 import {createStructuredSelector} from 'reselect'
 import WriteReviewForm from '../WriteReviewForm/WriteReviewForm'
-import {selectCurrentUser} from '../../redux/user/userSelectors'
+
 
 
 
@@ -27,7 +27,7 @@ const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
                <h1>Reviews</h1>
                {
                     currentUser ? (
-                    <WriteReviewForm/>
+                    <WriteReviewForm fetchReviewsStart={fetchReviewsStart} currentUser={currentUser} productName={productName}/>
                    )
                    :
                    null
