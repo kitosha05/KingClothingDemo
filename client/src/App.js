@@ -32,7 +32,7 @@ class App extends React.Component {
       <div >
         
         <BrowserRouter>
-        {/* <Header /> */}
+        <Header />
         <Switch>
             <Route exact path="/" component={HomePage}/>
             <Route  path='/shop' component={ShopPage}/>
