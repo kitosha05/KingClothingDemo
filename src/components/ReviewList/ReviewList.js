@@ -36,7 +36,7 @@ const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
                {
                    reviews ? 
                     reviews.map(review=>{
-                        return <Review reviewAuthor={review.reviewAuthor} reviewAuthor={user} reviewBody={review.reviewBody} reviewRating={review.reviewRating}/>
+                        return <Review reviewAuthor={review.reviewAuthor}  reviewBody={review.reviewBody} reviewRating={review.reviewRating}/>
                     })
                    :
                    null

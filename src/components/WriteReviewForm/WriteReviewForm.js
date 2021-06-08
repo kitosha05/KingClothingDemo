@@ -30,10 +30,6 @@ const WriteReviewForm = ({productName, currentUser, addReviewStart, fetchReviews
             addReviewStart(review)
             setReviewBody("")
             fetchReviewsStart(productName)
-            
-            // const {user} = await auth.createUserWithEmailAndPassword(email,password)
-            // await createUserProfileDocument(user, displayName)
-            // this.setState({displayName:"",email:'',password:'',confirmPassword:''})
 
         }catch(error){
                 console.log(error)
