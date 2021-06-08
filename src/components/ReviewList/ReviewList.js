@@ -5,7 +5,7 @@ import './ReviewList.scss'
 import {fetchReviewsStart} from '../../redux/reviews/reviewActions'
 import {selectReviewsToDisplay} from '../../redux/reviews/reviewSelectors'
 import {createStructuredSelector} from 'reselect'
-
+import WriteReviewForm from '../WriteReviewForm/WriteReviewForm'
 
 const ReviewList = ({reviews, fetchReviewsStart, productName})=>{
     
@@ -17,6 +17,7 @@ const ReviewList = ({reviews, fetchReviewsStart, productName})=>{
       return(
            <div>
                <h1>Reviews</h1>
+               <WriteReviewForm/>
                {
                    reviews ? 
                     reviews.map(review=>{
