@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import React, {Fragment} from 'react';
 import {BrowserRouter,Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {selectCurrentUser} from './redux/user/userSelectors'
@@ -32,15 +32,17 @@ class App extends React.Component {
     return (
       <div >
         
-        <BrowserRouter>
-        <Header />
+        <BrowserRouter>        
         <Switch>
-            <Route exact path="/" component={HomePage}/>
-            <Route  path='/shop' component={ShopPage}/>
-            <Route exact path='/checkout' component={CheckoutPage} />
             <Route exact path='/admin' component={AdminDash}/>
-            <Route exact path='/thank-you' component={ThankYou}/>
-            <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<LoginAndRegister/>)}/>
+            <Fragment>
+              <Header/>
+              <Route exact path="/" component={HomePage}/>
+              <Route  path='/shop' component={ShopPage}/>
+              <Route exact path='/checkout' component={CheckoutPage} />
+              <Route exact path='/thank-you' component={ThankYou}/>
+              <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<LoginAndRegister/>)}/>
+           </Fragment>
         </Switch>
         </BrowserRouter>
         

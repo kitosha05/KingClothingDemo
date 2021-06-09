@@ -1,6 +1,6 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {firestore} from '../../firebase/firebase.utils'
-import {newOrderStart, newOrderSuccess, newOrderFailure} from './orderActions'
+import {newOrderStart, newOrderSuccess, newOrderFailure, fetchOrdersSuccess, fetchOrdersFailure} from './orderActions'
 import orderActionTypes from './orderActionTypes'
 
 
@@ -18,9 +18,39 @@ export function* newOrder(action){
     }
 }
 
+export function* onFetchOrdersStart(){
+    yield takeLatest(orderActionTypes.FETCH_ORDERS_START, fetchOrders)
+}
+
+export function* fetchOrders(){
+    try {
+        const ordersRef = yield firestore.collection('orders').get()
+        const orders = yield ordersRef.docs.map(doc=>{
+            const {billing_name,
+                orderDate, 
+                orderTotal,
+                billing_address_city,
+                billing_address_state } = doc.data()
+            
+            return{
+                billing_name, 
+                orderDate, 
+                orderTotal,
+                billing_address_city,
+                billing_address_state,
+                id: doc.id }
+        })
+        yield put(fetchOrdersSuccess(orders))
+        
+    } catch (error) {
+        yield put(fetchOrdersFailure(error))
+    }
+}
+
 export function* orderSagas(){
     yield all([
-        call(onNewOrderStart)
+        call(onNewOrderStart),
+        call(onFetchOrdersStart)
         
     ])
 }
