@@ -29,3 +29,19 @@ export const fetchCollectionsFailure = errorMessage => ({
     payload: errorMessage
 
 })
+
+export const fetchProductsStart=()=>({
+    type: shopActionTypes.FETCH_PRODUCTS_START
+})
+
+export const fetchProductsSuccess = products => ({
+    type: shopActionTypes.FETCH_PRODUCTS_SUCCESS,
+    payload: products
+})
+
+export const fetchProductsFailure = errorMessage => ({
+    type: shopActionTypes.FETCH_PRODUCTS_FAILURE,
+    payload: errorMessage
+
+})
+

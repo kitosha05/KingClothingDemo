@@ -4,21 +4,28 @@ import { connect } from 'react-redux';
 
 import CollectionItem from '../../components/CollectionItem/CollectionItem';
 
-import { selectCollection } from '../../redux/shop/shopSelector'
+import { selectCollection, selectProductsByCollection } from '../../redux/shop/shopSelector'
 
 import './CollectionPage.scss';
 
-const CollectionPage = ({ collection, match }) => {
+const CollectionPage = ({ collection, match, products }) => {
     
   
-  const { title, items, routeName } = collection;
-  
+  const { title } = collection;
+  if(!products){
+    return(<div>Loading...</div>)
+  }
+
+  const productsInCollection= (collection)=>{
+    return(products.filter(product=>product.collection===collection))
+}
+
   return (
     <div className='collection-page'>
       <h2 className='title'>{title}</h2>
       <div className='items'>
-        {items.map(item => (
-          <CollectionItem key={item.id} item={item} collectionRoute={routeName} />
+        {productsInCollection(title).map(item => (
+          <CollectionItem key={item.id} item={item} collectionRoute={title.toLowerCase()} />
         ))}
       </div>
     </div>
@@ -26,7 +33,8 @@ const CollectionPage = ({ collection, match }) => {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  collection: selectCollection(ownProps.match.params.collectionId)(state)
+  collection: selectCollection(ownProps.match.params.collectionId)(state),
+  products: state.shop.products
 });
 
 export default connect(mapStateToProps)(CollectionPage);

@@ -6,7 +6,7 @@ import {createStructuredSelector} from 'reselect'
 import {fetchCollectionsStart} from '../../redux/shop/shopActions'
 import Button from '../CustomButton/CustomButton.js'
 import {selectCollections} from '../../redux/shop/shopSelector'
-
+import {addProductStart} from '../../redux/admin/adminActions'
 class AddProductForm extends React.Component{
     state={name:"",price:'',imageUrl:'', id:'', collection:"", description:''}
      componentDidMount(){
@@ -17,26 +17,27 @@ class AddProductForm extends React.Component{
         e.preventDefault();
         const {name, price, imageUrl, collection, description} = this.state
         const {collections} = this.props
-    
-
-        try{
-            // const {user} = await auth.createUserWithEmailAndPassword(email,password)
-            // await createUserProfileDocument(user, displayName)
-            // this.setState({displayName:"",email:'',password:'',confirmPassword:''})
-
-        }catch(error){
-                console.log(error)
+        const product = {
+          name,
+          price,
+          imageUrl,
+          collection,
+          description
         }
+        this.props.addProductStart(product)
     }
     onChange = e => {
         const {value, name} = e.target
         this.setState({[name]:value})
     }
 
+    
+
     renderCollectionTitles(collections){
         let collectionTitles = []
         for (const [key, value] of Object.entries(collections)) {
-             collectionTitles.push(key)
+            const formattedTitle= key.charAt(0).toUpperCase() + key.slice(1)
+             collectionTitles.push(formattedTitle)
             
           }
           
@@ -58,7 +59,7 @@ class AddProductForm extends React.Component{
             <div className='product-admin'>
                 <h2 className='title'>Add A New Product</h2>
 
-                <Form>
+                <Form onSubmit={this.onSubmit}>
   <Form.Group controlId="name" >
     <Form.Label>Product Name</Form.Label>
     <Form.Control type="text" name="name" onChange={this.onChange} 
@@ -79,8 +80,14 @@ class AddProductForm extends React.Component{
   </Form.Group>
   <Form.Group controlId="description">
     <Form.Label>Product Description</Form.Label>
-    <Form.Control as="textarea" rows={4} name="imageUrl" onChange={this.onChange} 
+    <Form.Control as="textarea" rows={4} name="description" onChange={this.onChange} 
                           value={this.state.description}
+                          required/>
+  </Form.Group>
+  <Form.Group controlId="price" >
+    <Form.Label>Price</Form.Label>
+    <Form.Control type="text" name="price" onChange={this.onChange} 
+                          value={this.state.price}
                           required/>
   </Form.Group>
   <Form.Group controlId="imageUrl">
@@ -89,6 +96,7 @@ class AddProductForm extends React.Component{
                           value={this.state.imageUrl}
                           required/>
   </Form.Group>
+  <Form.Group><Button type='submit'>Save New Product</Button></Form.Group>
 </Form>
             </div>
         )
@@ -101,7 +109,8 @@ const mapStateToProps = createStructuredSelector({
   })
 
 const mapDispatchToProps = dispatch => ({
-    fetchCollectionsStart: ()=>dispatch(fetchCollectionsStart())
+    fetchCollectionsStart: ()=>dispatch(fetchCollectionsStart()),
+    addProductStart: (product)=>dispatch(addProductStart(product))
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddProductForm)

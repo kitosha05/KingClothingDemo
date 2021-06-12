@@ -8,6 +8,7 @@ import Button from '../CustomButton/CustomButton'
 
 const CollectionItem = ({item, addItem, collectionRoute}) => {
     const {id, name, price, imageUrl} = item
+    const productUrl = name.toLowerCase().replace(/\b \b/g, "-")
     return(
         <div className='collection-item'>
                 <div className='image'
@@ -16,7 +17,7 @@ const CollectionItem = ({item, addItem, collectionRoute}) => {
             
             
              <div className='collection-footer'>
-             <Link to={`/shop/${collectionRoute}/${id}`}><span className='name'>{name}</span></Link>
+             <Link to={`/shop/${collectionRoute}/${productUrl}`}><span className='name'>{name}</span></Link>
             
             <span className='price'>{price}</span>
             </div>

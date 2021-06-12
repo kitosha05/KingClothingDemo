@@ -27,6 +27,9 @@ const ProductPage =({ product, addItem, match}) =>{
         setQuantity(e)
         
     }
+    if(!product){
+        return(<div>Loading...</div>)
+    }
    
     
     return(
@@ -102,6 +105,6 @@ const mapDispatchToProps = dispatch =>({
     addItem: (item) => dispatch(addItem(item))
 })
 const mapStateToProps = (state, ownProps) =>({
-    product: selectProduct(ownProps.match.params.collectionId, ownProps.match.params.productId)(state)
+    product: selectProduct( ownProps.match.params.productId)(state)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ProductPage)

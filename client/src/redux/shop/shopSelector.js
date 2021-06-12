@@ -7,6 +7,11 @@ export const selectCollections = createSelector(
   shop => shop.collections
 );
 
+export const selectProducts = createSelector(
+  [selectShop],
+  shop => shop.products
+);
+
 export const selectCollectionsForPreview = createSelector(
   [selectCollections],
   collections =>
@@ -20,12 +25,17 @@ export const selectCollection = collectionUrlParam =>
       collections ? collections[collectionUrlParam] : null
   );
 
-  export const selectProduct = (collectionParam, productParam) => 
+  export const selectProductsByCollection = collectionUrl=>
+  createSelector(
+    [selectProducts],
+    products=> 
+    products ? products.filter((e)=>e.collection.toLowerCase()===collectionUrl.toLowerCase()) : null
+  )
+  export const selectProduct = (productParam) => 
     createSelector(
-    [selectCollection(collectionParam)],
-    collection => collection.items.filter((e)=>{
-      return e.id==productParam
-    })[0]
+    [selectProducts],
+    products => 
+    products ? products.filter((e)=>{return e.name.toLowerCase()==productParam.replace(/-/g," ")})[0] : null
   );
 
   export const selectIsCollectionFetching = createSelector(

@@ -8,7 +8,7 @@ import directoryReducer from './directory/directoryReducer'
 import shopReducer from './shop/shopReducer'
 import reviewsReducer from './reviews/reviewsReducer'
 import orderReducers from './orders/orderReducers'
-
+import adminReducer from './admin/adminReducers'
 const persistConfig = {
     key: 'root',
     storage,
@@ -20,6 +20,7 @@ const persistConfig = {
     directory: directoryReducer,
     shop: shopReducer,
     reviews: reviewsReducer,
-    order: orderReducers
+    order: orderReducers,
+    admin: adminReducer
 })
 export default persistReducer(persistConfig, rootReducer)

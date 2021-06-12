@@ -146,6 +146,7 @@ class EditProductForm extends React.Component{
                           value={this.state.imageUrl}
                           required/>
         </Form.Group>
+        <Button>Save Changes</Button>
     </Form>
 
 
