@@ -1,34 +1,47 @@
-.header {
-  height: 70px;
+.navbar {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 25px;
+  transition: background-color 0.5s ease;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 80px;
 
-  .logo-container {
-    height: 100%;
-    width: 70px;
-    padding: 25px;
+  .nav-item a.nav-link {
+    color: black;
   }
 
-  .options {
-    width: 50%;
-    height: 100%;
-    display: flex;
+  span.navbar-brand {
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
+  }
 
-    .option {
-      padding: 10px 15px;
+  .navbar-brand a {
+    color: black;
+    text-decoration: none;
+  }
 
-      &.sign-out:hover {
-        cursor: pointer;
-      }
+  .right-side {
+    align-items: center;
+    justify-content: center;
+
+    a.toggle-signin {
+      color: black;
     }
   }
 }
-.right-side {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.navbar-active {
+  background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(75, 75, 75) 100%);
+
+  .nav-item a.nav-link {
+    color: white;
+  }
+
+  .navbar-brand a {
+    color: white;
+  }
+  .right-side a.nav-link a.toggle-signin {
+    color: white;
+  }
+  .cart-icon {
+    color: white;
+  }
 }

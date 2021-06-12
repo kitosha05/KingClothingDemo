@@ -10,6 +10,7 @@ import CollectionPage from '../CollectionPage/CollectionPage';
 import ProductPage from '../ProductPage/ProductPage'
 // import {updateCollections} from '../../redux/shop/shopActions'
 import WithSpinner from '../../components/Spinner/Spinner'
+import './shop.scss'
 
 const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview)
 const CollectionPageWithSpinner = WithSpinner(CollectionPage)

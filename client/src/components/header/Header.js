@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState,useEffect, useRef} from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {ReactComponent as Logo} from '../../assets/crown.svg'
@@ -12,9 +12,21 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import {signOutStart} from '../../redux/user/userActions'
 
 const Header = ({currentUser, hidden, signOutStart})=>{
+const [navbar, setNavbar] = useState(false)
+
+const changeBackground = ()=>{
+  if(window.scrollY>=80){
+    setNavbar(true)
+  }else{
+ setNavbar(false)}
+  }
+
+  window.addEventListener('scroll', changeBackground)
+
+
     return(
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href="#home">King Clothing</Navbar.Brand>
+        <Navbar className={navbar ? 'navbar-active' : ""} fixed="top" collapseOnSelect expand="lg" >
+        <Navbar.Brand ><Link to='/'><Logo/>  King Clothing</Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
@@ -24,9 +36,10 @@ const Header = ({currentUser, hidden, signOutStart})=>{
               <NavDropdown.Item ><Link to='/shop/sneakers'>Sneakers</Link></NavDropdown.Item>
               <NavDropdown.Item ><Link to='/shop/womens'>Womens</Link></NavDropdown.Item>
               <NavDropdown.Item ><Link to='/shop/mens'>Mens</Link></NavDropdown.Item>
+              <NavDropdown.Item ><Link to='/shop'>View All</Link></NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#features">About</Nav.Link>
-            <Nav.Link href="#pricing">Contact Us</Nav.Link>
+            {/* <Nav.Link href="#features">About</Nav.Link>
+            <Nav.Link href="#pricing">Contact Us</Nav.Link> */}
           </Nav>
           <Nav className='right-side'>
             <Nav.Link >

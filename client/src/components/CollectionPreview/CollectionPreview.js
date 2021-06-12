@@ -23,7 +23,7 @@ const CollectionPreview = ({title, id, routeName, products}) => {
     
     return(
         <div className='collection-preview'>
-            <Link to={`/shop/${title.toLowerCase()}`}><h1 className='title'>{title.toUpperCase()}</h1></Link>
+           <h1 className='title'><Link to={`/shop/${title.toLowerCase()}`}>{title.toUpperCase()}</Link></h1>
             <div className='preview'>
                 
                 

@@ -6,8 +6,9 @@ import HeroImage from '../../components/HeroImage/HeroImage'
 const HomePage = () => {
     return(
         <div className='homepage'>
+           <HeroImage/>
             <Directory />
-            <HeroImage/>
+            
             
         </div>
         
