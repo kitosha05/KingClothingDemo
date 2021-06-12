@@ -8,17 +8,27 @@ const INITIAL_STATE = {
 
 const adminReducer = (state=INITIAL_STATE, action)=> {
     switch(action.type){
-        case adminActionTypes.ADD_PRODUCTSSTART:
+        case adminActionTypes.ADD_PRODUCT_START:
             return{
                 ...state,
                 product: action.payload
             }
-        case adminActionTypes.ADD_PRODUCTS_FAILURE:
+        case adminActionTypes.EDIT_PRODUCT_START:
+                return{
+                    ...state,
+                    product: action.payload
+                }
+        case adminActionTypes.ADD_PRODUCT_FAILURE:
             return{
                 ...state,
                 errorMessage: action.payload
             }
-        case adminActionTypes.ADD_PRODUCTS_SUCCESS:
+        case adminActionTypes.EDIT_PRODUCT_FAILURE:
+                return{
+                    ...state,
+                    errorMessage: action.payload
+                }
+        case adminActionTypes.ADD_PRODUCT_SUCCESS:
                 return{
                     ...state,
                     errorMessage: "",
@@ -26,6 +36,14 @@ const adminReducer = (state=INITIAL_STATE, action)=> {
                     successMessage: "Product Has Been Successfully Added"
                 
                 } 
+         case adminActionTypes.EDIT_PRODUCT_SUCCESS:
+                    return{
+                        ...state,
+                        errorMessage: "",
+                        product: null,
+                        successMessage: "Product Has Been Successfully Edited"
+                    
+                    } 
         default:
             return state
     }

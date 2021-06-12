@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {connect} from 'react-redux'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -20,9 +21,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../ListItems/ListItems';
-import Chart from '../Chart/Chart';
-import Deposits from '../Deposits/Deposits';
-import Orders from '../Orders/Orders';
+import {fetchProductsStart} from '../../redux/shop/shopActions'
 import ProductAdminTabs from '../ProductAdminTabs/ProductAdminTabs'
 
 function Copyright() {
@@ -129,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function ProductAdminPanel({collections}) {
+const ProductAdminPanel=({collections, fetchProductsStart})=>{
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -143,6 +142,9 @@ export default function ProductAdminPanel({collections}) {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  useEffect(() => {
+   fetchProductsStart()
+  }, [])
  
  
  
@@ -207,3 +209,8 @@ export default function ProductAdminPanel({collections}) {
     </div>
   );
 }
+
+const mapDispatchToProps = dispatch =>({
+  fetchProductsStart: ()=>dispatch(fetchProductsStart())
+})
+export default connect(null, mapDispatchToProps)(ProductAdminPanel)

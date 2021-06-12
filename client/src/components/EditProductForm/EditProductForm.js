@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {fetchCollectionsStart} from '../../redux/shop/shopActions'
+import {editProductStart} from '../../redux/admin/adminActions'
 import Button from '../CustomButton/CustomButton.js'
 import {selectCollection, selectCollections} from '../../redux/shop/shopSelector'
 import Card from 'react-bootstrap/Card'
@@ -17,18 +18,10 @@ class EditProductForm extends React.Component{
   
     onSubmit = async e => {
         e.preventDefault();
-        const {name, price, imageUrl, collection, description} = this.state
-        const {collections} = this.props
-    
-
-        try{
-            // const {user} = await auth.createUserWithEmailAndPassword(email,password)
-            // await createUserProfileDocument(user, displayName)
-            // this.setState({displayName:"",email:'',password:'',confirmPassword:''})
-
-        }catch(error){
-                console.log(error)
-        }
+        const {name, price, imageUrl, collection, description, id} = this.state
+        const product = {name, price, imageUrl, collection, description, id}
+        this.props.editProductStart(product)
+        
     }
     onChange =  async e => {
         const {value, name} = e.target
@@ -43,14 +36,14 @@ class EditProductForm extends React.Component{
         const {value} = e.target
         await this.setState({selectedProduct:value})
         const {selectedProduct, selectedCollection}= this.state
-        const product = this.props.collections[selectedCollection].items.find(({name})=> name == selectedProduct)
-        const {price, imageUrl, description} = product
-        await this.setState({price, imageUrl, name: selectedProduct, collection: selectedCollection})
+        const product = this.props.products.find(({id})=> id === selectedProduct)
+        const {price, imageUrl, description, id, name} = product
+        await this.setState({price, id, imageUrl, name, collection: selectedCollection})
     }
     renderCollectionTitles(collections){
         let collectionTitles = []
         for (const [key, value] of Object.entries(collections)) {
-             collectionTitles.push(key)
+             collectionTitles.push(key.charAt(0).toUpperCase() + key.slice(1))
             
           }
           
@@ -60,19 +53,19 @@ class EditProductForm extends React.Component{
 
     }
 
-    renderProductsInCollection(collections, selectedCollection){
-        const products= collections[selectedCollection].items
+    renderProductsInCollection(products, selectedCollection){
         return products.map(product=>{
-            return <option value={product.name}>{product.name}</option>
+            if(product.collection === selectedCollection)
+            return <option value={product.id}>{product.name}</option>
         })
     }
     
       
     render(){
          const {name,price,imageUrl, id, collection, description, selectedProduct, selectedCollection} = this.state
-         const {collections} = this.props
+         const {collections, products} = this.props
          
-         
+         if(!collections || !products)return <div>Loading...</div>
 
         
         return(
@@ -99,7 +92,7 @@ class EditProductForm extends React.Component{
                           value={selectedProduct}
                           required>
                          {
-                           selectedCollection ? this.renderProductsInCollection(collections, selectedCollection) : null
+                           selectedCollection ? this.renderProductsInCollection(products, selectedCollection) : null
                         }    
                  </Form.Control>
                 </Form.Group>
@@ -110,7 +103,7 @@ class EditProductForm extends React.Component{
 </Card>
             <Card>
             <Card.Title><h4>Edit Selected Product</h4></Card.Title>
-            <Form>
+            <Form onSubmit={this.onSubmit}>
                 
                  <Form.Group controlId="name" >
                     <Form.Label>Product Name</Form.Label>
@@ -120,7 +113,7 @@ class EditProductForm extends React.Component{
                 </Form.Group>
                 <Form.Group controlId="price" >
                     <Form.Label>Price</Form.Label>
-                    <Form.Control type="text" name="name" onChange={this.onChange} 
+                    <Form.Control type="text" name="price" onChange={this.onChange} 
                           value={this.state.price}
                           required/>
                 </Form.Group>
@@ -136,7 +129,7 @@ class EditProductForm extends React.Component{
             </Form.Group>
          <Form.Group controlId="description">
               <Form.Label>Product Description</Form.Label>
-             <Form.Control as="textarea" rows={4} name="imageUrl" onChange={this.onChange} 
+             <Form.Control as="textarea" rows={4} name="description" onChange={this.onChange} 
                           value={this.state.description}
                           required/>
         </Form.Group>
@@ -162,12 +155,14 @@ class EditProductForm extends React.Component{
 
 }
 }
-const mapStateToProps = createStructuredSelector({
-    collections: selectCollections 
+const mapStateToProps =(state)=>({
+    collections: state.shop.collections,
+    products: state.shop.products
   })
 
 const mapDispatchToProps = dispatch => ({
-    fetchCollectionsStart: ()=>dispatch(fetchCollectionsStart())
+    fetchCollectionsStart: ()=>dispatch(fetchCollectionsStart()),
+    editProductStart: (product)=>dispatch(editProductStart(product))
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProductForm)

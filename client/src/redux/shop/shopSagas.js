@@ -32,7 +32,8 @@ export function* fetchProducts(){
         const productsRef = yield firestore.collection('products').get()
         const products = yield productsRef.docs.map(doc=>{
             const {name, imageUrl, description, price, collection} = doc.data()
-            const product = {name, imageUrl, description, price, collection}
+            const id = doc.id
+            const product = {id,name, imageUrl, description, price, collection}
             return product
         })
         yield put(fetchProductsSuccess(products))
