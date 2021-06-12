@@ -67,7 +67,7 @@ export default function Orders({allOrders}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.slice(0,4).map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
@@ -78,7 +78,11 @@ export default function Orders({allOrders}) {
           ))}
         </TableBody>
       </Table>
-      
+      <div className={classes.seeMore}>
+        <Link color="primary" href='/admin/orders' >
+          See more orders
+        </Link>
+      </div>
     </React.Fragment>
   );
 }

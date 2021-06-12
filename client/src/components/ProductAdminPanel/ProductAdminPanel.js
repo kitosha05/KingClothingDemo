@@ -15,13 +15,15 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../ListItems/ListItems';
 import Chart from '../Chart/Chart';
 import Deposits from '../Deposits/Deposits';
-import OrdersPreview from '../Orders/OrdersPreview';
+import Orders from '../Orders/Orders';
+import ProductAdminTabs from '../ProductAdminTabs/ProductAdminTabs'
 
 function Copyright() {
   return (
@@ -115,18 +117,35 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  summaryHeaders:{
+      display: 'inline-block',
+      textAlign: 'center'
+  }
 }));
 
-export default function Dashboard({allOrders}) {
+
+
+
+
+
+
+export default function ProductAdminPanel({collections}) {
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+ 
+ 
+ 
 
   return (
     <div className={classes.root}>
@@ -173,22 +192,10 @@ export default function Dashboard({allOrders}) {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart allOrders={allOrders}/>
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            {/* <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid> */}
-            {/* Recent Orders */}
+            
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <OrdersPreview allOrders={allOrders}/>
+                    <ProductAdminTabs collections={collections}/>
               </Paper>
             </Grid>
           </Grid>

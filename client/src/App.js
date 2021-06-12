@@ -34,7 +34,8 @@ class App extends React.Component {
         
         <BrowserRouter>        
         <Switch>
-            <Route exact path='/admin' component={AdminDash}/>
+            <Route path='/admin' render={({match}) => <AdminDash match={match} />}/>
+
             <Fragment>
               <Header/>
               <Route exact path="/" component={HomePage}/>

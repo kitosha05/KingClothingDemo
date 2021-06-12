@@ -21,7 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../ListItems/ListItems';
 import Chart from '../Chart/Chart';
 import Deposits from '../Deposits/Deposits';
-import OrdersPreview from '../Orders/OrdersPreview';
+import Orders from '../Orders/Orders';
 
 function Copyright() {
   return (
@@ -115,18 +115,86 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  summaryHeaders:{
+      display: 'inline-block',
+      textAlign: 'center'
+  }
 }));
 
-export default function Dashboard({allOrders}) {
+
+
+
+const isToday = (someDate) => {
+    const today = new Date()
+    return someDate.getDate() == today.getDate() &&
+      someDate.getMonth() == today.getMonth() &&
+      someDate.getFullYear() == today.getFullYear()
+  }
+
+  const isThisMonth = (someDate) => {
+    const today = new Date()
+    return someDate.getMonth() == today.getMonth() &&
+      someDate.getFullYear() == today.getFullYear()
+  }
+  const isThisYear = (someDate) => {
+    const today = new Date()
+    return someDate.getFullYear() == today.getFullYear()
+  }
+  
+
+
+
+
+export default function OrderAdminPanel({allOrders}) {
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+   ////Sales today
+   let todaysTotalSales = 0
+
+  const todaysOrders = !allOrders ? [] : (allOrders.map(order=>{
+    const {orderDate, orderTotal} = order
+    if (isToday(orderDate.toDate())){
+      todaysTotalSales += orderTotal
+      
+    }
+    return null
+   })
+ )
+
+ ///Sales this month
+   let thisMonthsSales = 0
+ const ordersThisMonth = !allOrders ? [] : (allOrders.map(order=>{
+    const {orderDate, orderTotal} = order
+    if (isThisMonth(orderDate.toDate())){
+
+      thisMonthsSales += orderTotal
+    }
+    return null
+   })
+ )
+
+ let ytdSales = 0
+ const  ordersThisYear = !allOrders ? [] : (allOrders.map(order=>{
+    const {orderDate, orderTotal} = order
+    if (isThisYear(orderDate.toDate())){
+
+      ytdSales += orderTotal
+    }
+    return null
+   })
+ )
+ 
 
   return (
     <div className={classes.root}>
@@ -174,9 +242,31 @@ export default function Dashboard({allOrders}) {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart allOrders={allOrders}/>
+            <Grid item xs={3} md={4} >
+              <Paper className={classes.paper}>
+                   
+                        <div className={classes.summaryHeaders}>
+                            <h2>Today's Sales</h2>
+                            <span>${todaysTotalSales}</span>
+                        </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={3} md={4} >
+              <Paper className={classes.paper}>
+                   
+                        <div className={classes.summaryHeaders}>
+                            <h2>Sales This Month</h2>
+                            <span>${thisMonthsSales}</span>
+                        </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={3} md={4} >
+              <Paper className={classes.paper}>
+                   
+                        <div className={classes.summaryHeaders}>
+                            <h2>YTD Sales</h2>
+                            <span>${ytdSales}</span>
+                        </div>
               </Paper>
             </Grid>
             {/* Recent Deposits */}
@@ -188,7 +278,7 @@ export default function Dashboard({allOrders}) {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <OrdersPreview allOrders={allOrders}/>
+                <Orders allOrders={allOrders}/>
               </Paper>
             </Grid>
           </Grid>
