@@ -5,7 +5,7 @@ import 'firebase/auth'
 
 
 const config= {
-    apiKey: "AIzaSyC1BUHZyw27DQ2QcaqQ9OO4c3AQOMeRspE",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "clothingdemodb.firebaseapp.com",
     projectId: "clothingdemodb",
     storageBucket: "clothingdemodb.appspot.com",

@@ -1,11 +1,11 @@
 .collection-page {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+  margin-top: 80px;
 
-  .collection-preview h1.title {
+  h2.title {
     font-size: 38px;
-    margin: 10 auto 30px;
+    margin: 0 auto;
   }
 
   .items {

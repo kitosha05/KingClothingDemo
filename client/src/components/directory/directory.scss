@@ -4,4 +4,8 @@
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 20px 80px;
+
+  @media screen and (max-width: 800px) {
+    padding: 10px;
+  }
 }

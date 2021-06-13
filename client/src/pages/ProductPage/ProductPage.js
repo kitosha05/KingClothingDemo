@@ -36,7 +36,7 @@ const ProductPage =({ product, addItem, match}) =>{
         <Container className='mt-3 col-md-8 offset-md-2 justify-content-center align-content-center'>
                 
                
-               <Card className='text-center'>  
+               <Card className='text-center product-card'>  
                    <Row className="mt-3 mb-3 justify-content-center align-items-center">
                        <Card.Title as='h1'>{product.name}</Card.Title>
                     </Row> 
@@ -53,6 +53,10 @@ const ProductPage =({ product, addItem, match}) =>{
                         <Card.Body>
                             <Row className='justify-content-around align-items-center mb-5'>
                                 <Col>
+                                    <Row>
+                                        <h3 className='item-price'>Price: ${product.price}</h3>
+                                    </Row>
+                                    <Row>
                                     <div className='adjust-quantity'>
                                     <Dropdown onSelect={handleSelect}>
                                         <Dropdown.Toggle variant='light' id="dropdown-basic">
@@ -68,6 +72,9 @@ const ProductPage =({ product, addItem, match}) =>{
                                          </Dropdown.Menu>
                                     </Dropdown>
                                 </div>
+
+                                    </Row>
+                                    
                                 </Col>
                                 <Col>
                                 <div className='add-to-cart-button'>

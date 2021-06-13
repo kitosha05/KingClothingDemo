@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {Fragment} from 'react';
 import {BrowserRouter,Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
@@ -12,6 +11,8 @@ import { createStructuredSelector } from 'reselect';
 import {checkUserSession} from './redux/user/userActions'
 import AdminDash from './pages/AdminDash/AdminDash'
 import ThankYou from './pages/ThankYou/ThankYou'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {GlobalStyle} from './global.styles/global.styles'
 class App extends React.Component {
   unsubscribeFromAuth = null;
   
@@ -32,7 +33,8 @@ class App extends React.Component {
     return (
       <div >
         
-        <BrowserRouter>        
+        <BrowserRouter> 
+        <GlobalStyle/>       
         <Switch>
             <Route path='/admin' render={({match}) => <AdminDash match={match} />}/>
 
