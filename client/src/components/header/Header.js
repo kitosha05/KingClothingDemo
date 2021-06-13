@@ -13,6 +13,27 @@ import {signOutStart} from '../../redux/user/userActions'
 
 const Header = ({currentUser, hidden, signOutStart})=>{
 const [navbar, setNavbar] = useState(false)
+const [isCollapsed, setIsCollapsed] = useState(true)
+const node = useRef();
+    
+   
+useEffect(() => {
+    // add when mounted
+    document.addEventListener("mousedown", handleClick);
+    // return function to be called when unmounted
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, []);
+
+  const handleClick = e => {
+    if (node.current.contains(e.target)) {
+      // inside click
+      return;
+    }
+    // outside click 
+    setIsCollapsed(true)
+  };
 
 const changeBackground = ()=>{
   if(window.scrollY>=80){
@@ -25,11 +46,11 @@ const changeBackground = ()=>{
 
 
     return(
-        <Navbar className={navbar ? 'navbar-active' : ""} fixed="top" collapseOnSelect expand="lg" >
+        <Navbar className={navbar ? 'navbar-active' : ""} sticky="top" collapseOnSelect expand="lg" >
         <Navbar.Brand ><Link to='/'><Logo/>  King Clothing</Link></Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Toggle ref={node} aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className="left-side-nav">
             <NavDropdown title="Shop" id="collasible-nav-dropdown">
               <NavDropdown.Item ><Link to='/shop/hats'>Hats</Link></NavDropdown.Item>
               <NavDropdown.Item ><Link to='/shop/jackets'>Jackets</Link></NavDropdown.Item>

@@ -3,7 +3,13 @@
   transition: background-color 0.5s ease;
   align-items: center;
   justify-content: center;
-  margin-bottom: 80px;
+
+  .left-side-nav {
+    margin-right: auto;
+    a.nav-link {
+      text-align: center;
+    }
+  }
 
   .nav-item a.nav-link {
     color: black;
@@ -28,20 +34,23 @@
     }
   }
 }
+
 .navbar-active {
-  background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(75, 75, 75) 100%);
+  background: linear-gradient(180deg, rgb(0, 0, 0) 0%, rgb(75, 75, 75) 100%);
 
-  .nav-item a.nav-link {
-    color: white;
-  }
+  @media screen and (max-width: 800px) {
+    .nav-item a.nav-link {
+      color: white;
+    }
 
-  .navbar-brand a {
-    color: white;
-  }
-  .right-side a.nav-link a.toggle-signin {
-    color: white;
-  }
-  .cart-icon {
-    color: white;
+    .navbar-brand a {
+      color: white;
+    }
+    .right-side a.nav-link a.toggle-signin {
+      color: white;
+    }
+    .cart-icon {
+      color: white;
+    }
   }
 }

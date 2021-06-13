@@ -19,7 +19,7 @@ const CollectionItem = ({item, addItem, collectionRoute}) => {
              <div className='collection-footer'>
              <Link to={`/shop/${collectionRoute}/${productUrl}`}><span className='name'>{name}</span></Link>
             
-            <span className='price'>{price}</span>
+            <span className='price'>${price}</span>
             </div>
             <Button onClick={()=>addItem(item)}inverted>Add To Cart</Button>
         </div>

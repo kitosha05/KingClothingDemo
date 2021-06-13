@@ -3,7 +3,7 @@ import './HeroImage.scss'
 import  BackgroundHero from '../../assets/homepageHero.jpg'
 import Card from 'react-bootstrap/Card'
 import CustomButton from '../CustomButton/CustomButton'
-
+import {Link} from 'react-router-dom'
 import LazyHero from 'react-lazy-hero'
 import styled from 'styled-components'
 import {ReactComponent as Logo} from '../../assets/crown.svg'
@@ -16,11 +16,11 @@ const HeroImage = () =>{
             <Card className='text-center'>
             
               <Card.Body>
-                <Card.Title><Logo/>Join Our Royal Following</Card.Title>
+                <Card.Title><Logo/> King Clothing</Card.Title>
                  <Card.Text>
                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>  
                 </Card.Text>   
-                 <Button>About Us</Button>
+                <Link to="/shop"><Button>Shop Now</Button></Link> 
                     
               </Card.Body>
             </Card>
