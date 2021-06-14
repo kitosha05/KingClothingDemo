@@ -46,7 +46,7 @@ const changeBackground = ()=>{
 
 
     return(
-        <Navbar className={navbar ? 'navbar-active' : ""} sticky="top" collapseOnSelect expand="lg" >
+        <Navbar className={navbar ? 'navbar-active' : ""} sticky="top" collapseOnSelect bg='dark' variant='dark' expand="lg" >
         <Navbar.Brand ><Link to='/'><Logo/>  King Clothing</Link></Navbar.Brand>
         <Navbar.Toggle ref={node} aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

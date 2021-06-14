@@ -1,10 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {googleSignInStart, emailSignInStart} from '../../redux/user/userActions'
 
 import './SignIn.scss'
 import FormInput from '../FormInput/FormInput.js'
 import Button from '../CustomButton/CustomButton.js'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 class SignIn extends React.Component{
 
@@ -27,7 +30,8 @@ class SignIn extends React.Component{
     render(){
         const {googleSignInStart} = this.props
         return(
-            <div className='sign-in'>
+            <Col className='sign-in col-md-6 offset-md-3'>
+                <Row>
                 <h2>I already Have An Account</h2>
                 <span>Sign in with your email and password</span>
 
@@ -57,7 +61,12 @@ class SignIn extends React.Component{
                     
 
                 </form>
-            </div>
+                </Row>
+                <Row className='mt-3 align-items-center justify-content-center text-align-center'>
+                  <Link  className='register-link' to='/register'>Create A New Account</Link>
+                    
+                </Row>           
+            </Col>
         )
 
     }

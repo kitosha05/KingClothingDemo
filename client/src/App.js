@@ -5,7 +5,8 @@ import {selectCurrentUser} from './redux/user/userSelectors'
 import HomePage from './pages/homepage/homepage.js'
 import ShopPage from './pages/shop/shop.js'
 import Header from './components/header/Header.js'
-import LoginAndRegister from './pages/loginAndRegister/loginAndRegister.js'
+import Login from './pages/loginAndRegister/Login.js'
+import Register from './pages/loginAndRegister/Register.js'
 import CheckoutPage from './pages/checkout/Checkout'
 import { createStructuredSelector } from 'reselect';
 import {checkUserSession} from './redux/user/userActions'
@@ -44,7 +45,8 @@ class App extends React.Component {
               <Route  path='/shop' component={ShopPage}/>
               <Route exact path='/checkout' component={CheckoutPage} />
               <Route exact path='/thank-you' component={ThankYou}/>
-              <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<LoginAndRegister/>)}/>
+              <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Login/>)}/>
+              <Route exact path='/register' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Register/>)}/>
            </Fragment>
         </Switch>
         </BrowserRouter>

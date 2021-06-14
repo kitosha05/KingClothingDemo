@@ -5,7 +5,7 @@ import './Register.scss'
 import FormInput from '../FormInput/FormInput.js'
 import Button from '../CustomButton/CustomButton.js'
 
-class Register extends React.Component{
+class RegisterForm extends React.Component{
     state={displayName:"",email:'',password:'',confirmPassword:''}
     onSubmit = async e => {
         e.preventDefault();
@@ -80,4 +80,4 @@ class Register extends React.Component{
 
 }
 }
-export default Register
+export default RegisterForm
