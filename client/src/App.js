@@ -28,16 +28,23 @@ class App extends React.Component {
   componentWillUnmount(){
     this.unsubscribeFromAuth()
   }
-
+ 
+  
 
   render(){
+  
     return (
+      
       <div >
+       
         
         <BrowserRouter> 
         <GlobalStyle/>       
         <Switch>
-            <Route path='/admin' render={({match}) => <AdminDash match={match} />}/>
+         
+             <Route path='/admin' render={({match}) => this.props.currentUser ? this.props.currentUser.isAdmin ? (<AdminDash match={match}/>): (<Redirect to='/'/>): 
+             (<Redirect to='/'/>)}  />
+       
 
             <Fragment>
               <Header/>
