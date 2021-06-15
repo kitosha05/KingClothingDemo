@@ -16,28 +16,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStyle} from './global.styles/global.styles'
 class App extends React.Component {
   unsubscribeFromAuth = null;
-  
+  state = {
+    userAuth: localStorage.getItem('user')
+  };
   componentDidMount(){
     const {checkUserSession} = this.props
-    checkUserSession()
-    
-    
- 
+    // checkUserSession()
   }
 
   componentWillUnmount(){
     this.unsubscribeFromAuth()
   }
  
-  
-
   render(){
   
     return (
       
       <div >
-       
-        
         <BrowserRouter> 
         <GlobalStyle/>       
         <Switch>

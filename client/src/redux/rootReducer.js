@@ -12,7 +12,7 @@ import adminReducer from './admin/adminReducers'
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist:['cart']
+    whitelist:['cart', 'user']
 }
  const rootReducer = combineReducers({
     user: userReducer,
