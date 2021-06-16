@@ -1,8 +1,22 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {firestore} from '../../firebase/firebase.utils'
 import adminActionTypes from './adminActionTypes'
-import {addProductSuccess, addProductFailure, editProductSuccess, editProductFailure} from './adminActions'
+import {newPageSuccess, newPageFailure,addProductSuccess, addProductFailure, editProductSuccess, editProductFailure} from './adminActions'
 
+export function* newPageStart(){
+    yield takeLatest(adminActionTypes.NEW_PAGE_START, newPage)
+}
+export function* newPage(action){
+    try {
+        const {pageName} = action.payload
+        const page = {name:pageName}
+        const response = yield firestore.collection('pages').add(page)
+        yield put(newPageSuccess(page))
+    } catch (error) {
+        yield put(newPageFailure(error))
+    }
+    
+}
 export function* addProductStart(){
     yield takeLatest(adminActionTypes.ADD_PRODUCT_START, addProduct)
 }
@@ -42,6 +56,7 @@ export function* editProduct(action){
 export function* adminSagas(){
     yield all([
         call(addProductStart),
-        call(editProductStart)
+        call(editProductStart),
+        call(newPageStart)
     ])
 }

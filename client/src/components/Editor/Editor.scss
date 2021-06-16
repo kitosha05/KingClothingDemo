@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+#gjs {
+  border: none;
+}
+
+/* Theming */
+
+/* Primary color for the background */
+.gjs-one-bg {
+  background-color: rgb(120, 196, 247);
+}
+
+/* Secondary color for the text color */
+.gjs-two-color {
+  color: rgba(221, 230, 233, 0.993);
+}
+
+/* Tertiary color for the background */
+.gjs-three-bg {
+  background-color: rgb(28, 189, 243);
+  color: white;
+}
+
+/* Quaternary color for the text color */
+.gjs-four-color,
+.gjs-four-color-h:hover {
+  color: #1f1d3f;
+}

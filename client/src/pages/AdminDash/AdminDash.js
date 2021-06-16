@@ -5,6 +5,7 @@ import {createStructuredSelector} from 'reselect'
 import Dashboard from '../../components/Dashboard/Dashboard'
 import OrderAdminPanel from '../../components/OrderAdminPanel/OrderAdminPanel'
 import ProductAdminPanel from '../../components/ProductAdminPanel/ProductAdminPanel'
+import PagesAdminPanel from '../../components/PagesAdminPanel/PagesAdminPanel'
 import {fetchCollectionsStart} from '../../redux/shop/shopActions'
 import {fetchOrdersStart} from '../../redux/orders/orderActions'
 
@@ -23,6 +24,7 @@ const AdminDash =({fetchOrdersStart, fetchCollectionsStart, allOrders, match, co
                 <Route exact path={`${match.path}`} render={({props}) => <Dashboard allOrders={allOrders}/>} />
                 <Route exact path={`${match.path}/orders`} render={({props}) => <OrderAdminPanel allOrders={allOrders} />} />
                 <Route exact path={`${match.path}/products`} render={({props}) => <ProductAdminPanel collections={collections} />} />
+                <Route exact path={`${match.path}/pages`} render={({props}) => <PagesAdminPanel />} />
 
       </div>
         

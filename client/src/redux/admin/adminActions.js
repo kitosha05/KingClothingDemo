@@ -24,3 +24,14 @@ export const editProductFailure = (err)=>({
     type: adminActionTypes.EDIT_PRODUCT_FAILURE,
     payload: err.message
 })
+export const newPageStart = (page)=>({
+    type: adminActionTypes.NEW_PAGE_START,
+    payload: page
+})
+export const newPageSuccess = () => ({
+    type:adminActionTypes.NEW_PAGE_SUCCESS
+})
+export const newPageFailure = (err)=>({
+    type: adminActionTypes.NEW_PAGE_FAILURE,
+    payload: err.message
+})
