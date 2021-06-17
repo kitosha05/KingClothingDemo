@@ -24,6 +24,7 @@ const [assets, setAssets]= useState(null)
 
 useEffect(()=>{
     fetchPagesStart()
+    clearCanvas()
     const editor = grapesjs.init({
         container:"#editor",
         plugins:[gjsPresetWebpage],
@@ -40,7 +41,7 @@ useEffect(()=>{
     setEditor(editor);
     
     
-}, [selectedPage]);
+}, []);
 
 const savePage = (e)=>{
     e.preventDefault();
@@ -94,7 +95,7 @@ const onSelectPage=async(e)=>{
    await setPageStyles(styles)
    await setPageComponents(components)
    await setSelectedPage(pageName)
-//    editor.load(res => console.log('Load callback'));
+   editor.load(res => console.log('Load callback'));
   
 
 }

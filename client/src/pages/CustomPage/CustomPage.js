@@ -8,13 +8,14 @@ const CustomPage = ({ route,fetchPagesStart, pages})=>{
     const [page, setPage] = useState(null)
     
 useEffect(() => {
-   if(!pages){
+
        fetchPagesStart()
-    }else{
-        console.log(pages)
-        setPage(pages.filter(p=>p.route === route)[0])
-    }
-},  [pages]) 
+    
+       if (pages){setPage(pages.filter(p=>p.route === route)[0])} 
+        
+        
+    
+},  []) 
 
 
 return(

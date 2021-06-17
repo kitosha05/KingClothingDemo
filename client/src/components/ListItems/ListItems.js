@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import NoteIcon from '@material-ui/icons/Note';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import StoreIcon from '@material-ui/icons/Store';
@@ -42,7 +43,7 @@ export const mainListItems = (
     <Link to='/admin/pages' as='button'>
     <ListItem button>
       <ListItemIcon>
-        <PeopleIcon />
+        <NoteIcon />
       </ListItemIcon>
       <ListItemText primary="Pages" />
     </ListItem>

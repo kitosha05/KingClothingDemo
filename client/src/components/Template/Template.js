@@ -1,7 +1,11 @@
-import React from 'react'
+import React, {useEffect}from 'react'
 import { Style } from "react-style-tag";
 
 const Template = ({page})=>{
+
+    useEffect(() => {
+       console.log(page.html)
+    }, [])
   
     return(
         <div>

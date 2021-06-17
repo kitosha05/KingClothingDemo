@@ -127,11 +127,9 @@ export default function PagesAdminPanel() {
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [selectedPage, setSelectedPage]=React.useState(null);
+  
 
-  const changeSelectedPage=(page)=>{
-      setSelectedPage(page)
-  }
+ 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
