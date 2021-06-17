@@ -1,7 +1,50 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {firestore} from '../../firebase/firebase.utils'
 import adminActionTypes from './adminActionTypes'
-import {newPageSuccess, newPageFailure,addProductSuccess, addProductFailure, editProductSuccess, editProductFailure} from './adminActions'
+import {savePageSuccess, fetchPagesSuccess, newPageSuccess, newPageFailure,addProductSuccess, addProductFailure, editProductSuccess, editProductFailure, fetchPagesFailure, savePageFailure} from './adminActions'
+
+
+export function* savePageStart(){
+    yield takeLatest(adminActionTypes.SAVE_PAGE_START, savePage)
+}
+
+export function* savePage(action){
+    try {
+        const page = action.payload
+        const pageName = page.pageName
+        const pageRef = yield firestore.collection('pages').doc(pageName)
+        const response = yield pageRef.update(page)
+        yield put(savePageSuccess())
+    } catch (error) {
+        yield put(savePageFailure(error))
+    }
+}
+export function* fetchPagesStart(){
+    yield takeLatest(adminActionTypes.FETCH_PAGES_START, fetchPages)
+}
+
+export function* fetchPages(action){
+    try {
+        const pagesRef = yield firestore.collection('pages').get()
+        const pages = yield pagesRef.docs.map(doc=>{
+            const pageId = doc.id
+            const {html, css, styles, components, assets, pageName,route} = doc.data()
+            const page = {
+                html,
+                css,
+                styles,
+                components,
+                assets,
+                pageName,
+                route
+            }
+            return page
+        })
+        yield put(fetchPagesSuccess(pages))
+    } catch (error) {
+        yield put(fetchPagesFailure(error))
+    }
+}
 
 export function* newPageStart(){
     yield takeLatest(adminActionTypes.NEW_PAGE_START, newPage)
@@ -9,9 +52,16 @@ export function* newPageStart(){
 export function* newPage(action){
     try {
         const {pageName} = action.payload
-        const page = {name:pageName}
-        const response = yield firestore.collection('pages').add(page)
-        yield put(newPageSuccess(page))
+        const page = {
+            pageName,
+            html:"",
+            css:"",
+            styles:null,
+            components:null,
+            assets:null
+        }
+        const response = yield firestore.collection('pages').doc(pageName).set(page)
+        yield put(newPageSuccess())
     } catch (error) {
         yield put(newPageFailure(error))
     }
@@ -57,6 +107,8 @@ export function* adminSagas(){
     yield all([
         call(addProductStart),
         call(editProductStart),
-        call(newPageStart)
+        call(newPageStart),
+        call(fetchPagesStart),
+        call(savePageStart)
     ])
 }

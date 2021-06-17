@@ -8,6 +8,7 @@ import Header from './components/header/Header.js'
 import Login from './pages/loginAndRegister/Login.js'
 import Register from './pages/loginAndRegister/Register.js'
 import CheckoutPage from './pages/checkout/Checkout'
+import CustomPage from './pages/CustomPage/CustomPage.js'
 import { createStructuredSelector } from 'reselect';
 import {checkUserSession} from './redux/user/userActions'
 import AdminDash from './pages/AdminDash/AdminDash'
@@ -25,7 +26,7 @@ class App extends React.Component {
   }
 
   componentWillUnmount(){
-    this.unsubscribeFromAuth()
+    // this.unsubscribeFromAuth()
   }
  
   render(){
@@ -45,6 +46,7 @@ class App extends React.Component {
               <Header/>
               <Route exact path="/" component={HomePage}/>
               <Route  path='/shop' component={ShopPage}/>
+              <Route path='/pages/:pageId' component={CustomPage}/>
               <Route exact path='/checkout' component={CheckoutPage} />
               <Route exact path='/thank-you' component={ThankYou}/>
               <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Login/>)}/>

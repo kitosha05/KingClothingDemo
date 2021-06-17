@@ -1,7 +1,28 @@
 import adminActionTypes from './adminActionTypes'
 import{firestore, convertCollectionsSnapshotToMap} from '../../firebase/firebase.utils'
 
-
+export const savePageStart = (page)=>({
+    type:adminActionTypes.SAVE_PAGE_START,
+    payload: page
+})
+export const savePageSuccess= ()=>({
+    type:adminActionTypes.SAVE_PAGE_SUCCESS
+})
+export const savePageFailure = (error)=>({
+    type:adminActionTypes.SAVE_PAGE_FAILURE,
+    payload:error
+})
+export const fetchPagesStart = ()=>({
+    type:adminActionTypes.FETCH_PAGES_START
+})
+export const fetchPagesSuccess = (pages)=>({
+    type:adminActionTypes.FETCH_PAGES_SUCCESS,
+    payload: pages
+})
+export const fetchPagesFailure= (error)=>({
+    type:adminActionTypes.FETCH_PAGES_FAILURE,
+    payload:error
+})
 export const addProductStart = (product)=>({
     type: adminActionTypes.ADD_PRODUCT_START,
     payload: product
