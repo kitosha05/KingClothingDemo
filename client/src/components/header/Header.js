@@ -59,6 +59,8 @@ const changeBackground = ()=>{
               <NavDropdown.Item ><Link to='/shop/mens'>Mens</Link></NavDropdown.Item>
               <NavDropdown.Item ><Link to='/shop'>View All</Link></NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link ><Link to='/pages/about-us'>About Us</Link></Nav.Link>
+            <Nav.Link ><Link to='/pages/contact-us'>Contact Us</Link></Nav.Link>
             {/* <Nav.Link href="#features">About</Nav.Link>
             <Nav.Link href="#pricing">Contact Us</Nav.Link> */}
           </Nav>

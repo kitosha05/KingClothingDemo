@@ -30,7 +30,7 @@ const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
                     <WriteReviewForm fetchReviewsStart={fetchReviewsStart} currentUser={currentUser} productName={productName}/>
                    )
                    :
-                   null
+                  <span>Sign In To Write A Review</span>
                }
                
                {
