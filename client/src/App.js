@@ -1,20 +1,25 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, lazy, Suspense} from 'react';
 import {BrowserRouter,Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {selectCurrentUser} from './redux/user/userSelectors'
-import HomePage from './pages/homepage/homepage.js'
-import ShopPage from './pages/shop/shop.js'
-import Header from './components/header/Header.js'
-import Login from './pages/loginAndRegister/Login.js'
-import Register from './pages/loginAndRegister/Register.js'
-import CheckoutPage from './pages/checkout/Checkout'
-import CustomPage from './pages/CustomPage/CustomPage.js'
+
 import { createStructuredSelector } from 'reselect';
 import {checkUserSession} from './redux/user/userActions'
-import AdminDash from './pages/AdminDash/AdminDash'
-import ThankYou from './pages/ThankYou/ThankYou'
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStyle} from './global.styles/global.styles'
+import Header from './components/header/Header.js'
+import PlainSpinner from './components/PlainSpinner/PlainSpinner'
+
+const AdminDash = lazy(()=>import('./pages/AdminDash/AdminDash'))
+const ThankYou = lazy(()=>import('./pages/ThankYou/ThankYou'))
+const HomePage = lazy(()=>import('./pages/homepage/homepage.js'))
+const ShopPage = lazy(()=>import('./pages/shop/shop.js'))
+const Login = lazy(()=>import('./pages/loginAndRegister/Login.js'))
+const Register = lazy(()=>import('./pages/loginAndRegister/Register.js'))
+const CheckoutPage = lazy(()=>import('./pages/checkout/Checkout'))
+const CustomPage = lazy(()=>import('./pages/CustomPage/CustomPage.js'))
+
 class App extends React.Component {
   unsubscribeFromAuth = null;
   state = {
@@ -44,13 +49,23 @@ class App extends React.Component {
 
             <Fragment>
               <Header/>
+              <ErrorBoundary>
+              <Suspense fallback={<PlainSpinner/>}>
               <Route exact path="/" component={HomePage}/>
-              <Route  path='/shop' component={ShopPage}/>
-              <Route path='/pages/:pageId' component={CustomPage}/>
-              <Route exact path='/checkout' component={CheckoutPage} />
-              <Route exact path='/thank-you' component={ThankYou}/>
-              <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Login/>)}/>
-              <Route exact path='/register' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Register/>)}/>
+            
+               <Route  path='/shop' component={ShopPage}/>
+            
+               <Route path='/pages/:pageId' component={CustomPage}/>
+            
+               <Route exact path='/checkout' component={CheckoutPage} />
+            
+               <Route exact path='/thank-you' component={ThankYou}/>
+            
+               <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Login/>)}/>
+            
+               <Route exact path='/register' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Register/>)}/>
+              </Suspense>
+              </ErrorBoundary>
            </Fragment>
         </Switch>
         </BrowserRouter>

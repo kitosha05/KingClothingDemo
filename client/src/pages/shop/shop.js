@@ -1,21 +1,21 @@
   
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import { Route } from 'react-router-dom';
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {fetchCollectionsStart, fetchProductsStart} from '../../redux/shop/shopActions'
 import {selectIsCollectionFetching, selectIsCollectionsLoaded} from '../../redux/shop/shopSelector'
-import CollectionsOverview from '../../components/CollectionsOverview/CollectionsOverview'
-import CollectionPage from '../CollectionPage/CollectionPage';
-import ProductPage from '../ProductPage/ProductPage'
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary'
+import PlainSpinner from '../../components/PlainSpinner/PlainSpinner'
+
 // import {updateCollections} from '../../redux/shop/shopActions'
 import WithSpinner from '../../components/Spinner/Spinner'
 import './shop.scss'
 
-const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview)
-const CollectionPageWithSpinner = WithSpinner(CollectionPage)
-const ProductPageWithSpinner = WithSpinner(ProductPage)
 
+const CollectionsOverview =lazy(()=>import('../../components/CollectionsOverview/CollectionsOverview'))
+const CollectionPage =lazy(()=>import('../CollectionPage/CollectionPage'));
+const ProductPage =lazy(()=>import('../ProductPage/ProductPage'))
 
 class  ShopPage extends React.Component{
   
@@ -32,9 +32,13 @@ class  ShopPage extends React.Component{
    
    return(
       <div className='shop-page'>
-        <Route exact path={`${match.path}`} render={(props)=><CollectionsOverviewWithSpinner isLoading={isCollectionFetching} {...props} />}/>
-        <Route exact path={`${match.path}/:collectionId`} render={(props)=><CollectionPageWithSpinner isLoading={!isCollectionsLoaded} {...props} />}/> 
-        <Route exact path={`${match.path}/:collectionId/:productId`} render={(props)=><ProductPageWithSpinner isLoading={!isCollectionsLoaded} {...props} />}/>
+        <ErrorBoundary>
+              <Suspense fallback={<PlainSpinner/>}>
+        <Route exact path={`${match.path}`} render={(props)=><CollectionsOverview  {...props} />}/>
+        <Route exact path={`${match.path}/:collectionId`} render={(props)=><CollectionPage {...props}/>}/> 
+        <Route exact path={`${match.path}/:collectionId/:productId`} render={(props)=><ProductPage  {...props} />}/>
+    </Suspense>
+    </ErrorBoundary>
      </div>
     )
   } 
