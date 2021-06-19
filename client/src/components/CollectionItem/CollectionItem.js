@@ -13,8 +13,8 @@ const configStars = {
     edit: false
   };
 
-
 const CollectionItem = ({item, addItem, collectionRoute, averageRating}) => {
+  
     const {id, name, price, imageUrl} = item
     const productUrl = name.toLowerCase().replace(/\b \b/g, "-")
     return(
@@ -42,8 +42,6 @@ const mapDispatchToProps = dispatch =>({
     addItem: item=> dispatch(addItem(item)),
     fetchReviewsStart: productName=>dispatch(fetchReviewsStart(productName))
 })
-const mapStateToProps = state =>({
-    reviews: state.reviews
-})
 
-export default connect(mapStateToProps, mapDispatchToProps)(CollectionItem)
+
+export default connect(null, mapDispatchToProps)(CollectionItem)
