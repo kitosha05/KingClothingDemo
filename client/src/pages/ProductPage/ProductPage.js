@@ -14,8 +14,8 @@ import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import ProductAccordion from '../../components/ProductAccordion/ProductAccordion'
 import ReviewList from '../../components/ReviewList/ReviewList'
-
-
+import ImageGallery from '../../components/ImageGallery/ImageGallery'
+import PlainSpinner from '../../components/PlainSpinner/PlainSpinner'
 import './ProductPage.scss'
 
 const ProductPage =({ product, addItem, match}) =>{
@@ -27,10 +27,8 @@ const ProductPage =({ product, addItem, match}) =>{
         setQuantity(e)
         
     }
-    if(!product){
-        return(<div>Loading...</div>)
-    }
-   
+  
+   if(!product)  return<PlainSpinner/>
     
     return(
         <Container className='mt-3 col-md-8 offset-md-2 justify-content-center align-content-center'>
@@ -43,7 +41,8 @@ const ProductPage =({ product, addItem, match}) =>{
                     <Row>
                         <Col md='6'>
                             <Container>
-                                <Card.Img   src={product.imageUrl} /> 
+                                <ImageGallery imageUrl={product.imageUrl}/>
+                                {/* <Card.Img   src={product.imageUrl} />  */}
                             </Container>
                            
                         </Col>         
@@ -107,6 +106,7 @@ const ProductPage =({ product, addItem, match}) =>{
         
  
     )
+   
 }
 const mapDispatchToProps = dispatch =>({
     addItem: (item) => dispatch(addItem(item))

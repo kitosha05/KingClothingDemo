@@ -11,10 +11,11 @@ import './CollectionPage.scss';
 const CollectionPage = ({ collection, match, products }) => {
     
   
-  const { title } = collection;
-  if(!products){
+  
+  if(!products || !collection){
     return(<div>Loading...</div>)
   }
+  const { title } = collection;
 
   const productsInCollection= (collection)=>{
     return(products.filter(product=>product.collection===collection))

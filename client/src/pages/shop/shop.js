@@ -32,13 +32,13 @@ class  ShopPage extends React.Component{
    
    return(
       <div className='shop-page'>
-        <ErrorBoundary>
-              <Suspense fallback={<PlainSpinner/>}>
+        
+        <Suspense fallback={<PlainSpinner/>}>
         <Route exact path={`${match.path}`} render={(props)=><CollectionsOverview  {...props} />}/>
         <Route exact path={`${match.path}/:collectionId`} render={(props)=><CollectionPage {...props}/>}/> 
         <Route exact path={`${match.path}/:collectionId/:productId`} render={(props)=><ProductPage  {...props} />}/>
     </Suspense>
-    </ErrorBoundary>
+   
      </div>
     )
   } 

@@ -11,7 +11,7 @@ import {GlobalStyle} from './global.styles/global.styles'
 import Header from './components/header/Header.js'
 import PlainSpinner from './components/PlainSpinner/PlainSpinner'
 
-const AdminDash = lazy(()=>import('./pages/AdminDash/AdminDash'))
+import AdminDash from './pages/AdminDash/AdminDash'
 const ThankYou = lazy(()=>import('./pages/ThankYou/ThankYou'))
 const HomePage = lazy(()=>import('./pages/homepage/homepage.js'))
 const ShopPage = lazy(()=>import('./pages/shop/shop.js'))
@@ -42,7 +42,7 @@ class App extends React.Component {
         <BrowserRouter> 
         <GlobalStyle/>       
         <Switch>
-         
+        
              <Route path='/admin' render={({match}) => this.props.currentUser ? this.props.currentUser.isAdmin ? (<AdminDash match={match}/>): (<Redirect to='/'/>): 
              (<Redirect to='/'/>)}  />
        
@@ -50,6 +50,7 @@ class App extends React.Component {
             <Fragment>
               <Header/>
               <ErrorBoundary>
+        
               <Suspense fallback={<PlainSpinner/>}>
               <Route exact path="/" component={HomePage}/>
             
