@@ -12,13 +12,12 @@ import WriteReviewForm from '../WriteReviewForm/WriteReviewForm'
 
 
 
-const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
+const ReviewList = ({reviews, fetchReviewsStart, productId, user, productName})=>{
     
     useEffect(()=>{
-        fetchReviewsStart(productName)
        checkUserSession()
        
-    }, [])
+    }, [reviews])
        
     const {currentUser} = useSelector((state) => state.user)
     
@@ -27,7 +26,7 @@ const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
                <h1>Reviews</h1>
                {
                     currentUser ? (
-                    <WriteReviewForm fetchReviewsStart={fetchReviewsStart} currentUser={currentUser} productName={productName}/>
+                    <WriteReviewForm  currentUser={currentUser} productId={productId} productName={productName}/>
                    )
                    :
                   <span>Sign In To Write A Review</span>
@@ -39,7 +38,7 @@ const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
                         return <Review reviewAuthor={review.reviewAuthor}  reviewBody={review.reviewBody} reviewRating={review.reviewRating}/>
                     })
                    :
-                   null
+                   <div>Be The First To Review This Product!</div>
                   
                }
             </div>
@@ -48,11 +47,13 @@ const ReviewList = ({reviews, fetchReviewsStart, productName, user})=>{
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    fetchReviewsStart: ()=>dispatch(fetchReviewsStart(ownProps.productName)),
+  fetchReviewsStart: productId=> dispatch(fetchReviewsStart(productId)),
+
     checkUserSession: ()=>dispatch(checkUserSession())
   })
+const mapStateToProps = state =>({
+  reviews: state.reviews.reviews
+})
 
-  const mapStateToProps = createStructuredSelector({
-    reviews: selectReviewsToDisplay
-  })    
+    
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewList)

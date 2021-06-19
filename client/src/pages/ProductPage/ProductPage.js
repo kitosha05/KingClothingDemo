@@ -1,4 +1,4 @@
-import React, {useState}from 'react'
+import React, {useState, useEffect}from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {selectProduct} from '../../redux/shop/shopSelector'
@@ -17,8 +17,9 @@ import ReviewList from '../../components/ReviewList/ReviewList'
 import ImageGallery from '../../components/ImageGallery/ImageGallery'
 import PlainSpinner from '../../components/PlainSpinner/PlainSpinner'
 import './ProductPage.scss'
+import {fetchReviewsStart} from '../../redux/reviews/reviewActions'
 
-const ProductPage =({ product, addItem, match}) =>{
+const ProductPage =({ product, addItem, match, fetchReviewsStart}) =>{
     let numberOfItemsToAdd = 1
     const [quantity,setQuantity] = useState(1)
     const dropDownLabel = `Quantity: ${quantity}`
@@ -27,9 +28,11 @@ const ProductPage =({ product, addItem, match}) =>{
         setQuantity(e)
         
     }
+
+  
   
    if(!product)  return<PlainSpinner/>
-    
+   fetchReviewsStart(product.id)
     return(
         <Container className='mt-3 col-md-8 offset-md-2 justify-content-center align-content-center'>
                 
@@ -96,7 +99,7 @@ const ProductPage =({ product, addItem, match}) =>{
                      </Row>
                      <Row className='mt-4 mb-4'>
                          <Col className="col-md-8 offset-md-2">
-                             <ReviewList productName={product.name}/>
+                             <ReviewList productName={product.name} productId={product.id}/>
                          </Col>
                          
                      </Row>
@@ -109,7 +112,8 @@ const ProductPage =({ product, addItem, match}) =>{
    
 }
 const mapDispatchToProps = dispatch =>({
-    addItem: (item) => dispatch(addItem(item))
+    addItem: (item) => dispatch(addItem(item)),
+    fetchReviewsStart: productId=> dispatch(fetchReviewsStart(productId))
 })
 const mapStateToProps = (state, ownProps) =>({
     product: selectProduct( ownProps.match.params.productId)(state)

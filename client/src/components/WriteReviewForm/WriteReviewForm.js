@@ -5,9 +5,9 @@ import Form from 'react-bootstrap/Form'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import StarRating from '../../components/StarRating/StarRating'
 import ReactStars from "react-rating-stars-component"
-import {addReviewStart} from '../../redux/reviews/reviewActions'
+import {addReviewStart, fetchReviewsStart} from '../../redux/reviews/reviewActions'
 
-const WriteReviewForm = ({productName, currentUser, addReviewStart, fetchReviewsStart})=> {
+const WriteReviewForm = ({productId, currentUser, addReviewStart, fetchReviewsStart, productName})=> {
     const [reviewBody, setReviewBody] = useState("")
     const [reviewRating, setReviewRating] = useState(5)
     
@@ -21,7 +21,7 @@ const WriteReviewForm = ({productName, currentUser, addReviewStart, fetchReviews
         const review = {
             reviewRating: reviewRating,
             reviewBody: reviewBody,
-            productName: productName,
+            productId: productId,
             reviewAuthor: currentUser.displayName
         }
         try{
@@ -29,7 +29,7 @@ const WriteReviewForm = ({productName, currentUser, addReviewStart, fetchReviews
             
             addReviewStart(review)
             setReviewBody("")
-            fetchReviewsStart(productName)
+            fetchReviewsStart(productId)
 
         }catch(error){
                 console.log(error)
@@ -72,7 +72,7 @@ const WriteReviewForm = ({productName, currentUser, addReviewStart, fetchReviews
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     addReviewStart: (review)=>dispatch(addReviewStart(review)),
-   
-  })
+    fetchReviewsStart: productId=> dispatch(fetchReviewsStart(productId))
+ })
 
 export default connect(null, mapDispatchToProps)(WriteReviewForm)

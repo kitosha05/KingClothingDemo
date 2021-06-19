@@ -6,19 +6,29 @@ import { selectProductsByCollection} from '../../redux/shop/shopSelector'
 import './CollectionPreview.scss'
 import CollectionItem from '../CollectionItem/CollectionItem.js'
 
-const CollectionPreview = ({title, id, routeName, products}) => {
+const CollectionPreview = ({title, id, routeName, products, allReviews}) => {
     const collectionId = id
    
     
    
-    if(!products){
+    if(!products || !allReviews){
         return(
             <div>Loading...</div>
         )
     }
+
     
     const productsInCollection= (collection)=>{
         return(products.filter(product=>product.collection===collection))
+    }
+
+    const averageRating = (product)=>{
+        const productReviews = allReviews.filter(review=>review.productId===product.id)
+        let subTotal = 0
+        productReviews.map(review=>{
+            subTotal += review.reviewRating
+        })
+        return subTotal / productReviews.length
     }
     
     return(
@@ -31,7 +41,7 @@ const CollectionPreview = ({title, id, routeName, products}) => {
                     .map((item)=>{
                         return(
                             
-                            <CollectionItem key={item.id}item={item} collectionId={collectionId} collectionRoute={routeName}/>
+                            <CollectionItem key={item.id}item={item} averageRating={averageRating(item)} collectionId={collectionId} collectionRoute={routeName}/>
                                 
                         )
                     })
@@ -41,7 +51,8 @@ const CollectionPreview = ({title, id, routeName, products}) => {
     )
 }
 const mapStateToProps = (state, ownProps)=>({
-    products: state.shop.products
+    products: state.shop.products,
+    allReviews: state.reviews.allReviews
 })
     
 

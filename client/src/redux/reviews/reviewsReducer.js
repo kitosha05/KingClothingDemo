@@ -3,7 +3,8 @@ import reviewActionTypes from './reviewActionTypes'
 const INITIAL_STATE = {
     reviews: null,
     errorMessage: "",
-    currentProduct:""
+    currentProduct:"",
+    allReviews:null
 }
 
 const reviewsReducer = (state=INITIAL_STATE, action)=> {
@@ -18,6 +19,16 @@ const reviewsReducer = (state=INITIAL_STATE, action)=> {
                 ...state,
                 reviews:action.payload
             }
+        case reviewActionTypes.FETCH_ALLREVIEWS_START:
+                return {
+                    ...state
+                }
+        case reviewActionTypes.FETCH_ALLREVIEWS_SUCCESS:
+                return{
+                    ...state,
+                    allReviews:action.payload
+                }
+        case reviewActionTypes.FETCH_ALLREVIEWS_FAILURE:
         case reviewActionTypes.FETCH_REVIEWS_FAILURE:
             return{
                 ...state,

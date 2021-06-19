@@ -4,12 +4,11 @@ import { Route } from 'react-router-dom';
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {fetchCollectionsStart, fetchProductsStart} from '../../redux/shop/shopActions'
+import {fetchAllReviewsStart} from '../../redux/reviews/reviewActions'
 import {selectIsCollectionFetching, selectIsCollectionsLoaded} from '../../redux/shop/shopSelector'
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary'
 import PlainSpinner from '../../components/PlainSpinner/PlainSpinner'
 
-// import {updateCollections} from '../../redux/shop/shopActions'
-import WithSpinner from '../../components/Spinner/Spinner'
+
 import './shop.scss'
 
 
@@ -21,9 +20,11 @@ class  ShopPage extends React.Component{
   
 
   componentDidMount(){
-    const{fetchCollectionsStart, fetchProductsStart} = this.props
+    const{fetchCollectionsStart, fetchProductsStart, fetchAllReviewsStart} = this.props
     fetchCollectionsStart()
     fetchProductsStart()
+    fetchAllReviewsStart()
+    
      
   }
 
@@ -51,7 +52,9 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   fetchCollectionsStart: ()=>dispatch(fetchCollectionsStart()),
-  fetchProductsStart: ()=>dispatch(fetchProductsStart())
+  fetchProductsStart: ()=>dispatch(fetchProductsStart()),
+  fetchAllReviewsStart: ()=>dispatch(fetchAllReviewsStart())
+
 
 })
 

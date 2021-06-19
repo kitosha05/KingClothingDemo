@@ -5,14 +5,25 @@ export const fetchReviewsStart = (productName) =>({
     type: reviewActionTypes.FETCH_REVIEWS_START,
     payload: productName
 })
+export const fetchAllReviewsStart = () =>({
+    type: reviewActionTypes.FETCH_ALLREVIEWS_START
+})
 
 export const fetchReviewsSuccess = (reviews) => ({
     type: reviewActionTypes.FETCH_REVIEWS_SUCCESS,
     payload: reviews
 })
+export const fetchAllReviewsSuccess = (reviews) => ({
+    type: reviewActionTypes.FETCH_ALLREVIEWS_SUCCESS,
+    payload: reviews
+})
 
 export const fetchReviewsFailure = (error) => ({
     type: reviewActionTypes.FETCH_REVIEWS_FAILURE,
+    payload: error.message
+})
+export const fetchAllReviewsFailure = (error) => ({
+    type: reviewActionTypes.FETCH_ALLREVIEWS_FAILURE,
     payload: error.message
 })
 
