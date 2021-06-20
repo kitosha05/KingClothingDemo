@@ -35,4 +35,16 @@ export const signOutFailure = (error)=>({
     type:userActionTypes.SIGN_OUT_FAILURE,
     payload:error
 })
+export const changeAvatarStart = ({selectedFile, currentUser})=>({
+    type:userActionTypes.CHANGE_AVATAR_START,
+    payload: {selectedFile, currentUser}
+})
+export const changeAvatarSuccess = ({avatarUrl, currentUser}) =>({
+    type: userActionTypes.CHANGE_AVATAR_SUCCESS,
+    payload:{avatarUrl, currentUser}
+})
+export const changeAvatarFailure = (error)=>({
+    type: userActionTypes.CHANGE_AVATAR_FAILURE,
+    payload: error
+})
 

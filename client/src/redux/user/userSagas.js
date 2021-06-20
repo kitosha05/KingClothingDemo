@@ -1,7 +1,7 @@
-import {takeLatest, put, all, call} from 'redux-saga/effects'
+import {takeLatest, put, all, call, take} from 'redux-saga/effects'
 import userActionTypes from './userActionTypes'
-import {auth, googleProvider, createUserProfileDocument, getCurrentUser} from '../../firebase/firebase.utils'
-import {signInSuccess, signInFailure, signOutSuccess, signOutFailure} from './userActions'
+import {firestore,auth, googleProvider, createUserProfileDocument, getCurrentUser, uploadFile} from '../../firebase/firebase.utils'
+import { signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess} from './userActions'
 
 
 
@@ -78,13 +78,43 @@ export function* signOut(){
     }
 }
 
+export function* onChangeAvatarStart(){
+    yield takeLatest(userActionTypes.CHANGE_AVATAR_START, changeAvatar)
+}
+export function* changeAvatar(action){
+    try {
+        const {selectedFile, currentUser} = action.payload
+       const avatarUrl =  yield call(uploadFile, selectedFile)
+    //    const avatarUrl = fileUpload.snapshot.ref.getDownloadURL()
+        yield put(changeAvatarSuccess({avatarUrl, currentUser}))
+    } catch (error) {
+        yield put(changeAvatarFailure(error))
+        
+    }
+}
+
+export function* onChangeAvatarSuccess(){
+    yield takeLatest(userActionTypes.CHANGE_AVATAR_SUCCESS, saveAvatarImageToUserDoc)
+}
+export function* saveAvatarImageToUserDoc(action){
+    try {
+        const {avatarUrl, currentUser} = action.payload
+        const userRef = yield firestore.collection('users').doc(currentUser.id)
+        const res = yield userRef.update({profileImage: avatarUrl})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 export function* userSagas(){
     yield all([
         call(onGoogleSignInStart), 
         call(onEmailSignInStart), 
         call(onCheckUserSession),
-        call(onSignOutStart)
+        call(onSignOutStart),
+        call(onChangeAvatarStart),
+        call(onChangeAvatarSuccess)
     ])
 }
 

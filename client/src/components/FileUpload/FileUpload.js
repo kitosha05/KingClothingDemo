@@ -1,17 +1,21 @@
 import React, {useState} from 'react';
-import { uploadFile } from '../../firebase/firebase.utils';
+import {connect} from 'react-redux'
+import Image from 'react-bootstrap/Image'
+import {changeAvatarStart} from '../../redux/user/userActions'
 
-const FileUpload=()=>{
+const FileUpload=({changeAvatarStart, currentUser})=>{
+
 	const [selectedFile, setSelectedFile] = useState();
 	const [isFilePicked, setIsFilePicked] = useState(false);
-
+    const [previewImage, setPreviewImage] = useState("")
 	const changeHandler = (event) => {
 		setSelectedFile(event.target.files[0]);
 		setIsFilePicked(true);
+        setPreviewImage(URL.createObjectURL(event.target.files[0]))
 	};
 
 	const handleSubmission = () => {
-        uploadFile(selectedFile)
+        changeAvatarStart({selectedFile, currentUser})
 	};
 	
 
@@ -19,17 +23,9 @@ const FileUpload=()=>{
    <div>
 			<input type="file" name="file" onChange={changeHandler} />
 			{isFilePicked ? (
-				<div>
-					<p>Filename: {selectedFile.name}</p>
-					<p>Filetype: {selectedFile.type}</p>
-					<p>Size in bytes: {selectedFile.size}</p>
-					<p>
-						lastModifiedDate:{' '}
-						{selectedFile.lastModifiedDate.toLocaleDateString()}
-					</p>
-				</div>
+				<Image src={previewImage} rounded fluid/>
 			) : (
-				<p>Select a file to show details</p>
+				""
 			)}
 			<div>
 				<button onClick={handleSubmission}>Submit</button>
@@ -37,4 +33,11 @@ const FileUpload=()=>{
 		</div>
 	)
 }
-export default FileUpload
+const mapDispatchToProps = dispatch=>({
+    changeAvatarStart: (file)=>dispatch(changeAvatarStart(file))
+})
+const mapStateToProps = state=>({
+    currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(FileUpload)

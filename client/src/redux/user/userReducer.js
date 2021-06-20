@@ -1,8 +1,11 @@
 import userActionTypes from './userActionTypes'
 const INITIAL_STATE={
     currentUser: null,
-    error: null
+    error: null,
+
+    avatarUrl:""
 }
+
 const userReducer = (state=INITIAL_STATE, action)=>{
     switch (action.type){
       
@@ -22,6 +25,11 @@ const userReducer = (state=INITIAL_STATE, action)=>{
             return{
                 ...state, 
                 error: action.payload
+            }
+        case userActionTypes.CHANGE_AVATAR_FAILURE:
+            return{
+                ...state,
+                error:action.payload
             }
         default:
             return state;
