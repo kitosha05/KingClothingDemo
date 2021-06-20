@@ -12,7 +12,7 @@ export function* newOrder(action){
     try {
          const order = yield action.payload
          const response = yield firestore.collection('orders').add(order)
-        yield put(newOrderSuccess(true))
+        yield put(newOrderSuccess(order))
     } catch (error) {
        yield put(newOrderFailure(error)) 
     }

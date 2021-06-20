@@ -2,11 +2,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const compression = require('compression')
+const nodemailer = require('nodemailer')
 fs = require('fs');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+         user: process.env.EMAIL,
+         pass: process.env.PASSWORD
+     }
+ });
 
 const app = express();
 const port = process.env.PORT || 5000;

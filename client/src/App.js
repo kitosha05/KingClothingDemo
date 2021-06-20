@@ -19,7 +19,7 @@ const Login = lazy(()=>import('./pages/loginAndRegister/Login.js'))
 const Register = lazy(()=>import('./pages/loginAndRegister/Register.js'))
 const CheckoutPage = lazy(()=>import('./pages/checkout/Checkout'))
 const CustomPage = lazy(()=>import('./pages/CustomPage/CustomPage.js'))
-
+const ProfilePage = lazy(()=>import('./pages/ProfilePage/ProfilePage'))
 class App extends React.Component {
   unsubscribeFromAuth = null;
   state = {
@@ -65,6 +65,7 @@ class App extends React.Component {
                <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Login/>)}/>
             
                <Route exact path='/register' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Register/>)}/>
+               <Route exact path='/user/profile' render={()=> this.props.currentUser ? (<ProfilePage/>): (<Redirect to='/signin'/>)}/>
               </Suspense>
               </ErrorBoundary>
            </Fragment>

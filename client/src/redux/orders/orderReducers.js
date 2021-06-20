@@ -4,7 +4,7 @@ const INITIAL_STATE ={
     allOrders: null,
     order: null,
     errorMessage:"",
-    orderConfirmed: false,
+    confirmedOrder:null
     
 }
 
@@ -14,7 +14,6 @@ const orderReducers = (state=INITIAL_STATE, action)=>{
             return{
                 ...state,
                 errorMessage:"",
-                orderConfirmed:false,
                 order: action.payload
             }
         case orderActionTypes.NEW_ORDER_FAILURE:
@@ -25,7 +24,9 @@ const orderReducers = (state=INITIAL_STATE, action)=>{
         case orderActionTypes.NEW_ORDER_SUCCESS:
             return{
                 ...state,
-                orderConfirmed: action.payload
+                order: null,
+                confirmedOrder:action.payload,
+                errorMessage:""
             }
         case orderActionTypes.FETCH_ORDERS_START:
             return{

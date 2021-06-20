@@ -6,7 +6,7 @@ import {useHistory} from 'react-router-dom'
 import {newOrderStart} from '../../redux/orders/orderActions'
 import {clearCart} from '../../redux/cart/cartActions'
 
-const StripeCheckoutButton = ({price, newOrderStart, orderConfirmed, clearCart}) =>{
+const StripeCheckoutButton = ({price, newOrderStart,  clearCart, currentUser, cartItems}) =>{
 
     const history = useHistory()
     const priceForStripe = price * 100
@@ -17,6 +17,8 @@ const StripeCheckoutButton = ({price, newOrderStart, orderConfirmed, clearCart})
         const order = {
             orderTotal: price,
             orderDate: new Date(),
+            currentUser,
+            cartItems,
             ...orderDetails
         }
         axios({
@@ -61,7 +63,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   })
 
 const mapStateToProps = (state) =>({
-    orderConfirmed: state.orderConfirmed
+   currentUser: state.user.currentUser
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(StripeCheckoutButton)

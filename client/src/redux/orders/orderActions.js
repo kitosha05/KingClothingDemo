@@ -5,8 +5,9 @@ export const newOrderStart = (order) => ({
     payload: order
 })
 
-export const newOrderSuccess = () => ({
-    type: orderActionTypes.NEW_ORDER_SUCCESS
+export const newOrderSuccess = (confirmedOrder) => ({
+    type: orderActionTypes.NEW_ORDER_SUCCESS,
+    payload: confirmedOrder
 })
 
 export const newOrderFailure =(err) =>({
