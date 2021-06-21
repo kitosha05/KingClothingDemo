@@ -2,8 +2,7 @@ import userActionTypes from './userActionTypes'
 const INITIAL_STATE={
     currentUser: null,
     error: null,
-
-    avatarUrl:""
+    userOrders:null
 }
 
 const userReducer = (state=INITIAL_STATE, action)=>{
@@ -19,6 +18,12 @@ const userReducer = (state=INITIAL_STATE, action)=>{
             return{
                 ...state,
                 currentUser:null
+            }
+        case userActionTypes.FETCH_USER_ORDERS_SUCCESS:
+            return{
+                ...state,
+                userOrders: action.payload
+                
             }
         case userActionTypes.SIGN_IN_FAILURE:
         case userActionTypes.SIGN_OUT_FAILURE:

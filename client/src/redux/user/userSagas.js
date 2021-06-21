@@ -1,9 +1,21 @@
 import {takeLatest, put, all, call, take} from 'redux-saga/effects'
 import userActionTypes from './userActionTypes'
 import {firestore,auth, googleProvider, createUserProfileDocument, getCurrentUser, uploadFile} from '../../firebase/firebase.utils'
-import { signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess} from './userActions'
+import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess, checkUserSession} from './userActions'
 
+// export function* onFetchOrdersStart(){
+//     yield takeLatest(userActionTypes.FETCH_USER_ORDERS_START, fetchUserOrders)
+// }
 
+// export function* fetchUserOrders(action){
+//     try {
+//         const userId = action.payload
+//         const userOrders = call(getOrdersByUserId, userId)
+//         yield put(fetchUserOrdersSuccess(userOrders))
+//     } catch (error) {
+//         yield put(fetchUserOrdersFailure(error))
+//     }
+// }
 
 export function* getSnapshotFromUserAuth(userAuth){
     try {
@@ -84,9 +96,11 @@ export function* onChangeAvatarStart(){
 export function* changeAvatar(action){
     try {
         const {selectedFile, currentUser} = action.payload
-       const avatarUrl =  yield call(uploadFile, selectedFile)
+       const avatarUrl =  yield call(uploadFile, selectedFile, currentUser)
     //    const avatarUrl = fileUpload.snapshot.ref.getDownloadURL()
+        
         yield put(changeAvatarSuccess({avatarUrl, currentUser}))
+       
     } catch (error) {
         yield put(changeAvatarFailure(error))
         
@@ -94,13 +108,14 @@ export function* changeAvatar(action){
 }
 
 export function* onChangeAvatarSuccess(){
-    yield takeLatest(userActionTypes.CHANGE_AVATAR_SUCCESS, saveAvatarImageToUserDoc)
+    yield takeLatest(userActionTypes.CHANGE_AVATAR_SUCCESS, saveAvatarUrlToUserDoc)
 }
-export function* saveAvatarImageToUserDoc(action){
+export function* saveAvatarUrlToUserDoc(action){
     try {
         const {avatarUrl, currentUser} = action.payload
         const userRef = yield firestore.collection('users').doc(currentUser.id)
         const res = yield userRef.update({profileImage: avatarUrl})
+        yield put(checkUserSession())
     } catch (error) {
         console.log(error)
     }

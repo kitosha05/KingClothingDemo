@@ -47,4 +47,16 @@ export const changeAvatarFailure = (error)=>({
     type: userActionTypes.CHANGE_AVATAR_FAILURE,
     payload: error
 })
+export const fetchUserOrdersStart = (userId)=>({
+    type:userActionTypes.FETCH_USER_ORDERS_START,
+    payload:userId
+})
+export const fetchUserOrdersSuccess = (userOrders)=>({
+    type:userActionTypes.FETCH_USER_ORDERS_SUCCESS,
+    payload: userOrders
+})
+export const fetchOrdersFailure = (error)=>({
+    type:userActionTypes.FETCH_USER_ORDERS_FAILURE,
+    payload:error
+})
 

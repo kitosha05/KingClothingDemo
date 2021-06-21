@@ -4,6 +4,10 @@ export const newOrderStart = (order) => ({
     type: orderActionTypes.NEW_ORDER_START,
     payload: order
 })
+export const addOrderToUser =(order)=>({
+    type: orderActionTypes.ADD_ORDER_TO_USER,
+    payload: order
+})
 
 export const newOrderSuccess = (confirmedOrder) => ({
     type: orderActionTypes.NEW_ORDER_SUCCESS,

@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux'
-import Image from 'react-bootstrap/Image'
+import Avatar from '@material-ui/core/Avatar'
+import Button from 'react-bootstrap/Button'
 import {changeAvatarStart} from '../../redux/user/userActions'
 
-const FileUpload=({changeAvatarStart, currentUser})=>{
+const FileUpload=({changeAvatarStart, currentUser, setShowFileInput})=>{
 
 	const [selectedFile, setSelectedFile] = useState();
 	const [isFilePicked, setIsFilePicked] = useState(false);
@@ -16,19 +17,24 @@ const FileUpload=({changeAvatarStart, currentUser})=>{
 
 	const handleSubmission = () => {
         changeAvatarStart({selectedFile, currentUser})
+        setShowFileInput(false)
 	};
 	
 
 	return(
    <div>
-			<input type="file" name="file" onChange={changeHandler} />
-			{isFilePicked ? (
-				<Image src={previewImage} rounded fluid/>
+
+			<input type="file" name="file"  onChange={changeHandler} />
+			{isFilePicked ? (<div>
+                <Avatar src={previewImage} />
+                <Button variant='primary' onClick={handleSubmission}>Save Photo</Button>
+            </div>
+				
 			) : (
 				""
 			)}
 			<div>
-				<button onClick={handleSubmission}>Submit</button>
+				
 			</div>
 		</div>
 	)

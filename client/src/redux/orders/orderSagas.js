@@ -13,10 +13,13 @@ export function* newOrder(action){
          const order = yield action.payload
          const response = yield firestore.collection('orders').add(order)
         yield put(newOrderSuccess(order))
+        
+        
     } catch (error) {
        yield put(newOrderFailure(error)) 
     }
 }
+
 
 export function* onFetchOrdersStart(){
     yield takeLatest(orderActionTypes.FETCH_ORDERS_START, fetchOrders)
@@ -30,9 +33,12 @@ export function* fetchOrders(){
                 orderDate, 
                 orderTotal,
                 billing_address_city,
-                billing_address_state } = doc.data()
+                billing_address_state, cartItems, currentUser } = doc.data()
+            const userId = currentUser.id
             
             return{
+                userId,
+                cartItems,
                 billing_name, 
                 orderDate, 
                 orderTotal,
