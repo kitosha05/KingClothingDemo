@@ -1,7 +1,7 @@
 import {takeLatest, put, all, call, take} from 'redux-saga/effects'
 import userActionTypes from './userActionTypes'
 import {firestore,auth, googleProvider, createUserProfileDocument, getCurrentUser, uploadFile} from '../../firebase/firebase.utils'
-import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess, checkUserSession, setFavItemFailure, setFavItemSuccess} from './userActions'
+import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess, checkUserSession, setFavItemFailure, setFavItemSuccess, removeFavItemFailure, removeFavItemSuccess} from './userActions'
 
 // export function* onFetchOrdersStart(){
 //     yield takeLatest(userActionTypes.FETCH_USER_ORDERS_START, fetchUserOrders)
@@ -23,7 +23,11 @@ export function* getSnapshotFromUserAuth(userAuth){
     try {
         const userRef = yield call(createUserProfileDocument, userAuth)
         const userSnapshot = yield userRef.get()
-        yield put(signInSuccess({id: userSnapshot.id, ...userSnapshot.data()}))
+        const favItemsSnapshot = yield firestore.collection('users').doc(userSnapshot.id).collection('favorites').get()
+        const favItems = yield favItemsSnapshot.docs.map(doc=>{
+            return doc.id
+        })
+        yield put(signInSuccess({id: userSnapshot.id, favItems, ...userSnapshot.data()}))
         
     } catch (error) {
         yield put(signInFailure(error))
@@ -140,6 +144,23 @@ export function* setFavItem(action){
     }
 }
 
+export function* onRemoveFavItemStart(){
+    yield takeLatest(userActionTypes.REMOVE_FAV_ITEM_START, removeFavItem)
+}
+export function* removeFavItem(action){
+    try {
+       const {userId, productId} = action.payload
+        const res = yield firestore.collection('users').doc(userId).collection('favorites').doc(productId).delete()
+        const favItemsSnapshot = yield firestore.collection('users').doc(userId).collection('favorites').get()
+        const favItems = yield favItemsSnapshot.docs.map(doc=>{
+            return doc.id
+        })
+        yield put(removeFavItemSuccess(favItems))
+    } catch (error) {
+        yield put(removeFavItemFailure(error))
+    }
+}
+
 
 export function* userSagas(){
     yield all([
@@ -149,7 +170,8 @@ export function* userSagas(){
         call(onSignOutStart),
         call(onChangeAvatarStart),
         call(onChangeAvatarSuccess),
-        call(onSetFavItemStart)
+        call(onSetFavItemStart),
+        call(onRemoveFavItemStart)
     ])
 }
 

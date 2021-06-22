@@ -1,5 +1,5 @@
 import './CollectionItem.scss'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {addItem} from '../../redux/cart/cartActions'
@@ -8,7 +8,7 @@ import ReactStars from "react-rating-stars-component"
 import { fetchReviewsStart } from '../../redux/reviews/reviewSagas';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import { setFavItemStart } from '../../redux/user/userActions'
+import { setFavItemStart, removeFavItemStart } from '../../redux/user/userActions'
 
 
 const configStars = {
@@ -16,17 +16,30 @@ const configStars = {
     edit: false
   };
 
-const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentUser, setFavItemStart}) => {
-    const [isFavorite, setIsFavorite] = useState(false)
+const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentUser, setFavItemStart, favItems, removeFavItemStart}) => {
+    
+    const [isFavorite, setIsFavorite] = useState(favItems.includes(item.id))
   
     const {id, name, price, imageUrl} = item
     const productUrl = name.toLowerCase().replace(/\b \b/g, "-")
 
-    const onClick = async(e)=>{
-        await setIsFavorite(!isFavorite)
-        if(isFavorite)setFavItemStart(currentUser.id, id)
+    useEffect(()=>{
+        if(currentUser && favItems){
+           //if isFavorite is true and item not already in favItems then dispatch setFavItem
+          if (isFavorite && !favItems.includes(id)) setFavItemStart(currentUser.id, id)
+          if(!isFavorite && favItems.includes(id)) removeFavItemStart(currentUser.id, id) 
+        }       
+        
+    },[isFavorite])
 
+    const onClick = async(e)=>{
+        setIsFavorite(!isFavorite)
+        
     }
+    const toggleFavorite = async()=>{
+       
+    }
+
     
     return(
         <div className='collection-item'>
@@ -59,10 +72,12 @@ const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentU
 const mapDispatchToProps = dispatch =>({
     addItem: item=> dispatch(addItem(item)),
     fetchReviewsStart: productName=>dispatch(fetchReviewsStart(productName)),
-    setFavItemStart: (userId, productId)=> dispatch(setFavItemStart(userId,productId))
+    setFavItemStart: (userId, productId)=> dispatch(setFavItemStart(userId,productId)),
+    removeFavItemStart: (userId, productId)=> dispatch(removeFavItemStart(userId,productId))
 })
 const mapStateToProps=state=>({
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    favItems: state.user.currentUser.favItems
 })
 
 

@@ -71,4 +71,17 @@ export const setFavItemFailure = (err)=>({
     type: userActionTypes.SET_FAV_ITEM_FAILURE,
     payload: err
 })
+export const removeFavItemStart = (userId, productId) =>({
+    type:userActionTypes.REMOVE_FAV_ITEM_START,
+    payload:{userId, productId}
+})
+export const removeFavItemSuccess = (faveItems)=>({
+    type:userActionTypes.REMOVE_FAV_ITEM_SUCCESS,
+    payload: faveItems
+})
+export const removeFavItemFailure = (err)=>({
+    type: userActionTypes.REMOVE_FAV_ITEM_FAILURE,
+    payload: err
+})
+
 
