@@ -21,6 +21,9 @@ const CheckoutPage = lazy(()=>import('./pages/checkout/Checkout'))
 const CustomPage = lazy(()=>import('./pages/CustomPage/CustomPage.js'))
 const ProfilePage = lazy(()=>import('./pages/ProfilePage/ProfilePage'))
 const UserOrderHistory = lazy(()=>import('./pages/UserOrderHistory/UserOrderHistory'))
+const UserOrderDetails = lazy(()=>import('./pages/UserOrderDetails/UserOrderDetails'))
+
+
 class App extends React.Component {
   unsubscribeFromAuth = null;
   state = {
@@ -68,7 +71,8 @@ class App extends React.Component {
                <Route exact path='/register' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Register/>)}/>
                <Route exact path='/user/profile' render={()=> this.props.currentUser ? (<ProfilePage/>): (<Redirect to='/signin'/>)}/>
                <Route exact path='/user/order-history' render={()=> this.props.currentUser ? (<UserOrderHistory/>): (<Redirect to='/signin'/>)}/>
-              
+               <Route exact path='/user/orders/:orderId' render={(props)=> this.props.currentUser ? (<UserOrderDetails {...props}/>): (<Redirect to='/signin'/>)}/>
+
               </Suspense>
               </ErrorBoundary>
            </Fragment>
