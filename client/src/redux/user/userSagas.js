@@ -1,7 +1,7 @@
 import {takeLatest, put, all, call, take} from 'redux-saga/effects'
 import userActionTypes from './userActionTypes'
 import {firestore,auth, googleProvider, createUserProfileDocument, getCurrentUser, uploadFile} from '../../firebase/firebase.utils'
-import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess, checkUserSession} from './userActions'
+import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess, checkUserSession, setFavItemFailure, setFavItemSuccess} from './userActions'
 
 // export function* onFetchOrdersStart(){
 //     yield takeLatest(userActionTypes.FETCH_USER_ORDERS_START, fetchUserOrders)
@@ -16,6 +16,8 @@ import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFai
 //         yield put(fetchUserOrdersFailure(error))
 //     }
 // }
+
+
 
 export function* getSnapshotFromUserAuth(userAuth){
     try {
@@ -121,6 +123,23 @@ export function* saveAvatarUrlToUserDoc(action){
     }
 }
 
+export function* onSetFavItemStart(){
+    yield takeLatest(userActionTypes.SET_FAV_ITEM_START, setFavItem)
+}
+export function* setFavItem(action){
+    try {
+        const {userId, productId} = action.payload
+        const favItemRef = yield firestore.collection('users').doc(userId).collection('favorites').doc(productId).set({isFavorite:true})
+        const favItemsSnapshot = yield firestore.collection('users').doc(userId).collection('favorites').get()
+        const favItems = yield favItemsSnapshot.docs.map(doc=>{
+            return doc.id
+        })
+        yield put(setFavItemSuccess(favItems))
+    } catch (error) {
+        yield put(setFavItemFailure(error))
+    }
+}
+
 
 export function* userSagas(){
     yield all([
@@ -129,7 +148,8 @@ export function* userSagas(){
         call(onCheckUserSession),
         call(onSignOutStart),
         call(onChangeAvatarStart),
-        call(onChangeAvatarSuccess)
+        call(onChangeAvatarSuccess),
+        call(onSetFavItemStart)
     ])
 }
 

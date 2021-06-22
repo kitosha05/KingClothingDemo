@@ -59,4 +59,16 @@ export const fetchOrdersFailure = (error)=>({
     type:userActionTypes.FETCH_USER_ORDERS_FAILURE,
     payload:error
 })
+export const setFavItemStart = (userId, productId) =>({
+    type:userActionTypes.SET_FAV_ITEM_START,
+    payload:{userId, productId}
+})
+export const setFavItemSuccess = (faveItems)=>({
+    type:userActionTypes.SET_FAV_ITEM_SUCCESS,
+    payload: faveItems
+})
+export const setFavItemFailure = (err)=>({
+    type: userActionTypes.SET_FAV_ITEM_FAILURE,
+    payload: err
+})
 

@@ -27,6 +27,21 @@
       padding: 0 10px;
     }
   }
+
+  .fave-item-span {
+    top: 5px;
+    position: absolute;
+    margin-left: 20vw;
+    color: white;
+    display: flex;
+
+    &:hover {
+      transform: scale(1.5);
+      transition: transform 1s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+      cursor: pointer;
+    }
+  }
+
   &:hover {
     .image {
       opacity: 0.8;

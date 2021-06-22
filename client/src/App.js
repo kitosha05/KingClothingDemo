@@ -22,6 +22,7 @@ const CustomPage = lazy(()=>import('./pages/CustomPage/CustomPage.js'))
 const ProfilePage = lazy(()=>import('./pages/ProfilePage/ProfilePage'))
 const UserOrderHistory = lazy(()=>import('./pages/UserOrderHistory/UserOrderHistory'))
 const UserOrderDetails = lazy(()=>import('./pages/UserOrderDetails/UserOrderDetails'))
+const WishList= lazy(()=>import('./pages/Wishlist/Wishlist'))
 
 
 class App extends React.Component {
@@ -72,6 +73,7 @@ class App extends React.Component {
                <Route exact path='/user/profile' render={()=> this.props.currentUser ? (<ProfilePage/>): (<Redirect to='/signin'/>)}/>
                <Route exact path='/user/order-history' render={()=> this.props.currentUser ? (<UserOrderHistory/>): (<Redirect to='/signin'/>)}/>
                <Route exact path='/user/orders/:orderId' render={(props)=> this.props.currentUser ? (<UserOrderDetails {...props}/>): (<Redirect to='/signin'/>)}/>
+               <Route exact path='/user/wishlist' render={(props)=> this.props.currentUser ? (<WishList {...props}/>): (<Redirect to='/signin'/>)}/>
 
               </Suspense>
               </ErrorBoundary>

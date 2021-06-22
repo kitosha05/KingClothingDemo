@@ -2,7 +2,8 @@ import userActionTypes from './userActionTypes'
 const INITIAL_STATE={
     currentUser: null,
     error: null,
-    userOrders:null
+    userOrders:null,
+    favItems: null
 }
 
 const userReducer = (state=INITIAL_STATE, action)=>{
@@ -25,12 +26,18 @@ const userReducer = (state=INITIAL_STATE, action)=>{
                 userOrders: action.payload
                 
             }
+        case userActionTypes.SET_FAV_ITEM_SUCCESS:
+            return{
+                ...state,
+                favItems: action.payload
+            }
         case userActionTypes.SIGN_IN_FAILURE:
         case userActionTypes.SIGN_OUT_FAILURE:
             return{
                 ...state, 
                 error: action.payload
             }
+        case userActionTypes.SET_FAV_ITEM_FAILURE:
         case userActionTypes.CHANGE_AVATAR_FAILURE:
             return{
                 ...state,

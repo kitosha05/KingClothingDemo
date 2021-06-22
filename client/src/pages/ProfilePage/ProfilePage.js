@@ -14,8 +14,10 @@ import Button from 'react-bootstrap/Button'
 import './ProfilePage.scss'
 
 const ProfilePage = ({currentUser, checkUserSession}) =>{
-    const {displayName, email} = currentUser
+    const {displayName, email, createdAt} = currentUser
     const [showFileInput, setShowFileInput] = useState(false)
+    const joinedDate = new Date(createdAt.seconds*1000)
+    
   
 
     return(
@@ -23,25 +25,24 @@ const ProfilePage = ({currentUser, checkUserSession}) =>{
            <Col className='col-md-8 offset-md-2 justify-content-center align-items-center'>
              <Card className="text-center" style={{ width: '18rem' }}>
             {currentUser.profileImage ? <Avatar  className='avatar' src={currentUser.profileImage} /> : ""} 
-            {showFileInput ? (<FileUpload setShowFileInput={setShowFileInput}/>)
+            
+                  <Card.Title>{displayName}</Card.Title>
+                  <Card.Text>{email} </Card.Text>
+                  <Card.Text>Member Since:</Card.Text>
+                  <Card.Text>{joinedDate.toDateString()}</Card.Text>
+                    <Card.Body>
+                        
+                    {showFileInput ? (<FileUpload setShowFileInput={setShowFileInput}/>)
              : (<Button onClick={()=>setShowFileInput(true)} variant="outline-info">Select New Avatar</Button>)}
             
-                 
-               
-                    <Card.Body>
                          
-                         <Card.Text>
-                              {email}
-                        </Card.Text>
+                        
                     </Card.Body>
                  <ListGroup className="list-group-flush">
                      <ListGroupItem><Link to='/user/order-history'>Order History</Link></ListGroupItem>
-                    <ListGroupItem>Favorites</ListGroupItem>
+                    <ListGroupItem><Link to='/user/wishlist'>Favorites</Link></ListGroupItem>
                 </ListGroup>
-               <Card.Body>
-                 <Card.Link href="#">Card Link</Card.Link>
-                 <Card.Link href="#">Another Link</Card.Link>
-                </Card.Body>
+           
             </Card>
            </Col>
        </Container>
