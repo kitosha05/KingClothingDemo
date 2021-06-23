@@ -16,18 +16,30 @@ const configStars = {
     edit: false
   };
 
-const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentUser, setFavItemStart, favItems, removeFavItemStart}) => {
+const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentUser, favItems, setFavItemStart,  removeFavItemStart}) => {
     
-    const [isFavorite, setIsFavorite] = useState(favItems.includes(item.id))
+    const [isFavorite, setIsFavorite] = useState(()=>{
+        if (currentUser) {
+        if (currentUser.favItems){
+            if (currentUser.favItems.length>0) return currentUser.favItems.includes(item.id)
+        }
+        }
+        return false
+    })
   
     const {id, name, price, imageUrl} = item
     const productUrl = name.toLowerCase().replace(/\b \b/g, "-")
 
     useEffect(()=>{
-        if(currentUser && favItems){
-           //if isFavorite is true and item not already in favItems then dispatch setFavItem
-          if (isFavorite && !favItems.includes(id)) setFavItemStart(currentUser.id, id)
-          if(!isFavorite && favItems.includes(id)) removeFavItemStart(currentUser.id, id) 
+        if(currentUser ){
+            
+         
+                
+                 //if isFavorite is true and item not already in favItems then dispatch setFavItem
+                if (isFavorite) setFavItemStart(currentUser.id, id)
+                 if(!isFavorite) removeFavItemStart(currentUser.id, id) 
+            
+          
         }       
         
     },[isFavorite])
@@ -36,9 +48,7 @@ const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentU
         setIsFavorite(!isFavorite)
         
     }
-    const toggleFavorite = async()=>{
-       
-    }
+    
 
     
     return(
@@ -57,10 +67,14 @@ const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentU
             <div className='stars'>
             <ReactStars {...configStars} value={averageRating}/>
             </div>
-            <span className='fave-item-span' onClick={e=>onClick(e)}>
-            {isFavorite ? <FavoriteIcon className='fav-icon-filled'/> : <FavoriteBorderIcon className='fav-icon-open'/>}
-            
-            </span>
+            {currentUser ? (
+                 <span className='fave-item-span' onClick={e=>onClick(e)}>
+                 {isFavorite ? <FavoriteIcon className='fav-icon-filled'/> : <FavoriteBorderIcon className='fav-icon-open'/>}
+                 
+                 </span>
+
+            ): ("")}
+           
             
             
             
@@ -77,7 +91,8 @@ const mapDispatchToProps = dispatch =>({
 })
 const mapStateToProps=state=>({
     currentUser: state.user.currentUser,
-    favItems: state.user.currentUser.favItems
+    favItems: state.user.favItems
+   
 })
 
 

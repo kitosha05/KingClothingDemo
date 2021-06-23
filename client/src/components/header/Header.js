@@ -67,10 +67,22 @@ const changeBackground = ()=>{
           <Nav className='right-side'>
             <Nav.Link >
                 {
-                     currentUser ?
-                     <Link as='div' className='option sign-out toggle-signin' onClick={signOutStart}>SIGN OUT</Link>
+                     currentUser ?(
+                     <div>
+                       <span>
+                          <Link to='/user/profile' className='profile-link'>Profile</Link>
+
+                       </span>
+                       <span>
+                       <Link as='div' className='option sign-out toggle-signin' onClick={signOutStart}>SIGN OUT</Link>
+
+                       </span>
+                     </div>
+                     )
+                     
                     :
-                    <Link className='option toggle-signin' to='/signin'>Sign In</Link>
+                    (<Link className='option toggle-signin' to='/signin'>Sign In</Link>)
+                    
                 }
                 </Nav.Link>
             <Nav.Link >

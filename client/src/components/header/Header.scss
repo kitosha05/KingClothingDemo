@@ -45,9 +45,13 @@
 
   .right-side {
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
     a.toggle-signin {
+      color: white;
+      margin: 0 10px;
+    }
+    a.profile-link {
       color: white;
     }
     .cart-icon {

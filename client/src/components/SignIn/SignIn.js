@@ -30,9 +30,9 @@ class SignIn extends React.Component{
     render(){
         const {googleSignInStart} = this.props
         return(
-            <Col className='sign-in col-md-6 offset-md-3'>
-                <Row>
-                <h2>I already Have An Account</h2>
+            <Col className='sign-in col-md-8 offset-md-2 justify-content-center align-items-center'>
+                <Row className='justify-content-center align-items-center'>
+                <h2>Have An Account Already?</h2>
                 <span>Sign in with your email and password</span>
 
                 <form onSubmit={this.onSubmit}>
@@ -53,10 +53,7 @@ class SignIn extends React.Component{
                         required/>
                     <div className='buttons'>
                          <Button type='submit'>Sign In</Button>
-                        <Button type='button' onClick={googleSignInStart} isGoogleSignIn>
-                            {' '}
-                            Sign In With Google{' '}
-                        </Button>
+                        <Button type='button' onClick={googleSignInStart} isGoogleSignIn>{' '}Sign In With Google{' '}</Button>
                     </div>
                     
 

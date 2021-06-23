@@ -3,6 +3,7 @@ const INITIAL_STATE={
     currentUser: null,
     error: null,
     userOrders:null,
+    favItems: null
     
 }
 
@@ -26,7 +27,12 @@ const userReducer = (state=INITIAL_STATE, action)=>{
                 userOrders: action.payload
                 
             }
-      
+        case userActionTypes.REMOVE_FAV_ITEM_SUCCESS:
+        case userActionTypes.SET_FAV_ITEM_SUCCESS:
+            return{
+                ...state,
+                favItems: action.payload
+            }
         case userActionTypes.SIGN_IN_FAILURE:
         case userActionTypes.SIGN_OUT_FAILURE:
             return{
