@@ -19,7 +19,8 @@ const userReducer = (state=INITIAL_STATE, action)=>{
         case userActionTypes.SIGN_OUT_SUCCESS:
             return{
                 ...state,
-                currentUser:null
+                currentUser:null,
+                favItems: null
             }
         case userActionTypes.FETCH_USER_ORDERS_SUCCESS:
             return{

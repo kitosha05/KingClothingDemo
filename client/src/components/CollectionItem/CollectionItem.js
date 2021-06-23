@@ -8,7 +8,7 @@ import ReactStars from "react-rating-stars-component"
 import { fetchReviewsStart } from '../../redux/reviews/reviewSagas';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import { setFavItemStart, removeFavItemStart } from '../../redux/user/userActions'
+import { setFavItemStart, removeFavItemStart, checkUserSession } from '../../redux/user/userActions'
 
 
 const configStars = {
@@ -16,7 +16,7 @@ const configStars = {
     edit: false
   };
 
-const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentUser, favItems, setFavItemStart,  removeFavItemStart}) => {
+const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, averageRating, currentUser, favItems, setFavItemStart,  removeFavItemStart}) => {
     
     const [isFavorite, setIsFavorite] = useState(()=>{
         if (currentUser) {
@@ -32,13 +32,20 @@ const CollectionItem = ({item, addItem, collectionRoute, averageRating, currentU
 
     useEffect(()=>{
         if(currentUser ){
-            
-         
-                
-                 //if isFavorite is true and item not already in favItems then dispatch setFavItem
-                if (isFavorite) setFavItemStart(currentUser.id, id)
-                 if(!isFavorite) removeFavItemStart(currentUser.id, id) 
-            
+            if(favItems){
+                if (favItems.length>0){
+                    if (isFavorite && !favItems.includes(id)) setFavItemStart(currentUser.id, id)
+                    if(!isFavorite && favItems.includes(id)) removeFavItemStart(currentUser.id, id) 
+                }
+            }else if (currentUser.favItems){
+                if(currentUser.favItems.length>0){
+                    if (isFavorite && !currentUser.favItems.includes(id)) setFavItemStart(currentUser.id, id)
+                    if(!isFavorite && currentUser.favItems.includes(id)) removeFavItemStart(currentUser.id, id) 
+
+                }
+            }
+                            
+           
           
         }       
         
@@ -87,7 +94,8 @@ const mapDispatchToProps = dispatch =>({
     addItem: item=> dispatch(addItem(item)),
     fetchReviewsStart: productName=>dispatch(fetchReviewsStart(productName)),
     setFavItemStart: (userId, productId)=> dispatch(setFavItemStart(userId,productId)),
-    removeFavItemStart: (userId, productId)=> dispatch(removeFavItemStart(userId,productId))
+    removeFavItemStart: (userId, productId)=> dispatch(removeFavItemStart(userId,productId)),
+    checkUserSession: ()=>dispatch(checkUserSession())
 })
 const mapStateToProps=state=>({
     currentUser: state.user.currentUser,
