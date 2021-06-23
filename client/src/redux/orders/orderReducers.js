@@ -4,7 +4,7 @@ const INITIAL_STATE ={
     allOrders: null,
     order: null,
     errorMessage:"",
-    confirmedOrder:null
+    checkoutId:null
     
 }
 
@@ -25,7 +25,7 @@ const orderReducers = (state=INITIAL_STATE, action)=>{
             return{
                 ...state,
                 order: null,
-                confirmedOrder:action.payload,
+                checkoutId:action.payload,
                 errorMessage:""
             }
         case orderActionTypes.FETCH_ORDERS_START:

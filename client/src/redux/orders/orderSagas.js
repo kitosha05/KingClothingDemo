@@ -11,8 +11,10 @@ export function* onNewOrderStart(){
 export function* newOrder(action){
     try {
          const order = yield action.payload
-         const response = yield firestore.collection('orders').add(order)
-        yield put(newOrderSuccess(order))
+        const orderId= yield firestore.collection('orders').add(order).then(doc=>{
+             return doc.id })
+
+        yield put(newOrderSuccess(orderId))
         
         
     } catch (error) {

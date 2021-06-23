@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {fetchCollectionsStart, fetchProductsStart} from '../../redux/shop/shopActions'
 import {fetchAllReviewsStart} from '../../redux/reviews/reviewActions'
+import { checkUserSession } from '../../redux/user/userActions';
 import {selectIsCollectionFetching, selectIsCollectionsLoaded} from '../../redux/shop/shopSelector'
 import PlainSpinner from '../../components/PlainSpinner/PlainSpinner'
 
@@ -20,10 +21,11 @@ class  ShopPage extends React.Component{
   
 
   componentDidMount(){
-    const{fetchCollectionsStart, fetchProductsStart, fetchAllReviewsStart} = this.props
+    const{fetchCollectionsStart, fetchProductsStart, fetchAllReviewsStart, checkUserSession} = this.props
     fetchCollectionsStart()
     fetchProductsStart()
     fetchAllReviewsStart()
+    checkUserSession()
     
      
   }
@@ -53,7 +55,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   fetchCollectionsStart: ()=>dispatch(fetchCollectionsStart()),
   fetchProductsStart: ()=>dispatch(fetchProductsStart()),
-  fetchAllReviewsStart: ()=>dispatch(fetchAllReviewsStart())
+  fetchAllReviewsStart: ()=>dispatch(fetchAllReviewsStart()),
+  checkUserSession: ()=>dispatch(checkUserSession())
 
 
 })

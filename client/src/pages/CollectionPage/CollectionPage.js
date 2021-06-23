@@ -3,9 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import CollectionItem from '../../components/CollectionItem/CollectionItem';
+import ImageWithOverlay from '../../components/ImageWithOverlay/ImageWithOverlay'
 
 import { selectCollection, selectProductsByCollection } from '../../redux/shop/shopSelector'
-
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import './CollectionPage.scss';
 
 const CollectionPage = ({ collection, match, products, allReviews }) => {
@@ -31,14 +33,21 @@ const averageRating = (productId)=>{
 }
 
   return (
-    <div className='collection-page'>
-      <h2 className='title'>{title}</h2>
-      <div className='items'>
+    <Col className=' col-md-10 offset-md-1 collection-page justify-content-center align-items-center'>
+      <Row>
+        
+     <h1>{title}</h1>
+     
+      </Row>
+      
+      <Row className='items justify-content-center align-items-center'>
         {productsInCollection(title).map(item => (
+          <Col className='col-xs-6 col-md-4 item-column'>
           <CollectionItem key={item.id} item={item} averageRating={averageRating(item.id)}collectionRoute={title.toLowerCase()} />
+          </Col>
         ))}
-      </div>
-    </div>
+      </Row>
+    </Col>
   );
 };
 

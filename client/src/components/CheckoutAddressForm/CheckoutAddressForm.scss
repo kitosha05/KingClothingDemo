@@ -1,0 +1,27 @@
+.city-form-group {
+  display: inline-flex;
+  width: 33%;
+
+  #shippingCity {
+    width: 40%;
+    margin-left: 5px;
+  }
+}
+.state-form-group {
+  display: inline-flex;
+  width: 33%;
+
+  #shippingState {
+    width: 40%;
+    margin-left: 5px;
+  }
+}
+.zip-form-group {
+  width: 33%;
+  display: inline-flex;
+
+  #shippingZipcode {
+    width: 40%;
+    margin-left: 5px;
+  }
+}

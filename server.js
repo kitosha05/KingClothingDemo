@@ -48,9 +48,7 @@ app.use(function (req, res, next) {
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
-  app.get('/page', (req,res)=>{
-    res.render('preview.html');
-  })
+
 
   app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
@@ -62,31 +60,17 @@ app.listen(port, error => {
   console.log('Server running on port ' + port);
 });
 
-app.post('/page', (req,res)=>{
-  let html = req.body['gjs-html'];
-  let css = req.body['gjs-css'];
-  let page = `<!doctype html>
-
-  <html lang="en">
-  <head>
-    <meta charset="utf-8">
-  
-    <title>Preview</title>
-   <style>${css}</style>
-  </head>
-  
-  <body>
-    ${html}
-    <script src="js/scripts.js"></script>
-  </body>
-  </html>`
-
-  
-  fs.writeFile('preview.html', page, function (err) {
-    if (err) throw err;
-    console.log('Saved!');
+app.post("/create-payment-intent", async (req, res) => {
+  const { items } = req.body;
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 100,
+    currency: "usd"
   });
-})
+  res.send({
+    clientSecret: paymentIntent.client_secret
+  });
+});
 
 
 

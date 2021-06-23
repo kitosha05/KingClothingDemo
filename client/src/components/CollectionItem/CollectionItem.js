@@ -9,6 +9,7 @@ import { fetchReviewsStart } from '../../redux/reviews/reviewSagas';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { setFavItemStart, removeFavItemStart, checkUserSession } from '../../redux/user/userActions'
+import { removeFavItem } from '../../redux/user/userSagas'
 
 
 const configStars = {
@@ -30,24 +31,9 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
     const {id, name, price, imageUrl} = item
     const productUrl = name.toLowerCase().replace(/\b \b/g, "-")
 
-    useEffect(()=>{
-        if(currentUser ){
-            if(favItems){
-                if (favItems.length>0){
-                    if (isFavorite && !favItems.includes(id)) setFavItemStart(currentUser.id, id)
-                    if(!isFavorite && favItems.includes(id)) removeFavItemStart(currentUser.id, id) 
-                }
-            }else if (currentUser.favItems){
-                if(currentUser.favItems.length>0){
-                    if (isFavorite && !currentUser.favItems.includes(id)) setFavItemStart(currentUser.id, id)
-                    if(!isFavorite && currentUser.favItems.includes(id)) removeFavItemStart(currentUser.id, id) 
-
-                }
-            }
-                            
-           
-          
-        }       
+    useEffect(()=>{     
+        if(isFavorite) setFavItemStart(currentUser.id, id)
+        if(!isFavorite) removeFavItemStart(currentUser.id, id)  
         
     },[isFavorite])
 

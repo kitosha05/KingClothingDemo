@@ -23,6 +23,7 @@ const ProfilePage = lazy(()=>import('./pages/ProfilePage/ProfilePage'))
 const UserOrderHistory = lazy(()=>import('./pages/UserOrderHistory/UserOrderHistory'))
 const UserOrderDetails = lazy(()=>import('./pages/UserOrderDetails/UserOrderDetails'))
 const WishList= lazy(()=>import('./pages/Wishlist/Wishlist'))
+const CompleteCheckout = lazy(()=>import('./pages/CompleteCheckout/CompleteCheckOut'))
 
 
 class App extends React.Component {
@@ -64,6 +65,7 @@ class App extends React.Component {
                <Route path='/pages/:pageId' component={CustomPage}/>
             
                <Route exact path='/checkout' component={CheckoutPage} />
+               <Route exact path='/checkout/:orderId/complete-checkout' component={CompleteCheckout} />
             
                <Route exact path='/thank-you' component={ThankYou}/>
             

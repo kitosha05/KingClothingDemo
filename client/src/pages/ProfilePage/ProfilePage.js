@@ -24,7 +24,7 @@ const ProfilePage = ({currentUser, checkUserSession}) =>{
        <Container>
            <Col className='col-md-8 offset-md-2 justify-content-center align-items-center'>
              <Card className="text-center" style={{ width: '18rem' }}>
-            {currentUser.profileImage ? <Avatar  className='avatar' src={currentUser.profileImage} /> : ""} 
+            {currentUser.profileImage ? <Avatar  className='avatar' src={currentUser.profileImage} /> : <Avatar  className='avatar' src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' />} 
             
                   <Card.Title>{displayName}</Card.Title>
                   <Card.Text>{email} </Card.Text>
