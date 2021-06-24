@@ -73,7 +73,11 @@ export const getCurrentUser = () => {
     })
 }
 
-
+export const updateOrder= async({order, orderId})=>{
+return await firestore.collection('orders').doc(orderId).update(order).then(order=>{
+    return order
+})
+}
 
 export const uploadFile = async (file, currentUser) =>{
    

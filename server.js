@@ -61,17 +61,24 @@ app.listen(port, error => {
 });
 
 app.post("/create-payment-intent", async (req, res) => {
-  const { items } = req.body;
+  const cartItems = req.body;
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: 100,
+    amount: calculateTotal(cartItems)*100,
     currency: "usd"
   });
   res.send({
     clientSecret: paymentIntent.client_secret
   });
 });
-
+const calculateTotal = (cartItems) =>{
+  let subTotal=0
+  cartItems.map(item=>{
+    subTotal += item.quantity * item.price
+  })
+  return subTotal
+  
+}
 
 
 app.post('/payment', (req, res) => {

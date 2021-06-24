@@ -71,7 +71,7 @@ handleChange = input => e => {
             case 3: 
               return (
                 <Elements stripe={promise}>
-               <StripeCheckoutForm values={values}/>
+               <StripeCheckoutForm nextStep={this.nextStep} values={values}/>
                </Elements>
               )
             case 4:

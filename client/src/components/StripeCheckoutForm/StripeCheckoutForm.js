@@ -4,13 +4,15 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import { useSelector } from "react-redux";
+import {useParams} from 'react-router-dom'
+import { connect, useSelector } from "react-redux";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import './StripeCheckoutForm.scss'
 import Image from 'react-bootstrap/Image'
 import Card  from "react-bootstrap/Card";
-
+import { updateOrder } from "../../firebase/firebase.utils";
+import {clearCart} from '../../redux/cart/cartActions'
 
 const renderItems = (items) =>{
     return items.map(item=>{
@@ -32,7 +34,7 @@ const renderItems = (items) =>{
     })
 }
 
-export default function CheckoutForm({values}) {
+const CheckoutForm=({values, nextStep, clearCart}) =>{
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -41,7 +43,8 @@ export default function CheckoutForm({values}) {
   const stripe = useStripe();
   const elements = useElements();
   const {cartItems} = useSelector(state=>state.cart)
-
+  const params = useParams()
+ 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
    if (cartItems) {
@@ -51,7 +54,7 @@ export default function CheckoutForm({values}) {
       headers: {
         "Content-Type": "application/json"
       },
-    body: JSON.stringify({items: [{ id: "shirt"}]})
+    body: JSON.stringify(cartItems)
     })
     .then(res => {
       return res.json();
@@ -103,9 +106,33 @@ export default function CheckoutForm({values}) {
       setError(`Payment failed ${payload.error.message}`);
       setProcessing(false);
     } else {
+      //on successfull payment...
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      //clear cart, update Order status depending on shipping method,move to next step
+      let orderStatus=''
+      if(values.shippingMethod==='pickUp'){
+         orderStatus='Prepare For Pickup' 
+      } else{
+        orderStatus='Prepare For Shipping'
+      }
+     const order={
+        shippingMethod: values.shippingMethod,
+        shippingCity: values.shippingCity,
+        shippingState: values.shippingState,
+        shippingStreetAddress: values.shippingStreetAddress,
+        shippingZipcode: values.shippingZipcode,
+        status: orderStatus,
+        total: getCartTotal(cartItems),
+        cartItems: cartItems,
+        orderDate: new Date()
+      }
+      const orderId = params.orderId
+      const updatedOrder = updateOrder({order, orderId})
+      clearCart()
+      nextStep()
+      
     }
   };
   const getCartTotal = (cartItems) =>{
@@ -192,3 +219,7 @@ export default function CheckoutForm({values}) {
     
   );
 }
+const mapDispatchToProps = dispatch =>({
+  clearCart:()=> dispatch(clearCart())
+})
+export default connect(null,mapDispatchToProps)(CheckoutForm)
