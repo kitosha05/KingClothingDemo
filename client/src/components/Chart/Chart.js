@@ -30,13 +30,17 @@ const isToday = (someDate) => {
 export default function Chart({allOrders}) {
 
   const todaysOrders = !allOrders ? [] : (allOrders.map(order=>{
-    const {orderDate, orderTotal} = order
-    if (isToday(orderDate.toDate())){
+    if(order.status!=='started'){
+      const {orderDate, orderTotal} = order
+       if (isToday(orderDate.toDate())){
       // const hour = orderDate.toDate().getHours()
       // const minutes = orderDate.toDate().getMinutes()
       // const time = `${hour}:${minutes}`
       return createData(orderDate.toDate(), orderTotal)
     }
+
+    }
+    
     return null
    })
  )

@@ -31,22 +31,8 @@ export function* fetchOrders(){
     try {
         const ordersRef = yield firestore.collection('orders').get()
         const orders = yield ordersRef.docs.map(doc=>{
-            const {billing_name,
-                orderDate, 
-                orderTotal,
-                billing_address_city,
-                billing_address_state, cartItems, currentUser } = doc.data()
-            const userId = currentUser.id
-            
-            return{
-                userId,
-                cartItems,
-                billing_name, 
-                orderDate, 
-                orderTotal,
-                billing_address_city,
-                billing_address_state,
-                id: doc.id }
+            const id = doc.id
+            return{id, ...doc.data()}
         })
         yield put(fetchOrdersSuccess(orders))
         

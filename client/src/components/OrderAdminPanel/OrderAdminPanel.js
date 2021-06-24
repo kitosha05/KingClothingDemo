@@ -159,13 +159,17 @@ export default function OrderAdminPanel({allOrders}) {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const onlyPaidOrders=(allOrders)=>{
+    return allOrders.filter(order=>order.status!=='started')
+  }
+
    ////Sales today
    let todaysTotalSales = 0
 
-  const todaysOrders = !allOrders ? [] : (allOrders.map(order=>{
-    const {orderDate, orderTotal} = order
+  const todaysOrders = !allOrders ? [] : (onlyPaidOrders(allOrders).map(order=>{
+    const {orderDate, total} = order
     if (isToday(orderDate.toDate())){
-      todaysTotalSales += orderTotal
+      todaysTotalSales += total
       
     }
     return null
@@ -174,22 +178,22 @@ export default function OrderAdminPanel({allOrders}) {
 
  ///Sales this month
    let thisMonthsSales = 0
- const ordersThisMonth = !allOrders ? [] : (allOrders.map(order=>{
-    const {orderDate, orderTotal} = order
+ const ordersThisMonth = !allOrders ? [] : (onlyPaidOrders(allOrders).map(order=>{
+    const {orderDate, total} = order
     if (isThisMonth(orderDate.toDate())){
 
-      thisMonthsSales += orderTotal
+      thisMonthsSales += total
     }
     return null
    })
  )
 
  let ytdSales = 0
- const  ordersThisYear = !allOrders ? [] : (allOrders.map(order=>{
-    const {orderDate, orderTotal} = order
+ const  ordersThisYear = !allOrders ? [] : (onlyPaidOrders(allOrders).map(order=>{
+    const {orderDate, total} = order
     if (isThisYear(orderDate.toDate())){
 
-      ytdSales += orderTotal
+      ytdSales += total
     }
     return null
    })

@@ -39,17 +39,23 @@ const useStyles = makeStyles((theme) => ({
 export default function Orders({allOrders}) {
  
   const rows = !allOrders ? [] : (allOrders.map(order=>{
-  const {orderDate, 
-    orderTotal, 
-    billing_name, 
-    billing_address_city, 
-    billing_address_state, 
-    id} = order
+  const {status} = order
+  if(status!=='started'){
+    const {orderDate, 
+      total,  
+      cartItems,
+      currentUser,
+      shippingCity, 
+      shippingState, 
+      id} = order
 
-    const dateString = orderDate.toDate().toDateString()
-  return(createData(id,dateString,billing_name,billing_address_city,billing_address_state, orderTotal))
-    
+      const dateString=orderDate.toDate().toDateString()
+      return (createData(id,dateString,currentUser.email,shippingCity,shippingState, total))
+  }
  }))
+ const filterRows=(rows)=>{
+  return rows.filter(row=>row!==undefined)
+}
 
 
   const classes = useStyles();
@@ -67,7 +73,7 @@ export default function Orders({allOrders}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {filterRows(rows).map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
