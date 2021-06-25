@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect,  useSelector} from 'react-redux'
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button'
 import Title from '../Title/Title';
 import fetchOrdersStart from '../../redux/orders/orderActions'
 import { all } from '@redux-saga/core/effects';
-
+import CustomModal from '../Modal/Modal'
 
 // Generate Order Data
 function createData(id, date, name, city, state, status,action,total) {
@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Orders({allOrders}) {
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
  
   const rows = !allOrders ? [] : (allOrders.map(order=>{
   const {status} = order
@@ -89,14 +93,14 @@ export default function Orders({allOrders}) {
               <TableCell>{row.state}</TableCell>
               <TableCell>{row.status}</TableCell>
               <TableCell>
-              <Button variant='contained' color='primary'>{row.action}</Button>
+              <Button variant='contained' color='primary' onClick={handleShow}>{row.action}</Button>
               </TableCell>
               <TableCell align="right">${row.total}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      
+      <CustomModal handleClose={handleClose} show={show}/>
     </React.Fragment>
   );
 }
