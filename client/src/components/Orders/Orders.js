@@ -7,15 +7,16 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button'
 import Title from '../Title/Title';
 import fetchOrdersStart from '../../redux/orders/orderActions'
 import { all } from '@redux-saga/core/effects';
 
 
 // Generate Order Data
-function createData(id, date, name, city, state, total) {
+function createData(id, date, name, city, state, status,action,total) {
  
-  return { id, date, name, city, state, total };
+  return { id, date, name, city, state, status,action, total };
 }
 
 // const rows = [
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Orders({allOrders}) {
+
  
   const rows = !allOrders ? [] : (allOrders.map(order=>{
   const {status} = order
@@ -47,10 +49,14 @@ export default function Orders({allOrders}) {
       currentUser,
       shippingCity, 
       shippingState, 
+      status,
       id} = order
 
       const dateString=orderDate.toDate().toDateString()
-      return (createData(id,dateString,currentUser.email,shippingCity,shippingState, total))
+      let action=''
+      if(status==='Prepare For Pickup') {action = 'Ready For Pickup'}else action = 'Ship Order'
+      
+      return (createData(id,dateString,currentUser.email,shippingCity,shippingState,status,action, total))
   }
  }))
  const filterRows=(rows)=>{
@@ -69,6 +75,8 @@ export default function Orders({allOrders}) {
             <TableCell>Name</TableCell>
             <TableCell>City</TableCell>
             <TableCell>State</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Action</TableCell>
             <TableCell align="right">Sale Amount</TableCell>
           </TableRow>
         </TableHead>
@@ -79,6 +87,10 @@ export default function Orders({allOrders}) {
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.city}</TableCell>
               <TableCell>{row.state}</TableCell>
+              <TableCell>{row.status}</TableCell>
+              <TableCell>
+              <Button variant='contained' color='primary'>{row.action}</Button>
+              </TableCell>
               <TableCell align="right">${row.total}</TableCell>
             </TableRow>
           ))}
