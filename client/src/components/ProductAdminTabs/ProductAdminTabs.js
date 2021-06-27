@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import AddProductForm from '../ProductForm/AddProductForm'
 import EditProductForm from '../EditProductForm/EditProductForm'
+import BulkEditInventory from '../BulkEditInventory/BulkEditInventory';
 
 
 const useStyles = makeStyles(theme => ({
@@ -68,6 +69,7 @@ export default function ProductAdminTabs() {
       >
          <Tab label="Add A Product" {...a11yProps(0)} />
           <Tab label="Edit A Product" {...a11yProps(1)} />
+          <Tab label="Bulk Edit Inventory and COGS" {...a11yProps(2)} />
     </Tabs>
 
     <TabPanel value={value} index={0}>
@@ -75,6 +77,9 @@ export default function ProductAdminTabs() {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <EditProductForm/>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <BulkEditInventory/>
       </TabPanel>
     </Paper>
   );

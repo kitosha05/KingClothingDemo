@@ -21,7 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../ListItems/ListItems';
 import Chart from '../Chart/Chart';
 import Deposits from '../Deposits/Deposits';
-import OrdersPreview from '../Orders/OrdersPreview';
+import PendingOrders from '../Orders/PendingOrders';
 
 function Copyright() {
   return (
@@ -188,7 +188,7 @@ export default function Dashboard({allOrders}) {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <OrdersPreview allOrders={allOrders}/>
+                <PendingOrders allOrders={allOrders}/>
               </Paper>
             </Grid>
           </Grid>

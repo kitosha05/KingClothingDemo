@@ -79,6 +79,11 @@ return await firestore.collection('orders').doc(orderId).update(order).then(orde
 })
 }
 
+export const updateProduct = async({product, productId})=>{
+    return await firestore.collection('products').doc(productId).update(product).then(product=>{
+        return product})
+}
+
 export const uploadFile = async (file, currentUser) =>{
    
     var storageRef = storage.ref();

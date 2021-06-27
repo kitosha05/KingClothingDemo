@@ -94,7 +94,7 @@ export function* editProduct(action){
     const product={name, collection, price, imageUrl, description}
     
     const productRef = yield firestore.collection('products').doc(id)
-    const response = yield productRef.set(product)
+    const response = yield productRef.update(product)
        yield put(editProductSuccess())
     } catch (error) {
        yield put(editProductFailure(error))

@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Orders=({allOrders, fetchOrdersStart}) =>{
+const PendingOrders=({allOrders, fetchOrdersStart}) =>{
   
   const [show, setShow] = useState('');
 
@@ -81,7 +81,7 @@ const [rows, setRows]= useState([])
   const getRows=()=>{
     const rows = allOrders.map(order=>{
       const {status} = order
-      if(status!=='started'){
+      if(status!=='started' && status!=='Complete'){
         const {orderDate, 
         total,  
         cartItems,
@@ -113,7 +113,7 @@ const [rows, setRows]= useState([])
   if(!allOrders)return<div>Loading...</div>
   return (
     <React.Fragment>
-      <Title>All Orders</Title>
+      <Title>Pending Orders</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -165,4 +165,4 @@ const [rows, setRows]= useState([])
 const mapDispatchToProps=dispatch=>({
   fetchOrdersStart: ()=>dispatch(fetchOrdersStart())
 })
-export default connect(null, mapDispatchToProps)(Orders) 
+export default connect(null, mapDispatchToProps)(PendingOrders) 
