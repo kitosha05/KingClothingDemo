@@ -43,6 +43,11 @@ const orderReducers = (state=INITIAL_STATE, action)=>{
                 ...state,
                 allOrders: action.payload
             }
+        case orderActionTypes.CLEAR_CHECKOUT:
+            return{
+                ...state,
+                checkoutId:''
+            }
         default:
             return state
     }

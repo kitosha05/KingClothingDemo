@@ -13,6 +13,7 @@ import Image from 'react-bootstrap/Image'
 import Card  from "react-bootstrap/Card";
 import { updateOrder } from "../../firebase/firebase.utils";
 import {clearCart} from '../../redux/cart/cartActions'
+import { clearCheckout } from "../../redux/orders/orderActions";
 
 const renderItems = (items) =>{
     return items.map(item=>{
@@ -34,7 +35,7 @@ const renderItems = (items) =>{
     })
 }
 
-const CheckoutForm=({values, nextStep, clearCart}) =>{
+const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>{
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -44,6 +45,7 @@ const CheckoutForm=({values, nextStep, clearCart}) =>{
   const elements = useElements();
   const {cartItems} = useSelector(state=>state.cart)
   const params = useParams()
+  
  
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
@@ -110,6 +112,8 @@ const CheckoutForm=({values, nextStep, clearCart}) =>{
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      
+     
       //clear cart, update Order status depending on shipping method,move to next step
       let orderStatus=''
       if(values.shippingMethod==='pickUp'){
@@ -131,6 +135,7 @@ const CheckoutForm=({values, nextStep, clearCart}) =>{
       const orderId = params.orderId
       const updatedOrder = updateOrder({order, orderId})
       clearCart()
+      clearCheckout()
       nextStep()
       
     }
@@ -220,6 +225,10 @@ const CheckoutForm=({values, nextStep, clearCart}) =>{
   );
 }
 const mapDispatchToProps = dispatch =>({
-  clearCart:()=> dispatch(clearCart())
+  clearCart:()=> dispatch(clearCart()),
+  clearCheckout:()=>dispatch(clearCheckout())
 })
-export default connect(null,mapDispatchToProps)(CheckoutForm)
+const mapStateToProps = state=>({
+  checkoutId:state.order.checkoutId
+})
+export default connect(mapStateToProps,mapDispatchToProps)(CheckoutForm)

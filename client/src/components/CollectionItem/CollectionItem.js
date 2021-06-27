@@ -31,9 +31,12 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
     const {id, name, price, imageUrl} = item
     const productUrl = name.toLowerCase().replace(/\b \b/g, "-")
 
-    useEffect(()=>{     
-        if(isFavorite) setFavItemStart(currentUser.id, id)
-        if(!isFavorite) removeFavItemStart(currentUser.id, id)  
+    useEffect(()=>{  
+        if(currentUser){
+            if(isFavorite) setFavItemStart(currentUser.id, id)
+        if(!isFavorite) removeFavItemStart(currentUser.id, id)
+        }  
+          
         
     },[isFavorite])
 

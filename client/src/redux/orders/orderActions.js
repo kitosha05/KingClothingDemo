@@ -32,3 +32,6 @@ export const fetchOrdersFailure = (error) =>({
     type: orderActionTypes.FETCH_ORDERS_FAILURE,
     payload: error
 })
+export const clearCheckout=()=>({
+    type:orderActionTypes.CLEAR_CHECKOUT
+})

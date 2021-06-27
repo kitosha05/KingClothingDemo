@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button'
 import Title from '../Title/Title';
-import fetchOrdersStart from '../../redux/orders/orderActions'
+import {fetchOrdersStart} from '../../redux/orders/orderActions'
 import { all } from '@redux-saga/core/effects';
 import { updateOrder } from '../../firebase/firebase.utils';
 import CustomModal from '../Modal/Modal'
@@ -39,8 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-export default function Orders({allOrders}) {
+const Orders=({allOrders, fetchOrdersStart}) =>{
   
   const [show, setShow] = useState('');
 
@@ -56,6 +55,20 @@ const [rows, setRows]= useState([])
    updateOrder({order,orderId})
    //send customer email with instructions for pickup
    //change action button
+   fetchOrdersStart()
+ }
+ const readyForShipping=(orderId, trackingNumber)=>{
+   handleClose()
+   const order={status:'Complete', trackingNumber:trackingNumber}
+   updateOrder({order,orderId})
+  fetchOrdersStart()
+ }
+
+ const wasPickedUp =(orderId)=>{
+   handleClose()
+   const order= {status:'Complete'}
+   updateOrder({orderId, order})
+   fetchOrdersStart()
  }
 
  useEffect(()=>{
@@ -83,6 +96,7 @@ const [rows, setRows]= useState([])
         if(status==='Prepare For Pickup') action = 'Mark As Ready'
         if(status==='Prepare For Shipping')action = 'Ship Order'
         if(status==='Pending Pickup') action='Mark As Picked Up'
+        if(status==='Complete') action='ORDER COMPLETE'
         
         return (createData(id,dateString,currentUser.email,shippingCity,shippingState,status,action, total, cartItems))
       }
@@ -108,7 +122,7 @@ const [rows, setRows]= useState([])
             <TableCell>City</TableCell>
             <TableCell>State</TableCell>
             <TableCell>Status</TableCell>
-            <TableCell>Action</TableCell>
+            <TableCell>Next Step</TableCell>
             <TableCell align="right">Sale Amount</TableCell>
           </TableRow>
         </TableHead>
@@ -120,12 +134,23 @@ const [rows, setRows]= useState([])
               <TableCell>{row.city}</TableCell>
               <TableCell>{row.state}</TableCell>
               <TableCell>{row.status}</TableCell>
-              <TableCell>
-              <Button variant='contained' color='primary' onClick={()=>handleShow(row.id)}>{row.action}</Button>
+              <TableCell>{
+                row.status==='Complete' ? (
+                  <Button variant="outline-success" disabled>{row.action}</Button>
+                ) : (
+                  <Button variant='contained' color='primary' onClick={()=>handleShow(row.id)}>{row.action}</Button>
+
+                )
+                }
 
               </TableCell>
               <TableCell align="right">${row.total}</TableCell>
-              <CustomModal handleClose={handleClose}  cartItems={row.cartItems} status={row.status} orderId={row.id}handleConfirm={readyForPickUp}show={show===row.id}/>
+              <CustomModal
+                handleClose={handleClose}  
+                cartItems={row.cartItems} 
+                status={row.status} 
+                orderId={row.id}
+                handleConfirm={(row.status==='Prepare For Pickup') ? readyForPickUp : (row.status==='Prepare For Shipping') ? readyForShipping : wasPickedUp}show={show===row.id}/>
             </TableRow>
           ))}
         </TableBody>
@@ -137,3 +162,7 @@ const [rows, setRows]= useState([])
     </React.Fragment>
   );
 }
+const mapDispatchToProps=dispatch=>({
+  fetchOrdersStart: ()=>dispatch(fetchOrdersStart())
+})
+export default connect(null, mapDispatchToProps)(Orders) 
