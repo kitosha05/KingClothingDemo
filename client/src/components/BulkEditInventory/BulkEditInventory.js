@@ -121,7 +121,7 @@ const BulkEditInventory = ({products, collections, fetchProductsStart})=>{
                                  return(
                                      <TableRow key={product.id}>
                                          <TableCell>{product.name}</TableCell>
-                                         <TableCell>{product.price}</TableCell>
+                                         <TableCell>${product.price}</TableCell>
                                          <TableCell>
                                          {
                                                           inEditMode.status && inEditMode.rowKey === product.id ? (
@@ -140,7 +140,7 @@ const BulkEditInventory = ({products, collections, fetchProductsStart})=>{
                                                                      onChange={(event) => changeCOGS(event)}
                                                               />
                                                           ) : (
-                                                              product.cogs ? product.cogs : ""
+                                                              product.cogs ? ('$' + product.cogs) : ""
                                                           )
                                                       }
                                          

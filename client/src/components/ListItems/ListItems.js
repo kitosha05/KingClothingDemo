@@ -48,13 +48,14 @@ export const mainListItems = (
       <ListItemText primary="Pages" />
     </ListItem>
     </Link>
-    
+    <Link to='/admin/reports' as='button'>
     <ListItem button>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItem>
+    </Link>
     
   </div>
 );
