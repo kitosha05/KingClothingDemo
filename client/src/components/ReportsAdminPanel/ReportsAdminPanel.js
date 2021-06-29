@@ -23,6 +23,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../ListItems/ListItems';
 import {fetchProductsStart} from '../../redux/shop/shopActions'
 import SalesWithNetMarginChart from '../Chart/SalesWithNetMarginChart';
+import SalesWithGrossMarginPieChart from '../Chart/SaleswithGrossMarginPieChart';
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 function Copyright() {
   return (
@@ -127,7 +131,9 @@ const ReportsAdminPanel=({fetchProductsStart, allOrders, products})=>{
   const classes = useStyles();
   const [view, setView] = React.useState('month')
   const [data, setData] = React.useState(null)
+  const [pieData, setPieData] = React.useState(null)
   const [open, setOpen] = React.useState(true);
+  const [grossSales, setGrossSales]= React.useState(null)
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -139,13 +145,42 @@ const ReportsAdminPanel=({fetchProductsStart, allOrders, products})=>{
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   useEffect(() => {
-   if(!products)fetchProductsStart()
-   if(allOrders)formatOrderData(view)
-   
-  }, [products, allOrders])
-
-const completedOrders = allOrders ? allOrders.filter(order=>order.status!=='started') : []
-  
+    if(!products)fetchProductsStart()
+    if(allOrders && products)formatOrderData(view)
+    
+   }, [products, allOrders, view])
+ 
+  const formatOrderData = (view) =>{
+    if(view==='month'){
+        const orders =  ordersThisMonth()
+        const pieData = preparePieData(orders)
+        
+        setPieData(pieData)
+        //if view = month then get all days of this month
+        const dailyTotals = getDailyTotals(orders)
+        setData(dailyTotals.reverse())
+    }
+    if(view==='year'){
+        const orders = ordersThisYear()
+        const pieData = preparePieData(orders)
+        
+        setPieData(pieData)
+        const monthlyTotals = getMonthlyTotals(orders)
+        setData(monthlyTotals.reverse())
+    } 
+}
+const preparePieData = (orders)=>{
+    let cogs =0
+    let grossMargin=0
+    orders.map(order=>{
+        cogs+=order.orderCOGS
+        grossMargin+=order.orderGrossMargin
+    })
+    const pieData=[{name:'Cost of Goods Sold', value: cogs}, {name: 'Gross Margin', value: grossMargin}]
+    const totalSales=cogs+grossMargin
+    setGrossSales(totalSales)
+    return pieData
+}
 const isThisWeek=(date) =>{
     const todayObj = new Date();
     const todayDate = todayObj.getDate();
@@ -168,7 +203,10 @@ const isThisWeek=(date) =>{
      testDate.toDate().getMonth() == targetDate.getMonth() &&
      testDate.toDate().getFullYear() == targetDate.getFullYear()
   }
+  const isSameMonth = (targetDate, testDate) => {
   
+    return testDate.toDate().getMonth() === targetDate.getMonth()
+  }
 
   const isThisMonth = (someDate) => {
     const today = new Date()
@@ -218,13 +256,27 @@ const isThisWeek=(date) =>{
      return orderData.filter(order=>order!==null)
 }
 
-const formatOrderData = (view) =>{
-    const orders =  ordersThisMonth()
+const  ordersThisYear = ()=>{
+   const orderData= allOrders.filter(order=>order.status!=='started').map(order=>{
+        const {orderDate, cartItems, total} = order
+        if (isThisYear(orderDate.toDate())){
+            let orderCOGS=0
+            cartItems.map(item=>{
+                const {quantity} = item
+                const cogs = getItemCOGS(item)
+                orderCOGS+=cogs*quantity
 
-    //if view = month then get all days of this month
-    const dailyTotals = getDailyTotals(orders)
-    setData(dailyTotals.reverse())
+            })
+            
+            const orderGrossMargin =total - orderCOGS
+           return {orderDate, orderCOGS, orderGrossMargin}
+       }
+   return null
+})
+return orderData.filter(order=>order!==null)
 }
+
+
 const getDailyTotals = (orders)=>{
     const today = new Date()
     const dailyTotals = []
@@ -240,10 +292,34 @@ const getDailyTotals = (orders)=>{
             dailyCOGS+=order.orderCOGS
             dailyGrossMargin+=order.orderGrossMargin
         })
-        const dateString = targetDate.toDateString()
+        const dateString = targetDate.getDate()
         dailyTotals.push({date:dateString, cogs: dailyCOGS, grossMargin:dailyGrossMargin})  
     }
     return dailyTotals
+}
+
+const getMonthlyTotals = (orders)=>{
+    const today = new Date()
+    const month = today.getMonth()
+    const monthlyTotals = []
+    //work backwards from this month to beginning of year
+    for (let i=0; i<=month; i++){
+        let targetDate = new Date(today)
+        targetDate.setMonth(targetDate.getMonth()-i)
+        
+         const monthlyOrders = orders.filter(order=>isSameMonth(targetDate, order.orderDate))
+        let monthlyCOGS = 0
+        let monthlyGrossMargin = 0
+        monthlyOrders.map(order=>{
+            monthlyCOGS+=order.orderCOGS
+            monthlyGrossMargin+=order.orderGrossMargin
+        })
+        const MONTHS =['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        const dateString = MONTHS[targetDate.getMonth()]
+        monthlyTotals.push({date:dateString, cogs: monthlyCOGS, grossMargin:monthlyGrossMargin})  
+    }
+    
+    return monthlyTotals
 }
 
 const getItemCOGS=(item)=>{
@@ -252,17 +328,11 @@ const getItemCOGS=(item)=>{
 
 }
 
- let ytdSales = 0
- const  ordersThisYear = (completedOrders)=>{
-     completedOrders.map(order=>{
-    const {orderDate, total} = order
-    if (isThisYear(orderDate.toDate())){
-
-      ytdSales += total
-    }
-    return null
-   })
+const onChange=(e)=>{
+    setView(e.target.value)
 }
+
+
  
  
  
@@ -315,7 +385,26 @@ const getItemCOGS=(item)=>{
             
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                    <SalesWithNetMarginChart data={data}/>
+                  <h2>Sales Data</h2>
+                      <Form.Group controlId="selectView">
+                         <Form.Label>Select Time Frame</Form.Label>
+                             <Form.Control as="select" onChange={(e)=>onChange(e)}>
+                                <option eventKey='month' value='month'>This Month</option>
+                                 <option eventKey='year' value='year'>This Year</option>     
+                            </Form.Control>
+                    </Form.Group>
+                    <Row>
+                        <Col>
+                        <h2>Gross Margin & Cost of Goods Sold</h2>
+                            <SalesWithNetMarginChart data={data}/>
+                        </Col>
+                        <Col>
+                        <h2>Gross Sales: ${grossSales}</h2>
+                            <SalesWithGrossMarginPieChart pieData={pieData}/>
+                        </Col>
+                    </Row>
+                   
+                    
               </Paper>
             </Grid>
           </Grid>
