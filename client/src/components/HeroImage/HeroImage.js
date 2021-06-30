@@ -8,22 +8,28 @@ import LazyHero from 'react-lazy-hero'
 import styled from 'styled-components'
 import {ReactComponent as Logo} from '../../assets/crown.svg'
 import Button from '../CustomButton/CustomButton'
+import Bounce from 'react-reveal/Bounce';
+
 
 const HeroImage = () =>{
     return(
         
          <LazyHero parallaxOffset='100' imageSrc={BackgroundHero} minHeight='100vh' opacity=".4" isCentered='true'>
-            <Card className='text-center'>
+           <Bounce>
+           <Card className='text-center'>
             
-              <Card.Body>
-                <Card.Title><Logo/> King Clothing</Card.Title>
-                 <Card.Text>
-                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>  
-                </Card.Text>   
-                <Link to="/shop"><Button>Shop Now</Button></Link> 
-                    
-              </Card.Body>
-            </Card>
+            <Card.Body>
+              <Card.Title><Logo/> King Clothing</Card.Title>
+               <Card.Text>
+               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>  
+              </Card.Text>   
+              <Link to="/shop"><Button>Shop Now</Button></Link> 
+                  
+            </Card.Body>
+          </Card>
+
+           </Bounce>
+            
         </LazyHero>
     )
 }

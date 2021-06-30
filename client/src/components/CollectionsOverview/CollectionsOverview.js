@@ -4,6 +4,7 @@ import{createStructuredSelector} from 'reselect'
 import { fetchAllReviewsStart } from '../../redux/reviews/reviewActions'
 import { selectCollectionsForPreview } from '../../redux/shop/shopSelector'
 import CollectionPreview from '../CollectionPreview/CollectionPreview'
+import Fade from 'react-reveal/Fade';
 import './CollectionsOverview.scss'
 
 const CollectionsOverview = ({collections, fetchAllReviewsStart})=>{
@@ -13,7 +14,9 @@ const CollectionsOverview = ({collections, fetchAllReviewsStart})=>{
     return(
         <div className='collections-overview'>
                 {
-                 collections.map(collection=><CollectionPreview key={collection.id} {...collection}/>)
+                 collections.map(collection=>
+                     <CollectionPreview key={collection.id} {...collection}/>
+                 )
                 }
         </div>
     )

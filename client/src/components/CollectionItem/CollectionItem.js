@@ -10,6 +10,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { setFavItemStart, removeFavItemStart, checkUserSession } from '../../redux/user/userActions'
 import { removeFavItem } from '../../redux/user/userSagas'
+import Zoom from 'react-reveal/Zoom';
 
 
 const configStars = {
@@ -48,7 +49,8 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
 
     
     return(
-        <div className='collection-item'>
+        <Zoom bottom>
+<div className='collection-item'>
                 <div className='image'
                     style={{backgroundImage: `url(${imageUrl})`}}
                  />
@@ -77,6 +79,9 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
             
             <Button onClick={()=>addItem(item)}inverted>Add To Cart</Button>
         </div>
+
+        </Zoom>
+        
     )
 }
 const mapDispatchToProps = dispatch =>({

@@ -5,6 +5,7 @@ import{createStructuredSelector} from 'reselect'
 import { selectProductsByCollection} from '../../redux/shop/shopSelector'
 import './CollectionPreview.scss'
 import CollectionItem from '../CollectionItem/CollectionItem.js'
+import Fade from 'react-reveal/Fade';
 
 const CollectionPreview = ({title, id, routeName, products, allReviews}) => {
     const collectionId = id
@@ -32,7 +33,8 @@ const CollectionPreview = ({title, id, routeName, products, allReviews}) => {
     }
     
     return(
-        <div className='collection-preview'>
+        <Fade bottom>
+             <div className='collection-preview'>
            <h1 className='title'><Link to={`/shop/${title.toLowerCase()}`}>{title.toUpperCase()}</Link></h1>
             <div className='preview'>
                 
@@ -48,6 +50,8 @@ const CollectionPreview = ({title, id, routeName, products, allReviews}) => {
                 }
             </div>
         </div>
+        </Fade>
+       
     )
 }
 const mapStateToProps = (state, ownProps)=>({

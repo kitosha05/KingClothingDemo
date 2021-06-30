@@ -1,12 +1,13 @@
 import './MenuItem.scss'
 import React from 'react'
 import {withRouter} from 'react-router-dom'
+import Slide from 'react-reveal/Slide'
 
 const MenuItem = ({title, imageUrl, size, history, linkUrl, match})=>{
      
  return(
-
-    <div 
+<Slide bottom>
+<div 
     className={`${size} menu-item`}
     onClick={()=>history.push(`${match.url}${linkUrl}`)}>
     <div
@@ -21,6 +22,9 @@ const MenuItem = ({title, imageUrl, size, history, linkUrl, match})=>{
     </div>       
 
 </div>
+
+</Slide>
+    
 
  )
 }

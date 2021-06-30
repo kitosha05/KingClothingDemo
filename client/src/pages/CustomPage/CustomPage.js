@@ -6,16 +6,17 @@ import Template from '../../components/Template/Template'
 
 const CustomPage = ({ route,fetchPagesStart, pages})=>{
     const [page, setPage] = useState(null)
+   
     
 useEffect(() => {
 
        fetchPagesStart()
     
-       if (pages){setPage(pages.filter(p=>p.route === route)[0])} 
+       if (pages){setPage(pages.filter(p=>p.route ===route)[0])} 
         
         
     
-},  []) 
+},  [route]) 
 
 
 return(

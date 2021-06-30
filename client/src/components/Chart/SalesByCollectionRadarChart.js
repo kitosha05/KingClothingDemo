@@ -40,7 +40,7 @@ export default class SalesByCollectionRadarChart extends PureComponent {
           <Radar name="% of Sales" dataKey="A" stroke="#8884d8" fill="blue" fillOpacity={0.6} />
 
         
-          <Legend fill="blue"/>
+          <Legend />
         </RadarChart>
    
     );
