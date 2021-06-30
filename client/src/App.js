@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {GlobalStyle} from './global.styles/global.styles'
 import Header from './components/header/Header.js'
 import PlainSpinner from './components/PlainSpinner/PlainSpinner'
-
+import Footer from './components/Footer/Footer'
 import AdminDash from './pages/AdminDash/AdminDash'
 const ThankYou = lazy(()=>import('./pages/ThankYou/ThankYou'))
 const HomePage = lazy(()=>import('./pages/homepage/homepage.js'))
@@ -79,6 +79,7 @@ class App extends React.Component {
 
               </Suspense>
               </ErrorBoundary>
+              <Footer/>
            </Fragment>
         </Switch>
         </BrowserRouter>

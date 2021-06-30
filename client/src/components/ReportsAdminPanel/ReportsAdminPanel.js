@@ -24,6 +24,7 @@ import { mainListItems, secondaryListItems } from '../ListItems/ListItems';
 import {fetchProductsStart} from '../../redux/shop/shopActions'
 import SalesWithNetMarginChart from '../Chart/SalesWithNetMarginChart';
 import SalesWithGrossMarginPieChart from '../Chart/SaleswithGrossMarginPieChart';
+import SalesByCollectionRadarChart from '../Chart/SalesByCollectionRadarChart';
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -134,6 +135,7 @@ const ReportsAdminPanel=({fetchProductsStart, allOrders, products})=>{
   const [pieData, setPieData] = React.useState(null)
   const [open, setOpen] = React.useState(true);
   const [grossSales, setGrossSales]= React.useState(null)
+  const [radarData, setRadarData]= React.useState(null)
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -154,8 +156,9 @@ const ReportsAdminPanel=({fetchProductsStart, allOrders, products})=>{
     if(view==='month'){
         const orders =  ordersThisMonth()
         const pieData = preparePieData(orders)
-        
+        const radarData = prepareRadarData(orders)
         setPieData(pieData)
+        setRadarData(radarData)
         //if view = month then get all days of this month
         const dailyTotals = getDailyTotals(orders)
         setData(dailyTotals.reverse())
@@ -163,23 +166,97 @@ const ReportsAdminPanel=({fetchProductsStart, allOrders, products})=>{
     if(view==='year'){
         const orders = ordersThisYear()
         const pieData = preparePieData(orders)
-        
+        const radarData = prepareRadarData(orders)
+        setRadarData(radarData)
         setPieData(pieData)
         const monthlyTotals = getMonthlyTotals(orders)
         setData(monthlyTotals.reverse())
     } 
 }
+
+const prepareRadarData =(orders)=>{
+  let hatsCOGS =0
+  let hatsGrossSales = 0
+  let jacketsCOGS =0
+  let jacketsGrossSales = 0
+  let sneakersCOGS =0
+  let sneakersGrossSales = 0
+  let womensCOGS =0
+  let womensGrossSales = 0
+  let mensCOGS =0
+  let mensGrossSales = 0
+
+  orders.map(order=>{
+    order.cartItems.map(item=>{
+      const cogs = getItemCOGS(item)
+      if(item.collection==='Hats'){
+        hatsCOGS+= cogs*item.quantity
+        hatsGrossSales+=item.price*item.quantity
+      }
+      if(item.collection==='Jackets'){
+        jacketsCOGS+= cogs*item.quantity
+        jacketsGrossSales+=item.price*item.quantity
+      }
+      if(item.collection==='Mens'){
+        mensCOGS+= cogs*item.quantity
+        mensGrossSales+=item.price*item.quantity
+      }
+      if(item.collection==='Womens'){
+        womensCOGS+= cogs*item.quantity
+        womensGrossSales+=item.price*item.quantity
+      }
+      if(item.collection==='Sneakers'){
+        sneakersCOGS+= cogs*item.quantity
+        sneakersGrossSales+=item.price*item.quantity
+      }
+
+  })
+})
+console.log(hatsGrossSales)
+console.log(hatsCOGS)
+const{cogs, grossMargin} = accumulateMarginAndCogs(orders)
+const grossSales = cogs+grossMargin
+const radarData=[
+  {collection: 'Hats',
+            A: (hatsGrossSales/grossSales)*100,
+            B: (hatsGrossSales-hatsCOGS)/grossMargin*100
+  },
+  {collection: 'Jackets',
+            A: (jacketsGrossSales/grossSales)*100,
+            B: (jacketsGrossSales-jacketsCOGS)/grossMargin*100
+  },
+  {collection: 'Sneakers',
+            A: (sneakersGrossSales/grossSales)*100,
+            B: (sneakersGrossSales-sneakersCOGS)/grossMargin*100
+  },
+  {collection: 'Womens',
+            A: (womensGrossSales/grossSales)*100,
+            B: (womensGrossSales-womensCOGS)/grossMargin*100
+  },
+  {collection: 'Mens',
+  A: (mensGrossSales/grossSales)*100,
+  B: (mensGrossSales-mensCOGS)/grossMargin*100
+}
+
+]
+return radarData
+}
+
 const preparePieData = (orders)=>{
-    let cogs =0
-    let grossMargin=0
-    orders.map(order=>{
-        cogs+=order.orderCOGS
-        grossMargin+=order.orderGrossMargin
-    })
+   const {cogs, grossMargin} = accumulateMarginAndCogs(orders)
     const pieData=[{name:'Cost of Goods Sold', value: cogs}, {name: 'Gross Margin', value: grossMargin}]
     const totalSales=cogs+grossMargin
     setGrossSales(totalSales)
     return pieData
+}
+const accumulateMarginAndCogs=(orders)=>{
+  let cogs =0
+  let grossMargin=0
+  orders.map(order=>{
+      cogs+=order.orderCOGS
+      grossMargin+=order.orderGrossMargin
+  })
+  return {cogs, grossMargin}
 }
 const isThisWeek=(date) =>{
     const todayObj = new Date();
@@ -249,7 +326,7 @@ const isThisWeek=(date) =>{
                      })
                      
                      const orderGrossMargin =total - orderCOGS
-                    return {orderDate, orderCOGS, orderGrossMargin}
+                    return {orderDate, orderCOGS, orderGrossMargin, cartItems}
                 }
             return null
      })
@@ -269,7 +346,7 @@ const  ordersThisYear = ()=>{
             })
             
             const orderGrossMargin =total - orderCOGS
-           return {orderDate, orderCOGS, orderGrossMargin}
+           return {orderDate, orderCOGS, orderGrossMargin, cartItems}
        }
    return null
 })
@@ -394,14 +471,19 @@ const onChange=(e)=>{
                             </Form.Control>
                     </Form.Group>
                     <Row>
-                        <Col>
-                        <h2>Gross Margin & Cost of Goods Sold</h2>
+                        <Col className='text-center'>
+                        <h2>Total Sales</h2>
                             <SalesWithNetMarginChart data={data}/>
                         </Col>
-                        <Col>
-                        <h2>Gross Sales: ${grossSales}</h2>
+                        <Col className='text-center'>
+                        <h2>Margin vs Cost Of Goods Sold</h2>
                             <SalesWithGrossMarginPieChart pieData={pieData}/>
+                            <h4>Total Sales: ${grossSales}</h4>
                         </Col>
+                    </Row>
+                    <Row>
+                      <h2>Percent Of Total Sales By Collection</h2>
+                      <SalesByCollectionRadarChart data={radarData}/>
                     </Row>
                    
                     
