@@ -17,7 +17,7 @@ const Footer = () =>{
 
     }
     return(
-        <Row className='footer-row justify-content-center align-items-center'>
+        <Row className='footer-row justify-content-center  mt-4'>
             <Col xs='12'  md='4' className='footer-collection-links text-center mt-2'>
                 <h3>Shop By Collection</h3>
                 <Link to='/shop/hats'>Hats</Link>

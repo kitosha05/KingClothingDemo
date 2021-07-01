@@ -11,6 +11,7 @@ import Row from 'react-bootstrap/Row'
 import './StripeCheckoutForm.scss'
 import Image from 'react-bootstrap/Image'
 import Card  from "react-bootstrap/Card";
+import Button from '../CustomButton/CustomButton'
 import { updateOrder } from "../../firebase/firebase.utils";
 import {clearCart} from '../../redux/cart/cartActions'
 import { clearCheckout } from "../../redux/orders/orderActions";
@@ -151,19 +152,23 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
 
   return (
     <Col className='col-md-6 offset-md-3 text-center'>
-        <h1>Review Your Order</h1>
         <Card>
+        <h1>Review Your Order</h1>
+        <Row className='mt-2'>
+          <Col>
+          <Card.Title as='h2'>Items In Order</Card.Title>
         {cartItems ? renderItems(cartItems) : ""}
-        </Card>
-        <Row>
-            <Card>
+       
+        </Col>
+        <Col>
+            
                 <Card.Title as='h2'>Shipping Details</Card.Title>
                 <Card.Body>
                     <Card.Text><b>Shipping Method:</b>   {values.shippingMethod}</Card.Text>
                     {
                         values.shippingMethod==='pickUp' ? (
                             <Card.Body>
-                            <Card.Text>Pick Up Instructions Below:</Card.Text>
+                            <Card.Text>Pick Up Instructions:</Card.Text>
                             <Card.Text> Instructions...</Card.Text>
                             </Card.Body>
                         ):(
@@ -176,20 +181,19 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
 
                     }
                     <Card.Body>
-                        <Card.Title>Subtotal:</Card.Title>
-                        <Card.Text>${getCartTotal(cartItems)}</Card.Text>
-                        <Card.Title>Shipping:</Card.Title>
-                        <Card.Text>FREE PICKUP</Card.Text>
-                        <Card.Title>Order Total:</Card.Title>
-                        <Card.Text>${getCartTotal(cartItems)}</Card.Text>
+                        <Card.Text><b>Subtotal:  </b>${getCartTotal(cartItems)}</Card.Text>
+                        <Card.Text><b>Shipping:  </b>FREE PICKUP</Card.Text>
+                        <Card.Text><b>Order Total:  </b>${getCartTotal(cartItems)}</Card.Text>
                     </Card.Body>
                 </Card.Body>
-            </Card>
+                </Col>
         </Row>
-        <Row>
+        </Card>
+        <Card>
+          <Card.Title><b>Payment Details</b></Card.Title>
         <form id="payment-form" onSubmit={handleSubmit}>
       <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
-      <button
+      <Button className='custom-checkout-button'
         disabled={processing || disabled || succeeded}
         id="submit"
       >
@@ -200,7 +204,7 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
             "Pay now"
           )}
         </span>
-      </button>
+      </Button>
       {/* Show any error that happens when processing the payment */}
       {error && (
         <div className="card-error" role="alert">
@@ -218,7 +222,7 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
         </a> Refresh the page to pay again.
       </p>
     </form>
-        </Row>
+        </Card>
     </Col>
 
     

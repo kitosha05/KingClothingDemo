@@ -42,7 +42,7 @@ const averageRating = (productId)=>{
       
       <Row className='items justify-content-center align-items-center'>
         {productsInCollection(title).map(item => (
-          <Col className='col-xs-6 col-md-4 item-column'>
+          <Col xs='6' md='4' lg='3'>
           <CollectionItem key={item.id} item={item} averageRating={averageRating(item.id)}collectionRoute={title.toLowerCase()} />
           </Col>
         ))}

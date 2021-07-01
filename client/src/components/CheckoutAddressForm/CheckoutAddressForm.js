@@ -1,6 +1,6 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import Button from '../CustomButton/CustomButton'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import './CheckoutAddressForm.scss'
@@ -31,14 +31,15 @@ const CheckOutAddressForm =({nextStep, handleChange, values})=>{
                 <Form.Label>Shipping Zipcode</Form.Label>
                  <Form.Control type="text" value={values.shippingZipcode} onChange={handleChange('shippingZipcode')} name='shippingZipcode' placeholder='Zipcode' />
             </Form.Group>
-            
-        </Form>
-        </Row>
-        <Row>
-        <Button variant="primary" onClick={nextStep}>
+            <Row className='justify-content-center'>
+            <Button variant="primary" onClick={nextStep}>
                 Next
             </Button>
         </Row>
+           
+        </Form>
+        </Row>
+       
         </Col>
     )
 }

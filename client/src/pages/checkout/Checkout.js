@@ -35,6 +35,7 @@ const CheckoutPage = ({cartItems, total, newOrderStart, currentUser}) =>{
     return(
      
         <div className='checkout-page'>
+            <h1>Items In Your Cart:</h1>
             <div className='checkout-header'>
                  <div className='header-block'>
                      <span>Product</span>

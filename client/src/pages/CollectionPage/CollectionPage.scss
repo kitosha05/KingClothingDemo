@@ -11,6 +11,13 @@
   .item-column {
     margin-bottom: 15px;
   }
+  .items {
+    width: 100%;
+
+    .fave-item-span {
+      margin-left: 90%;
+    }
+  }
   // .items {
   //   display: grid;
   //   grid-template-columns: 1fr 1fr 1fr 1fr;

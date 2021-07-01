@@ -1,14 +1,16 @@
 import React from 'react'
-
+import {Link} from 'react-router-dom'
 import './CartItem.scss'
 
 const CartItem = ({item}) => {
-    const {name, price, imageUrl, quantity} = item
+    const {name, price, imageUrl, quantity, collection} = item
+    const formattedName = name.replace(/\s/g, '-').toLowerCase()
+    const route = `/shop/${collection.toLowerCase()}/${formattedName}`
     return(
         <div className="cart-item">
             <img src={imageUrl} alt='item'/>
             <div className='item-details'>
-                <span className='name'>{name}</span>
+                <span className='name'><Link to={route}>{name}</Link></span>
                 <span className='price'>{quantity}x ${price}</span>
 
             </div>

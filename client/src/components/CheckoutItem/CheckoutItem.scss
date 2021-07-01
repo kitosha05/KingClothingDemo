@@ -1,21 +1,21 @@
 .checkout-item {
   width: 100%;
   display: flex;
-  min-height: 100px;
+  max-height: 125px;
   border-bottom: 1px solid darkgrey;
   padding: 15px 0;
   font-size: 20px;
   align-items: center;
 
-  .image-container {
-    width: 23%;
-    padding-right: 15px;
+  .img-div {
+    height: 125px;
+    max-width: 100%;
 
-    img {
-      width: 100%;
-      height: 100%;
+    .img-fluid {
+      height: 110px;
     }
   }
+
   .name,
   .quantity,
   .price {
@@ -24,6 +24,7 @@
 
   .quantity {
     display: flex;
+    margin: 0 auto;
 
     .arrow {
       cursor: pointer;
@@ -36,5 +37,6 @@
   .remove-button {
     padding-left: 12px;
     cursor: pointer;
+    margin: 0 auto;
   }
 }
