@@ -6,7 +6,6 @@ import {fetchReviewsStart} from '../../redux/reviews/reviewActions'
 import {selectReviewsToDisplay} from '../../redux/reviews/reviewSelectors'
 import {checkUserSession} from '../../redux/user/userActions'
 import {createStructuredSelector} from 'reselect'
-import WriteReviewForm from '../WriteReviewForm/WriteReviewForm'
 
 
 
@@ -23,24 +22,18 @@ const ReviewList = ({reviews, fetchReviewsStart, productId, user, productName})=
     
       return(
            <div>
-               <h1>Reviews</h1>
+             
                {
-                    currentUser ? (
-                    <WriteReviewForm  currentUser={currentUser} productId={productId} productName={productName}/>
-                   )
-                   :
-                  <span>Sign In To Write A Review</span>
-               }
-               
-               {
-                   reviews ? 
+                   reviews.length>0 ? 
                     reviews.map(review=>{
                         return <Review reviewAuthor={review.reviewAuthor}  reviewBody={review.reviewBody} reviewRating={review.reviewRating}/>
                     })
                    :
-                   <div>Be The First To Review This Product!</div>
-                  
+                   <h3>NO REVIEWS YET</h3>
                }
+              
+               
+               
             </div>
         )
     

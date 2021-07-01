@@ -6,8 +6,9 @@ import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 
 import './ProductAccordion.scss'
+import ReviewList from '../ReviewList/ReviewList';
 
-const ProductAccordion = () =>{
+const ProductAccordion = ({product}) =>{
     return(
         <Accordion defaultActiveKey="0">
                                 <Card className='accordion-card'>
@@ -48,6 +49,19 @@ const ProductAccordion = () =>{
                                              when an unknown printer took a galley of type and scrambled it to make a type 
                                              specimen book. It has survived not only five centuries, but also the leap into 
                                              electronic typesetting, remaining essentially unchanged.</Card.Body>
+                                        </Accordion.Collapse>
+                                 </Card>
+                                 <Card>
+                                 <Card.Header>
+                                     <Accordion.Toggle as={Button} variant="link" eventKey="3">
+                                          Reviews
+                                    </Accordion.Toggle>
+                                </Card.Header>
+                                        <Accordion.Collapse eventKey="3">
+                                             <Card.Body>
+                                             <ReviewList productName={product.name} productId={product.id}/>
+
+                                             </Card.Body>
                                         </Accordion.Collapse>
                                  </Card>
                             </Accordion>

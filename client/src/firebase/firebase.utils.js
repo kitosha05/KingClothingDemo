@@ -73,6 +73,25 @@ export const getCurrentUser = () => {
     })
 }
 
+export const addBlogPost = async(post)=>{
+    return await firestore.collection('blogPosts').add(post).then(post=>{
+        return post.id
+    })
+}
+export const editBlogPost = async(post)=>{
+    const{id}= post
+    return await firestore.collection('blogPosts').doc(id).update(post).then(post=>{
+        return post.id
+    })
+}
+export const fetchBlogPosts = async()=>{
+    const blogPostsSnapShot= await firestore.collection('blogPosts').get()
+    return blogPostsSnapShot.docs.map(doc=>{
+        const id = doc.id
+        const post = {id, ...doc.data()}
+        return post
+    })
+}
 export const updateOrder= async({order, orderId})=>{
 return await firestore.collection('orders').doc(orderId).update(order).then(order=>{
     return order

@@ -10,6 +10,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import StoreIcon from '@material-ui/icons/Store';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import CreateIcon from '@material-ui/icons/Create';
 import AdminDash from '../../pages/AdminDash/AdminDash';
 import OrderAdminPanel from '../../components/OrderAdminPanel/OrderAdminPanel'
 import {Link} from 'react-router-dom'
@@ -54,6 +55,14 @@ export const mainListItems = (
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Reports" />
+    </ListItem>
+    </Link>
+    <Link to='/admin/blog' as='button'>
+    <ListItem button>
+      <ListItemIcon>
+        <CreateIcon />
+      </ListItemIcon>
+      <ListItemText primary="Blog" />
     </ListItem>
     </Link>
     

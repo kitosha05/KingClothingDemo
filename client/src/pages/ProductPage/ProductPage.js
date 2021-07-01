@@ -18,8 +18,10 @@ import ImageGallery from '../../components/ImageGallery/ImageGallery'
 import PlainSpinner from '../../components/PlainSpinner/PlainSpinner'
 import './ProductPage.scss'
 import {fetchReviewsStart} from '../../redux/reviews/reviewActions'
+import WriteReviewForm from '../../components/WriteReviewForm/WriteReviewForm'
 
-const ProductPage =({ product, addItem, match, fetchReviewsStart}) =>{
+
+const ProductPage =({ product, addItem, match, fetchReviewsStart, currentUser}) =>{
     let numberOfItemsToAdd = 1
     const [quantity,setQuantity] = useState(1)
     const dropDownLabel = `Quantity: ${quantity}`
@@ -91,19 +93,21 @@ const ProductPage =({ product, addItem, match, fetchReviewsStart}) =>{
                                
                             </Row>
                             <Row className='justify-content-center align-items-center'>
-                                    <ProductAccordion/>
+                                    <ProductAccordion product={product}/>
                              </Row>
                              </Card.Body>
                          </Col>
                         
                      </Row>
-                     <Row className='mt-4 mb-4'>
-                         <Col className="col-md-8 offset-md-2">
-                             <ReviewList productName={product.name} productId={product.id}/>
-                         </Col>
-                         
-                     </Row>
+                    
                  </Card>
+                 {
+                     currentUser ? <WriteReviewForm productId={product.id} currentUser={currentUser}/> : (
+                         <h3>Sign In To Write A Review</h3>
+                     )
+                 }
+                 
+
             
   </Container>
         
@@ -116,6 +120,7 @@ const mapDispatchToProps = dispatch =>({
     fetchReviewsStart: productId=> dispatch(fetchReviewsStart(productId))
 })
 const mapStateToProps = (state, ownProps) =>({
-    product: selectProduct( ownProps.match.params.productId)(state)
+    product: selectProduct( ownProps.match.params.productId)(state),
+    currentUser: state.user.currentUser
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ProductPage)

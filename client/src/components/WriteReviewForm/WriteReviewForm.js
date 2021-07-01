@@ -6,6 +6,10 @@ import CustomButton from '../../components/CustomButton/CustomButton'
 import StarRating from '../../components/StarRating/StarRating'
 import ReactStars from "react-rating-stars-component"
 import {addReviewStart, fetchReviewsStart} from '../../redux/reviews/reviewActions'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Card from 'react-bootstrap/Card'
+
 
 const WriteReviewForm = ({productId, currentUser, addReviewStart, fetchReviewsStart, productName})=> {
     const [reviewBody, setReviewBody] = useState("")
@@ -51,20 +55,33 @@ const WriteReviewForm = ({productId, currentUser, addReviewStart, fetchReviewsSt
             edit: true
           };
     return(
-          
-            <Form onSubmit={e=>onSubmit(e)}>
-                <Form.Group controlId="reviewRating">
-                     <Form.Label>Rate This Product</Form.Label>
-                     <ReactStars onChange={e=>onRatingChange(e)} value={reviewRating}{...configStars}/>
-                </Form.Group>
+          <Card className='write-review-card'>
+              <Form className='write-review-form' onSubmit={e=>onSubmit(e)}>
+                <h2 className='write-review-form-title'>Add A New Review</h2>
+                <Row className='justify-content-center align-items-center'>
+               
+                    <Col xs='6'>
+                    <Form.Label className='start-label'>Product Rating:</Form.Label>
+                    </Col>
+                    <Col xs='6'>
+                    <ReactStars onChange={e=>onRatingChange(e)} value={reviewRating}{...configStars}/>
+                    </Col>   
+              
+                </Row>
+                
                 <Form.Group controlId="reviewBody">
+                <Form.Label>Comments</Form.Label>
                      <Form.Control onChange={e=>onReviewBodyChange(e)} value={reviewBody} name="reviewBody" as="textarea" rows={4} />
-                     <CustomButton variant="primary" type="submit">
+                     
+                </Form.Group>
+                <CustomButton variant="primary" type="submit">
                     Submit
                 </CustomButton>
-                </Form.Group>
               
             </Form>
+
+          </Card>
+            
         
     )
     

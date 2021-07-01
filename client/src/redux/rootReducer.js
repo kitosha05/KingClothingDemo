@@ -9,6 +9,7 @@ import shopReducer from './shop/shopReducer'
 import reviewsReducer from './reviews/reviewsReducer'
 import orderReducers from './orders/orderReducers'
 import adminReducer from './admin/adminReducers'
+import blogReducer from './blog/blogReducer.js';
 const persistConfig = {
     key: 'root',
     storage,
@@ -21,6 +22,7 @@ const persistConfig = {
     shop: shopReducer,
     reviews: reviewsReducer,
     order: orderReducers,
-    admin: adminReducer
+    admin: adminReducer,
+    blog: blogReducer
 })
 export default persistReducer(persistConfig, rootReducer)
