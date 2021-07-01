@@ -67,19 +67,20 @@ class AddPostForm extends React.Component{
                           value={this.state.title}
                           required/>
   </Form.Group>
-
-  <Form.Group controlId="body">
-    <Form.Label>Blog Post</Form.Label>
-    <Form.Control as="textarea" rows={50} name="body" onChange={this.onChange} 
-                          value={this.state.body}
-                          required/>
-    </Form.Group>
   <Form.Group controlId="imageUrl">
     <Form.Label>Image URL</Form.Label>
     <Form.Control type="text" name="imageUrl" onChange={this.onChange} 
                           value={this.state.imageUrl}
                           required/>
   </Form.Group>
+
+  <Form.Group controlId="body">
+    <Form.Label>Blog Post</Form.Label>
+    <Form.Control as="textarea" rows={30} name="body" onChange={this.onChange} 
+                          value={this.state.body}
+                          required/>
+    </Form.Group>
+  
   <Form.Group><Button type='submit'>Save New Blog Post</Button></Form.Group>
 </Form>
             </div>

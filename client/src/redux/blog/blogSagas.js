@@ -34,7 +34,7 @@ export function* fetchPosts(){
     try {
      
         const blogPosts = yield call(fetchBlogPosts)
-        yield put(fetchPostsSuccess())
+        yield put(fetchPostsSuccess(blogPosts))
     } catch (error) {
         yield put(fetchPostsFailure(error))
     }

@@ -24,6 +24,8 @@ const UserOrderHistory = lazy(()=>import('./pages/UserOrderHistory/UserOrderHist
 const UserOrderDetails = lazy(()=>import('./pages/UserOrderDetails/UserOrderDetails'))
 const WishList= lazy(()=>import('./pages/Wishlist/Wishlist'))
 const CompleteCheckout = lazy(()=>import('./pages/CompleteCheckout/CompleteCheckOut'))
+const Blog = lazy(()=>import('./pages/Blog/Blog'))
+const BlogPost = lazy(()=>import('./components/BlogPost/BlogPost'))
 
 
 class App extends React.Component {
@@ -67,7 +69,9 @@ class App extends React.Component {
                <Route exact path='/checkout' component={CheckoutPage} />
                <Route exact path='/checkout/:orderId/complete-checkout' component={CompleteCheckout} />
             
-               <Route exact path='/thank-you' component={ThankYou}/>
+               <Route exact path='/blog' component={Blog}/>
+               <Route exact path='/blog/:postId' component={BlogPost}/>
+
             
                <Route exact path='/signin' render={()=> this.props.currentUser ? (<Redirect to='/'/>): (<Login/>)}/>
             
