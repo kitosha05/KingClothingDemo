@@ -52,7 +52,7 @@ function TabPanel(props) {
   }
 
 
-export default function BlogAdminTabs() {
+export default function BlogAdminTabs({blogPosts}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -77,7 +77,7 @@ export default function BlogAdminTabs() {
         <AddPostForm/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <EditPostForm/>
+        <EditPostForm  blogPosts={blogPosts}/>
       </TabPanel>
     
     </Paper>

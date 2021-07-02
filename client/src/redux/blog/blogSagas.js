@@ -20,7 +20,7 @@ export function* onEditPostStart(){
 }
 export function* editPost(action){
     try {
-        const {post} = action.payload
+        const post = action.payload
         const postId = yield call(editBlogPost, post)
         yield put(editPostSuccess())
     } catch (error) {

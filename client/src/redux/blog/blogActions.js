@@ -20,7 +20,7 @@ export const fetchPostsSuccess = (blogPosts)=>({
     payload:blogPosts
 })
 export const fetchPostsFailure = (error)=>({
-    type: blogActionTypes.FETCH_POSTS_SUCCESS,
+    type: blogActionTypes.FETCH_POSTS_FAILURE,
     payload:error
 })
 export const editPostStart = (post)=>({

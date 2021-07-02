@@ -128,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const BlogAdminPanel=()=>{
+const BlogAdminPanel=({blogPosts, fetchPostsStart})=>{
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -143,7 +143,7 @@ const BlogAdminPanel=()=>{
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   useEffect(() => {
-   fetchPostsStart()
+   if(blogPosts===null)fetchPostsStart()
   }, [])
  
  
@@ -197,7 +197,7 @@ const BlogAdminPanel=()=>{
             
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                    <BlogAdminTabs/>
+                    <BlogAdminTabs blogPosts={blogPosts}/>
               </Paper>
             </Grid>
           </Grid>
@@ -213,4 +213,7 @@ const BlogAdminPanel=()=>{
 const mapDispatchToProps = dispatch =>({
   fetchPostsStart: ()=>dispatch(fetchPostsStart())
 })
-export default connect(null, mapDispatchToProps)(BlogAdminPanel)
+const mapStateToProps = state =>({
+  blogPosts: state.blog.blogPosts
+})
+export default connect(mapStateToProps, mapDispatchToProps)(BlogAdminPanel)

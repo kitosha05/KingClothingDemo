@@ -27,11 +27,18 @@ const blogReducer = (state=INITIAL_STATE, action) => {
                 blogPosts:action.payload,
                 error:null
             }
+            case blogActionTypes.EDIT_POST_FAILURE:
         case blogActionTypes.FETCH_POSTS_FAILURE:
                 return{
                     ...state,
                     error:action.payload
                 }
+        case blogActionTypes.EDIT_POST_SUCCESS:
+             return{
+                 ...state,
+                 error:null
+             }
+
         default:
             return{
                 ...state

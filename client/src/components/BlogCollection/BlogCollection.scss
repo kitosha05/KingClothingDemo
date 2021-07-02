@@ -1,6 +1,12 @@
+.featured-post-row {
+  --bs-gutter-x: 0;
+}
 .card.featured-post {
   height: 400px;
-
+  margin: 0 0;
+  .featured-blog-overlay {
+    font-size: 28px;
+  }
   .featured-image {
     height: 100%;
   }

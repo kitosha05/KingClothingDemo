@@ -11,7 +11,8 @@ const BlogCollection =({blogPosts})=>{
     if(!blogPosts)return <PlainSpinner/>
 
     const renderBlogCards = (blogPosts)=>{
-       return blogPosts.map(post=>{
+      const posts = blogPosts.filter(post=>post.featured===false)
+       return posts.map(post=>{
             const {id,title, body, author, postedDate, imageUrl} = post
             const route = `/blog/${id}`
             return(
@@ -33,25 +34,33 @@ const BlogCollection =({blogPosts})=>{
         
     }
 
-    return(
-        <Col className='col-8 offset-2'>
-            <Row>
-                <h1>Blog</h1>
-            </Row>
-            <Row >
-            <Card className="bg-dark text-white featured-post">
-                <Card.Img src={blogPosts[1].imageUrl} alt="Card image" className='featured-image'/>
-                <Card.ImgOverlay>
-                <Card.Title>Card title</Card.Title>
+    const renderFeaturedPost=()=>{
+        const post = blogPosts.filter(post=>post.featured===true)[0]
+        return(
+            <Row className='featured-post-row' >
+            <Card className=" text-white featured-post">
+                <Image src={post.imageUrl} alt="Card image" className='featured-image' />
+                <Card.ImgOverlay className='featured-blog-overlay text-center'>
+                <Card.Title>{post.title}</Card.Title>
                 <Card.Text>
-                This is a wider card with supporting text below as a natural lead-in to
-                additional content. This content is a little bit longer.
+                {post.body.substring(0,100)}
                 </Card.Text>
-                <Card.Text>Last updated 3 mins ago</Card.Text>
+                <Card.Text><small>By: {post.author}</small></Card.Text>
                  </Card.ImgOverlay>
             </Card>
             </Row>
-            <Row className='mt-3'>
+        )
+    }
+
+    return(
+        <Col className='col-8 offset-2 '>
+            <Row className='text-center mt-1 mb-3'>
+                <h1>The King Clothing Blog</h1>
+            </Row>
+           {
+               renderFeaturedPost()
+           }
+            <Row className='mt-3 justify-content-center'>
                 {
                     renderBlogCards(blogPosts)
                 }

@@ -79,10 +79,10 @@ export const addBlogPost = async(post)=>{
     })
 }
 export const editBlogPost = async(post)=>{
-    const{id}= post
-    return await firestore.collection('blogPosts').doc(id).update(post).then(post=>{
-        return post.id
-    })
+    const id = post.id
+    console.log(post)
+
+    return await firestore.collection('blogPosts').doc(id).update(post)
 }
 export const fetchBlogPosts = async()=>{
     const blogPostsSnapShot= await firestore.collection('blogPosts').get()
