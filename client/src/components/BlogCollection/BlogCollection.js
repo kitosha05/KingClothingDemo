@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card'
 import Image from 'react-bootstrap/Image'
 import PlainSpinner from '../PlainSpinner/PlainSpinner'
 import './BlogCollection.scss'
+import BlogPreviewCard from '../BlogPreviewCard/BlogPreviewCard'
 
 const BlogCollection =({blogPosts})=>{
     if(!blogPosts)return <PlainSpinner/>
@@ -16,19 +17,7 @@ const BlogCollection =({blogPosts})=>{
             const {id,title, body, author, postedDate, imageUrl} = post
             const route = `/blog/${id}`
             return(
-                <Col key={id} xs sm='6' md='4' className='text-center'>
-                <Card className='blog-preview-card'>
-                <Link to={route}><Image className='blog-preview-image'src={imageUrl}/></Link>
-                <Card.Body className='blog-preview-body'>
-                    <Card.Title><Link to={route}>{title}</Link></Card.Title>
-                    <Card.Text><small>Author: {author}</small></Card.Text>
-                    <Card.Text><small>Posted: {postedDate.toDate().toDateString()}</small></Card.Text>
-                  <Card.Text>
-                    {body.substring(0,100)}
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-              </Col>
+                <BlogPreviewCard post={post} route={route}/>
             )
         })
         
@@ -38,8 +27,9 @@ const BlogCollection =({blogPosts})=>{
         const post = blogPosts.filter(post=>post.featured===true)[0]
         return(
             <Row className='featured-post-row' >
+                <Col xs='12' md='10' className='offset-md-1'>
             <Card className=" text-white featured-post">
-                <Image src={post.imageUrl} alt="Card image" className='featured-image' />
+                <Image src={post.imageUrl} alt="Card image" className='featured-image' fluid />
                 <Card.ImgOverlay className='featured-blog-overlay text-center'>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Text>
@@ -48,19 +38,20 @@ const BlogCollection =({blogPosts})=>{
                 <Card.Text><small>By: {post.author}</small></Card.Text>
                  </Card.ImgOverlay>
             </Card>
+            </Col>
             </Row>
         )
     }
 
     return(
-        <Col className='col-8 offset-2 '>
+        <Col xs  className='justify-content-center align-items-center'>
             <Row className='text-center mt-1 mb-3'>
                 <h1>The King Clothing Blog</h1>
             </Row>
            {
                renderFeaturedPost()
            }
-            <Row className='mt-3 justify-content-center'>
+            <Row className='mt-5 mb-5 justify-content-center'>
                 {
                     renderBlogCards(blogPosts)
                 }

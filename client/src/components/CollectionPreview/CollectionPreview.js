@@ -8,6 +8,7 @@ import CollectionItem from '../CollectionItem/CollectionItem.js'
 import Fade from 'react-reveal/Fade';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import PlainSpinner from '../PlainSpinner/PlainSpinner'
 
 const CollectionPreview = ({title, id, routeName, products, allReviews}) => {
     const collectionId = id
@@ -15,9 +16,7 @@ const CollectionPreview = ({title, id, routeName, products, allReviews}) => {
     
    
     if(!products || !allReviews){
-        return(
-            <div>Loading...</div>
-        )
+        return <PlainSpinner/>
     }
 
     

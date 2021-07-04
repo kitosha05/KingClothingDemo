@@ -11,7 +11,7 @@ import {createStructuredSelector} from 'reselect'
 
 
 
-const ReviewList = ({reviews, fetchReviewsStart, productId, user, productName})=>{
+const ReviewList = ({reviews})=>{
     
     useEffect(()=>{
        checkUserSession()
@@ -40,13 +40,11 @@ const ReviewList = ({reviews, fetchReviewsStart, productId, user, productName})=
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchReviewsStart: productId=> dispatch(fetchReviewsStart(productId)),
+  
 
     checkUserSession: ()=>dispatch(checkUserSession())
   })
-const mapStateToProps = state =>({
-  reviews: state.reviews.reviews
-})
+
 
     
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewList)
+export default connect(null, mapDispatchToProps)(ReviewList)

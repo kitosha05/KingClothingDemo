@@ -1,7 +1,7 @@
 import './CollectionItem.scss'
 import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import {addItem} from '../../redux/cart/cartActions'
 import Button from '../CustomButton/CustomButton'
 import ReactStars from "react-rating-stars-component"
@@ -19,7 +19,7 @@ const configStars = {
   };
 
 const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, averageRating, currentUser, favItems, setFavItemStart,  removeFavItemStart}) => {
-    
+    const history = useHistory();
     const [isFavorite, setIsFavorite] = useState(()=>{
         if (currentUser) {
         if (currentUser.favItems){
@@ -46,11 +46,14 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
         
     }
     
-
+const onDivClick=(e)=>{
+   
+    history.push(`/shop/${collectionRoute}/${productUrl}`)
+}
     
     return(
         <Zoom bottom>
-<div className='collection-item'>
+<div className='collection-item' onClick={(e)=>onDivClick(e)}>
                 <div className='image'
                     style={{backgroundImage: `url(${imageUrl})`}}
                  />
@@ -77,7 +80,14 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
             
             
             
-            <Button onClick={()=>addItem(item)}inverted>Add To Cart</Button>
+            <Button onClick={(e)=>{
+               e.preventDefault();
+               e.stopPropagation();
+                addItem(item)
+            }}
+                inverted>
+                    Add To Cart
+                    </Button>
         </div>
 
         </Zoom>

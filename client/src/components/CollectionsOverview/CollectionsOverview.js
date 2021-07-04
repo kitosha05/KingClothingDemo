@@ -6,19 +6,22 @@ import { selectCollectionsForPreview } from '../../redux/shop/shopSelector'
 import CollectionPreview from '../CollectionPreview/CollectionPreview'
 import Fade from 'react-reveal/Fade';
 import './CollectionsOverview.scss'
+import Col from 'react-bootstrap/Col'
+
 
 const CollectionsOverview = ({collections, fetchAllReviewsStart})=>{
     useEffect(()=>{
         fetchAllReviewsStart()
     },[])
     return(
-        <div className='collections-overview'>
+        <Col xs className='collections-overview col-md-10 offset-md-1'>
+
                 {
                  collections.map(collection=>
                      <CollectionPreview key={collection.id} {...collection}/>
                  )
                 }
-        </div>
+        </Col>
     )
 }
 

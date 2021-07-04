@@ -60,10 +60,10 @@ const WriteReviewForm = ({productId, currentUser, addReviewStart, fetchReviewsSt
                 <h2 className='write-review-form-title'>Add A New Review</h2>
                 <Row className='justify-content-center align-items-center'>
                
-                    <Col xs='6'>
+                    <Col xs='2'>
                     <Form.Label className='start-label'>Product Rating:</Form.Label>
                     </Col>
-                    <Col xs='6'>
+                    <Col xs='10'>
                     <ReactStars onChange={e=>onRatingChange(e)} value={reviewRating}{...configStars}/>
                     </Col>   
               
@@ -74,9 +74,12 @@ const WriteReviewForm = ({productId, currentUser, addReviewStart, fetchReviewsSt
                      <Form.Control onChange={e=>onReviewBodyChange(e)} value={reviewBody} name="reviewBody" as="textarea" rows={4} />
                      
                 </Form.Group>
+                <Row className='justify-content-center align-items-center'>
                 <CustomButton variant="primary" type="submit">
                     Submit
                 </CustomButton>
+                </Row>
+                
               
             </Form>
 

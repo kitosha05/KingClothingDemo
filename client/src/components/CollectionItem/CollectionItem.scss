@@ -5,6 +5,8 @@
   height: 350px;
   align-items: center;
   position: relative;
+  margin-bottom: 10px;
+  margin-top: 10px;
 
   .image {
     width: 100%;
@@ -36,13 +38,16 @@
     display: flex;
 
     &:hover {
-      transform: scale(1.5);
-      transition: transform 1s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+      transform: scale(1.1);
       cursor: pointer;
     }
   }
 
   &:hover {
+    transform: scale(1.05);
+    transition: transform 1s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
     .image {
       opacity: 0.8;
     }

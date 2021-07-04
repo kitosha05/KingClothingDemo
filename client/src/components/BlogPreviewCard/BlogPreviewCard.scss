@@ -1,0 +1,46 @@
+.blog-preview-card {
+  margin-bottom: 15px;
+
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06) !important;
+  transition: 0.3s ease-in-out;
+  height: 420px;
+
+  .blog-image-container {
+    margin-top: -20px;
+    height: 215px;
+    transition: 0.3s ease-in-out;
+    position: relative;
+  }
+  a .blog-preview-image {
+    max-width: 90%;
+    max-height: 100%;
+    border-radius: 4px;
+    position: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06) !important;
+  }
+  @media (hover) {
+    height: unset;
+    height: 215px;
+
+    .blog-preview-body {
+      position: relative;
+      visibility: hidden;
+      opacity: 0;
+
+      background: rgba(255, 255, 255, 0.8);
+    }
+    &:hover,
+    &:focus-within {
+      height: 420px;
+      .blog-preview-body {
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0.3s;
+      }
+      .blog-image-container {
+        margin-top: -40px;
+        transform: scale(1.1) translateY(-20px);
+      }
+    }
+  }
+}

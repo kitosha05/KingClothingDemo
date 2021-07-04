@@ -9,13 +9,14 @@ import { selectCollection, selectProductsByCollection } from '../../redux/shop/s
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import './CollectionPage.scss';
+import PlainSpinner from '../../components/PlainSpinner/PlainSpinner';
 
 const CollectionPage = ({ collection, match, products, allReviews }) => {
     
   
   
   if(!products || !collection || !allReviews ){
-    return(<div>Loading...</div>)
+    return  <PlainSpinner/>
   }
   const { title } = collection;
 

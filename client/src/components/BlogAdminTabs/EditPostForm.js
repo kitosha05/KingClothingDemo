@@ -140,7 +140,7 @@ console.log(currentFeatured)
           <TableRow key={post.id}>
             <TableCell>
               
-                  <Form.Check name='isFeatured' defaultChecked={currentFeatured===post.id} checked={currentFeatured===post.id} disabled/>
+                  <Form.Check name='isFeatured'  checked={currentFeatured===post.id} disabled/>
              
 
             </TableCell>

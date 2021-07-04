@@ -8,7 +8,7 @@ import Image from 'react-bootstrap/Image'
 import './ProductAccordion.scss'
 import ReviewList from '../ReviewList/ReviewList';
 
-const ProductAccordion = ({product}) =>{
+const ProductAccordion = ({product, reviews}) =>{
     return(
         <Accordion defaultActiveKey="0">
                                 <Card className='accordion-card'>
@@ -54,12 +54,12 @@ const ProductAccordion = ({product}) =>{
                                  <Card>
                                  <Card.Header>
                                      <Accordion.Toggle as={Button} variant="link" eventKey="3">
-                                          Reviews
+                                          Reviews ({reviews.length})
                                     </Accordion.Toggle>
                                 </Card.Header>
                                         <Accordion.Collapse eventKey="3">
                                              <Card.Body>
-                                             <ReviewList productName={product.name} productId={product.id}/>
+                                             <ReviewList reviews={reviews} productName={product.name} productId={product.id}/>
 
                                              </Card.Body>
                                         </Accordion.Collapse>

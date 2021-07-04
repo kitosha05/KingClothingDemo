@@ -21,9 +21,10 @@ import {fetchReviewsStart} from '../../redux/reviews/reviewActions'
 import WriteReviewForm from '../../components/WriteReviewForm/WriteReviewForm'
 
 
-const ProductPage =({ product, addItem, match, fetchReviewsStart, currentUser}) =>{
-    let numberOfItemsToAdd = 1
+const ProductPage =({ product, addItem, currentUser,allReviews}) =>{
+    
     const [quantity,setQuantity] = useState(1)
+    const [productReviews, setProductReviews]=useState([])
     const dropDownLabel = `Quantity: ${quantity}`
     const handleSelect = (e) => {
         console.log(e)
@@ -31,18 +32,22 @@ const ProductPage =({ product, addItem, match, fetchReviewsStart, currentUser}) 
         
     }
 
-  
+  useEffect(()=>{
+      filterReviews()
+
+  },[allReviews,product])
+
+  const filterReviews=()=>{
+     const productReviews=!allReviews ? [] : allReviews.filter(review=>review.productId===product.id)
+     setProductReviews(productReviews)
+  }
   
    if(!product)  return<PlainSpinner/>
-   fetchReviewsStart(product.id)
     return(
         <Container className='mt-3 col-md-8 offset-md-2 justify-content-center align-content-center'>
                 
                
                <Card className='text-center product-card'>  
-                   <Row className="mt-3 mb-3 justify-content-center align-items-center">
-                       <Card.Title as='h1'>{product.name}</Card.Title>
-                    </Row> 
                     <Row>
                         <Col md='6'>
                             <Container>
@@ -55,6 +60,10 @@ const ProductPage =({ product, addItem, match, fetchReviewsStart, currentUser}) 
                       
                         <Col md='6'>
                         <Card.Body>
+                        <Row className="mt-3 mb-3 justify-content-center align-items-center">
+                       <Card.Title className='product-page-title' as='h1'>{product.name}</Card.Title>
+                    </Row> 
+                        
                             <Row className='justify-content-around align-items-center mb-5'>
                                 <Col>
                                     <Row>
@@ -93,7 +102,7 @@ const ProductPage =({ product, addItem, match, fetchReviewsStart, currentUser}) 
                                
                             </Row>
                             <Row className='justify-content-center align-items-center'>
-                                    <ProductAccordion product={product}/>
+                                    <ProductAccordion product={product} reviews={productReviews}/>
                              </Row>
                              </Card.Body>
                          </Col>
@@ -116,11 +125,11 @@ const ProductPage =({ product, addItem, match, fetchReviewsStart, currentUser}) 
    
 }
 const mapDispatchToProps = dispatch =>({
-    addItem: (item) => dispatch(addItem(item)),
-    fetchReviewsStart: productId=> dispatch(fetchReviewsStart(productId))
+    addItem: (item) => dispatch(addItem(item))
 })
 const mapStateToProps = (state, ownProps) =>({
     product: selectProduct( ownProps.match.params.productId)(state),
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    allReviews: state.reviews.allReviews
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ProductPage)
