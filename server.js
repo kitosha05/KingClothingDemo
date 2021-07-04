@@ -17,6 +17,9 @@ const transporter = nodemailer.createTransport({
      }
  });
 
+
+
+
 const app = express();
 const port = process.env.PORT || 5000;
 app.set('views', __dirname + '/views');
@@ -71,6 +74,29 @@ app.post("/create-payment-intent", async (req, res) => {
     clientSecret: paymentIntent.client_secret
   });
 });
+
+app.post('/email/order-confirmation', async(req, res)=>{
+  const order = req.body;
+  console.log(order);
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+    console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+})
+const mailOptions = {
+  from: process.env.EMAIL,
+  to: '3rdcoastlabs@gmail.com',
+  subject: 'Test Email- Order Confirmed',
+  text: 'Order Confirmed'
+};
+
+// const createOrderConfirmationEmail = (order)=>{
+
+// }
+
 const calculateTotal = (cartItems) =>{
   let subTotal=0
   cartItems.map(item=>{

@@ -1,12 +1,13 @@
-import Reach from 'react'
+import React from 'react'
 import './ThankYou.scss'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Image from 'react-bootstrap/Image'
 
-const ThankYou =()=>{
-    return(
+const ThankYou =({order})=>{
+   
+return(
         <Col className='col-md-8 offset-md-2'>
             <Card>
             <Row>

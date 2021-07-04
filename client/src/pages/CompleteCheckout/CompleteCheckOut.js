@@ -22,7 +22,7 @@ class CompleteCheckout extends React.Component{
         shippingMethod:''
     }
 
-
+    
     // go back to previous step
 prevStep = () => {
     const { step } = this.state;
@@ -50,6 +50,7 @@ handleChange = input => e => {
             shippingMethod,
             currentUser:this.state.currentUser
         }
+        const order = this.props.location.customNameData
         switch (step) {
             case 1: 
               return (
@@ -71,12 +72,12 @@ handleChange = input => e => {
             case 3: 
               return (
                 <Elements stripe={promise}>
-               <StripeCheckoutForm nextStep={this.nextStep} values={values}/>
+               <StripeCheckoutForm nextStep={this.nextStep} order={order} values={values} />
                </Elements>
               )
             case 4:
               return (
-                <ThankYou />
+                <ThankYou order={order}/>
               )
             // never forget the default case, otherwise VS code would be mad!
             default: 

@@ -88,6 +88,18 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
     }
   };
 
+  const sendOrderConfirmation=({orderId, order})=>{
+    const confirmedOrder ={id:orderId, ...order}
+    window
+    .fetch('/email/order-confirmation', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(confirmedOrder)
+    })
+  }
+
   const handleChange = async (event) => {
     // Listen for changes in the CardElement
     // and display any errors as the customer types their card details
@@ -113,8 +125,6 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       setError(null);
       setProcessing(false);
       setSucceeded(true);
-      
-     
       //clear cart, update Order status depending on shipping method,move to next step
       let orderStatus=''
       if(values.shippingMethod==='pickUp'){
@@ -135,6 +145,7 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       }
       const orderId = params.orderId
       const updatedOrder = updateOrder({order, orderId})
+      sendOrderConfirmation({orderId, order})
       clearCart()
       clearCheckout()
       nextStep()
