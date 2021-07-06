@@ -80,7 +80,7 @@ export const addBlogPost = async(post)=>{
 }
 export const editBlogPost = async(post)=>{
     const id = post.id
-    console.log(post)
+  
 
     return await firestore.collection('blogPosts').doc(id).update(post)
 }
@@ -93,9 +93,15 @@ export const fetchBlogPosts = async()=>{
     })
 }
 export const updateOrder= async({order, orderId})=>{
-return await firestore.collection('orders').doc(orderId).update(order).then(order=>{
-    return order
-})
+     return await firestore.collection('orders').doc(orderId).update(order).then(error=>{
+          if(error)return error
+          return fetchSpecificOrder(orderId) 
+      })  
+      
+}
+export const fetchSpecificOrder= async(orderId)=>{
+    const orderRef= await firestore.collection('orders').doc(orderId).get()
+    return {id:orderRef.id, ...orderRef.data()}
 }
 
 export const updateProduct = async({product, productId})=>{

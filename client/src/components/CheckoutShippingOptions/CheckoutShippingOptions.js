@@ -52,7 +52,7 @@ const CheckoutShippingOptions =({nextStep,prevStep,handleChange,order})=>{
                              value='standardShipping'
                               onChange={handleChange('shippingMethod')}
                         />
-                        <Form.Text className='text-muted'>`Add ${FREE_SHIPPING_MINIMUM-total} To Qualify For Free Shipping</Form.Text>
+                        <Form.Text className='text-muted'>Add ${FREE_SHIPPING_MINIMUM-total} To Qualify For Free Shipping</Form.Text>
 
                                 </Form.Group>
                         

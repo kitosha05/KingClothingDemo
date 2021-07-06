@@ -21,7 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../ListItems/ListItems';
 import Chart from '../Chart/Chart';
 import Deposits from '../Deposits/Deposits';
-import PendingOrders from '../Orders/PendingOrders';
+import Orders from '../Orders/Orders';
 
 function Copyright() {
   return (
@@ -126,6 +126,7 @@ export default function Dashboard({allOrders}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const pendingOrders = allOrders ? allOrders.filter(order=>order.status!=='started' && order.status!=='Complete') : []
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -188,7 +189,7 @@ export default function Dashboard({allOrders}) {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <PendingOrders allOrders={allOrders}/>
+                <Orders allOrders={pendingOrders}/>
               </Paper>
             </Grid>
           </Grid>

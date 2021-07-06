@@ -48,66 +48,109 @@ const [rows, setRows]= useState([])
   const handleShow = (orderId) => {
   setShow(orderId)
 }
- const readyForPickUp = (orderId)=>{
-   handleClose()
-   //update order status to waiting for pickup
-   const order = {status:'Pending Pickup'}
-   updateOrder({order,orderId})
-   //send customer email with instructions for pickup
-   //change action button
-   fetchOrdersStart()
- }
- const readyForShipping=(orderId, trackingNumber)=>{
-   handleClose()
-   const order={status:'Complete', trackingNumber:trackingNumber}
-   updateOrder({order,orderId})
-  fetchOrdersStart()
- }
 
- const wasPickedUp =(orderId)=>{
-   handleClose()
-   const order= {status:'Complete'}
-   updateOrder({orderId, order})
-   fetchOrdersStart()
- }
+useEffect(()=>{
+  if(allOrders){
+    getRows()
+  }
 
- useEffect(()=>{
-    if(allOrders){
-      getRows()
-    }
+},[allOrders])
 
- },[allOrders])
-
-  const getRows=()=>{
-    const rows = allOrders.map(order=>{
-      const {status} = order
-      if(status!=='started'){
-        const {orderDate, 
+const getRows=()=>{
+  const rows = allOrders.sort((a, b) => b.orderDate - a.orderDate).map(order=>{
+    const {status} = order
+    if(status!=='started'){
+      const {orderDate, 
         total,  
         cartItems,
         currentUser,
         shippingCity, 
         shippingState, 
         status,
+        billingName,
+        billingEmail,
+        shippingMethod,
+        shippingFee,
         id} = order
-        const email = currentUser.email
-        const dateString=orderDate.toDate().toDateString()
-        let action=''
-        if(status==='Prepare For Pickup') action = 'Mark As Ready'
-        if(status==='Prepare For Shipping')action = 'Ship Order'
-        if(status==='Pending Pickup') action='Mark As Picked Up'
-        if(status==='Complete') action='ORDER COMPLETE'
-        
-        return (createData(id,dateString,currentUser.email,shippingCity,shippingState,status,action, total, cartItems))
-      }
-   })
-   setRows(filterRows(rows))
-  }
 
- const filterRows=(rows)=>{
-  return rows.filter(row=>row!==undefined)
+      const dateString=orderDate.toDate().toDateString()
+      let action=''
+      if(status==='Prepare For Pickup') action = 'Mark As Ready'
+      if(status==='Prepare For Shipping')action = 'Ship Order'
+      if(status==='Pending Pickup') action='Mark As Picked Up'
+      if(status==='Complete') action='ORDER COMPLETE'
+      
+      return (createData(id,dateString,billingEmail,shippingCity,shippingState,status,action, total, cartItems))
+    }
+ })
+ setRows(filterRows(rows))
 }
+
+const filterRows=(rows)=>{
+return rows.filter(row=>row!==undefined)
+}
+
+ const readyForPickUp = async(orderId)=>{
   
+   //update order status to waiting for pickup
+   const order = {status:'Pending Pickup'}
+   const updatedOrder = await updateOrder({order,orderId})
+   //send customer email with instructions for pickup
+   //change action button
+   sendReadyForPickUpEmail(updatedOrder)
+   fetchOrdersStart()
+   handleClose()
+ }
+
+ const sendReadyForPickUpEmail=(order)=>{
+  window
+  .fetch('/email/ready-for-pickup', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(order)
+  })
+ }
+ const readyForShipping=async(orderId, trackingNumber, actualShippingCost)=>{
+  handleClose()
+  const order={status:'Complete', trackingNumber:trackingNumber, actualShippingCost:actualShippingCost}
+  const updatedOrder = await updateOrder({order,orderId})
+  sendShippingConfirmation(updatedOrder)
+ fetchOrdersStart()
+}
+
+const sendShippingConfirmation=(order)=>{
+  window
+  .fetch('/email/shipping-confirmation', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(order)
+  })
+ }
+
+ const wasPickedUp =async(orderId)=>{
+  
+   const order= {status:'Complete'}
+   const updatedOrder = await updateOrder({orderId, order})
+  sendPickedUpConfirmation(updatedOrder)
+   fetchOrdersStart()
+   handleClose()
+ }
+
+ const sendPickedUpConfirmation=(order)=>{
+  window
+  .fetch('/email/was-picked-up', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(order)
+  })
+ }
+
  
   const classes = useStyles();
   if(!allOrders)return<div>Loading...</div>

@@ -6,6 +6,7 @@ import './Modal.scss'
 
 const CustomModal =({show, handleClose, handleConfirm, orderId, status, cartItems})=>{
     const [trackingNumber, setTrackingNumber]=useState('')
+    const [actualShippingCost, setActualShippingCost]=useState(0)
 const getTitle=()=>{
     switch(status){
         case "Prepare For Pickup":
@@ -29,7 +30,7 @@ const getConfirmButton=()=>{
             )
         case "Prepare For Shipping":
             return (
-                <Button variant="primary" onClick={()=>handleConfirm(orderId, trackingNumber)}>
+                <Button variant="primary" onClick={()=>handleConfirm(orderId, trackingNumber, actualShippingCost)}>
                 Confirm
               </Button>
             )
@@ -48,6 +49,10 @@ const onChange=(e)=>{
     const value = e.target.value
     setTrackingNumber(value)
 }
+const onChangeCost=(e)=>{
+    const value = e.target.value
+    setActualShippingCost(value)
+}
     const getBody=()=>{
         switch(status){
             case "Prepare For Pickup":
@@ -60,11 +65,15 @@ const onChange=(e)=>{
                 return (
                     <Form>
                         <Form.Group controlId="trackingNumber">
-                            <Form.Label>Enter Tracking Number</Form.Label>
-                                <Form.Control type="text" name='trackingNumber'value={trackingNumber} onChange={e=>onChange(e)} placeholder="Tracking Number" />
+                            <Form.Label>Tracking Number</Form.Label>
+                                <Form.Control required type="text" name='trackingNumber'value={trackingNumber} onChange={e=>onChange(e)} placeholder="Tracking Number" />
                             <Form.Text className="text-muted">
                             An Email With The Tracking Number Will Be Sent To The Customer
                             </Form.Text>
+                        </Form.Group>
+                        <Form.Group controlId="actualShippingCost">
+                            <Form.Label>Actual Shipping Cost</Form.Label>
+                                <Form.Control required type="text" name='actualShippingCost'value={actualShippingCost} onChange={e=>onChangeCost(e)} placeholder="Shipping Cost" />
                         </Form.Group>
                     </Form>
                 )

@@ -96,6 +96,93 @@ try {
 }
 
 })
+app.post('/email/ready-for-pickup', async(req, res)=>{
+  const order = req.body;
+try {
+  const mailOptions= createReadyForPickUpEmail(order)
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+    console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  
+} catch (error) {
+  console.log(error);
+}
+
+})
+app.post('/email/shipping-confirmation', async(req, res)=>{
+  const order = req.body;
+try {
+  const mailOptions= createShippingConfirmation(order)
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+    console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  
+} catch (error) {
+  console.log(error);
+}
+
+})
+app.post('/email/was-picked-up', async(req, res)=>{
+  const order = req.body;
+try {
+  const mailOptions= createPickedUpConfirmation(order)
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+    console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  
+} catch (error) {
+  console.log(error);
+}
+
+})
+const createPickedUpConfirmation=(order)=>{
+  const {id, billingName, billingEmail}= order;
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: billingEmail,
+    subject: `Your Order Was Picked Up!`,
+    text: `Your Order: ${id} Has Been Picked Up. Enjoy and Thanks Again For Your Business ${billingName}!`,
+    html: `<p>Your Order: ${id} Has Been Picked Up. Enjoy and Thanks Again For Your Business ${billingName}!`
+  };
+  return mailOptions
+}
+const createShippingConfirmation=(order)=>{
+  const {id, billingName, billingEmail, trackingNumber}= order;
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: billingEmail,
+    subject: `Your Order Has Been Shipped!`,
+    text: `Great News ${billingName}, Your Order: ${id} Has Been Shipped. The Tracking Number is: ${trackingNumber}!`,
+    html: `<p> Great News ${billingName}, Your Order: ${id} Has Been Shipped. The Tracking Number is: ${trackingNumber}!`
+  };
+  return mailOptions
+}
+const createReadyForPickUpEmail=(order)=>{
+  const {id, billingName, billingEmail, cartItems, shippingMethod, shippingFee,total}= order;
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: billingEmail,
+    subject: `Your Order Is Now Ready For Pick Up`,
+    text: `Great News ${billingName}, Your Order: ${id} Is Now Ready For Pick Up!`,
+    html: `<p> Great News ${billingName}, Your Order: ${id} Is Now Ready For Pick Up`
+  };
+  return mailOptions
+}
 
 
  const createOrderConfirmationEmail = (order)=>{
