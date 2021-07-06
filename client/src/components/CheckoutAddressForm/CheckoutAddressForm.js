@@ -6,8 +6,23 @@ import Row from 'react-bootstrap/Row'
 import './CheckoutAddressForm.scss'
 
 const CheckOutAddressForm =({nextStep, handleChange, values})=>{
+    
     return(
         <Col className='col-md-6 offset-md-3'> 
+             <Row className='mt-3'>
+                <h1>Billing Information</h1>
+            <Form>
+                <Form.Group controlId="billingName">
+                     <Form.Label>Full Name:</Form.Label>
+                     <Form.Control type="text" name='billingName' value={values.billingName} onChange={handleChange('billingName')} placeholder="Billing Name" />
+                </Form.Group>
+            <Form.Group controlId="billingEmail">
+                <Form.Label>Email Address</Form.Label>
+                 <Form.Control type="email" value={values.billingEmail} onChange={handleChange('billingEmail')} name='billingEmail'placeholder="your@email.com" />
+            </Form.Group>
+            </Form>
+            </Row>
+
             <Row className='mt-3'>
                 <h1>Enter Shipping Information</h1>
             <Form>

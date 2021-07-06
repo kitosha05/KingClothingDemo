@@ -12,16 +12,16 @@ const CheckoutItem = ({ cartItem, clearItem, reduceItem, addItem }) => {
   const { name, imageUrl, price, quantity } = cartItem;
   return (
     <Row className='checkout-item text-center justify-content-center'>
-      <Col>
-        <div className='image-div'>
-        <Image src={imageUrl} alt='item' fluid/>
+      <Col className='text-center'>
+        <div className='checkout-image-div'>
+        <Image className='checkout-item-image' src={imageUrl} alt='item' />
         </div>
       
       </Col>
-      <Col>
+      <Col className='text-center'>
          <span className='name'>{name}</span>
       </Col>
-      <Col>
+      <Col className='text-center'>
       <span className='quantity'>
           <div className='arrow' onClick={()=> reduceItem(cartItem)}>&#10094;</div>
           <span className='value'>{quantity}</span>
@@ -29,10 +29,10 @@ const CheckoutItem = ({ cartItem, clearItem, reduceItem, addItem }) => {
         </span>
 
       </Col>
-      <Col>
+      <Col className='text-center'>
       <span className='price'>${price}</span>
       </Col>
-      <Col>
+      <Col className='text-center'>
       <div className='remove-button' onClick={() => clearItem(cartItem)}>
         &#10005;
       </div>

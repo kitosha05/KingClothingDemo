@@ -7,11 +7,10 @@
   font-size: 20px;
   align-items: center;
 
-  .img-div {
-    height: 125px;
-    max-width: 100%;
+  .checkout-image-div {
+    max-height: 100%;
 
-    .img-fluid {
+    .checkout-item-image {
       height: 110px;
     }
   }

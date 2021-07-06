@@ -42,14 +42,18 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
   const [processing, setProcessing] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [clientSecret, setClientSecret] = useState('');
+  const [shippingCharge, setShippingCharge]= useState(0);
   const stripe = useStripe();
   const elements = useElements();
   const {cartItems} = useSelector(state=>state.cart)
   const params = useParams()
   
  
+  
+ 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
+    const orderDetails = {cartItems, ...values}
    if (cartItems) {
     window
     .fetch("/create-payment-intent", {
@@ -57,7 +61,7 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       headers: {
         "Content-Type": "application/json"
       },
-    body: JSON.stringify(cartItems)
+    body: JSON.stringify(orderDetails)
     })
     .then(res => {
       return res.json();
@@ -66,8 +70,7 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       setClientSecret(data.clientSecret);
     });
    }
-   
-   JSON.stringify({items: [{ cartItems}]})  
+   if(values.shippingMethod==='standardShipping') setShippingCharge(10)
   }, [cartItems]);
 
   const cardStyle = {
@@ -88,17 +91,7 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
     }
   };
 
-  const sendOrderConfirmation=({orderId, order})=>{
-    const confirmedOrder ={id:orderId, ...order}
-    window
-    .fetch('/email/order-confirmation', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(confirmedOrder)
-    })
-  }
+ 
 
   const handleChange = async (event) => {
     // Listen for changes in the CardElement
@@ -127,19 +120,24 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       setSucceeded(true);
       //clear cart, update Order status depending on shipping method,move to next step
       let orderStatus=''
+      let shippingFee=0
       if(values.shippingMethod==='pickUp'){
          orderStatus='Prepare For Pickup' 
       } else{
         orderStatus='Prepare For Shipping'
+        if(values.shippingMethod==='standardShipping') shippingFee=10
       }
      const order={
+        billingName:values.billingName,
+        billingEmail:values.billingEmail,
         shippingMethod: values.shippingMethod,
         shippingCity: values.shippingCity,
         shippingState: values.shippingState,
         shippingStreetAddress: values.shippingStreetAddress,
         shippingZipcode: values.shippingZipcode,
+        shippingFee,
         status: orderStatus,
-        total: getCartTotal(cartItems),
+        total: getCartTotal(cartItems) +shippingFee,
         cartItems: cartItems,
         orderDate: new Date()
       }
@@ -152,6 +150,18 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       
     }
   };
+
+  const sendOrderConfirmation=({orderId, order})=>{
+    const confirmedOrder ={id:orderId, ...order}
+    window
+    .fetch('/email/order-confirmation', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(confirmedOrder)
+    })
+  }
   const getCartTotal = (cartItems) =>{
       let subTotal=0
       cartItems.map(item=>{
@@ -193,8 +203,8 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
                     }
                     <Card.Body>
                         <Card.Text><b>Subtotal:  </b>${getCartTotal(cartItems)}</Card.Text>
-                        <Card.Text><b>Shipping:  </b>FREE PICKUP</Card.Text>
-                        <Card.Text><b>Order Total:  </b>${getCartTotal(cartItems)}</Card.Text>
+                        <Card.Text><b>Shipping:  </b>{shippingCharge}</Card.Text>
+                        <Card.Text><b>Order Total:  </b>${getCartTotal(cartItems) +shippingCharge}</Card.Text>
                     </Card.Body>
                 </Card.Body>
                 </Col>

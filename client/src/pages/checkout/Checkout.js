@@ -10,14 +10,20 @@ import StripeCheckoutButton from '../../components/StripeButton/StripeButton'
 import { newOrderStart } from '../../redux/orders/orderActions'
  import './Checkout.scss'
 import { selectCurrentUser } from '../../redux/user/userSelectors'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import { updateAllOrders } from '../../firebase/firebase.utils'
+
 
 const CheckoutPage = ({cartItems, total, newOrderStart, currentUser}) =>{
+   
     const {checkoutId} = useSelector(state=>state.order)
     const history = useHistory()
-
+    const billingEmail= currentUser ? currentUser.email : ''
     const order ={
         cartItems,
         total,
+        billingEmail,
         currentUser,
         status:'started'
     }
@@ -29,33 +35,33 @@ const CheckoutPage = ({cartItems, total, newOrderStart, currentUser}) =>{
      if(checkoutId){
         history.push({
             pathname: `/checkout/${checkoutId}/complete-checkout`,
-            customNameData: order,
+            state: order,
           })
      }
     return(
      
         <div className='checkout-page'>
             <h1>Items In Your Cart:</h1>
-            <div className='checkout-header'>
-                 <div className='header-block'>
+            <Row className='checkout-header'>
+                 <Col className='text-center header-block'>
                      <span>Product</span>
-                </div>
-                <div className='header-block'>
+                </Col>
+                <Col className='text-center header-block'>
                      <span>Description</span>
-                </div>
-                <div className='header-block'>
+                 </Col>
+                <Col className=' text-center header-block'>
                      <span>Quantity</span>
-                </div>
-                <div className='header-block'>
+                 </Col>
+                <Col className=' text-center header-block'>
                      <span>Price</span>
-                </div>
-                <div className='header-block'>
+                 </Col>
+                <Col className=' text-center header-block'>
                      <span>Remove</span>
-                </div>
-            </div>
+                 </Col>
+            </Row>
             {cartItems.map(cartItem=><CheckoutItem key={cartItem.id}cartItem={cartItem}/>)}
             <div className='total'>
-                <span>Total: ${total}</span>
+                <span>Subtotal: ${total}</span>
             </div> 
             <CustomButton onClick={()=>onClick()}>Proceed To Checkout</CustomButton>        
         </div>

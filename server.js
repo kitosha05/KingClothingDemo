@@ -64,10 +64,13 @@ app.listen(port, error => {
 });
 
 app.post("/create-payment-intent", async (req, res) => {
-  const cartItems = req.body;
+  const orderDetails = req.body;
+  const {cartItems} = orderDetails
+  const shippingFee = orderDetails.shippingMethod==='standardShipping' ? 1000 : 0
+
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateTotal(cartItems)*100,
+     amount: calculateTotal(cartItems)*100 + shippingFee,
     currency: "usd"
   });
   res.send({
@@ -77,7 +80,9 @@ app.post("/create-payment-intent", async (req, res) => {
 
 app.post('/email/order-confirmation', async(req, res)=>{
   const order = req.body;
-  console.log(order);
+console.log(order)
+try {
+  const mailOptions= createOrderConfirmationEmail(order)
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
     console.log(error);
@@ -85,17 +90,44 @@ app.post('/email/order-confirmation', async(req, res)=>{
       console.log('Email sent: ' + info.response);
     }
   });
+  
+} catch (error) {
+  console.log(error)
+}
+
 })
-const mailOptions = {
-  from: process.env.EMAIL,
-  to: '3rdcoastlabs@gmail.com',
-  subject: 'Test Email- Order Confirmed',
-  text: 'Order Confirmed'
-};
 
-// const createOrderConfirmationEmail = (order)=>{
 
-// }
+ const createOrderConfirmationEmail = (order)=>{
+   const {id, billingName, billingEmail, cartItems, shippingMethod, shippingFee,total}= order;
+   let statusString='';
+   let method='';
+   if (shippingMethod==='pickUp'){
+     statusString='You Will Receive An Email When Your Order Is Ready For Pick Up';
+     method='Pick Up';
+   }else{
+     statusString='Your Order Is Being Prepared And You Will Receive An Email When It Has Shipped';
+   }
+   const itemStrings = cartItems.map(item=>{
+     return `${item.name} x ${item.quantity}`
+   })
+   const itemListItems = cartItems.map(item=>{
+     return(
+      `<li>${item.name} x ${item.quantity}</li>`
+     )
+   })
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: billingEmail,
+    subject: `Thanks, ${billingName}! Here Is Your Order Confirmation`,
+    text: `Order Confirmation  Order Id: ${id} Ordered Items: ${itemStrings} 
+    Shipping Method: ${shippingMethod} Shipping Cost: ${shippingFee} Total: ${total} Status:${statusString}`,
+    html: `<h1>Order Confirmation</h1> <div><b>Order Id:</b> ${id}<div> <div><b>Ordered Items:</b><ul>${itemListItems}</ul></div> 
+    <div><b>Shipping Method:</b> ${shippingMethod} </div><div><b>Shipping Cost:</b> $${shippingFee}</div> <div><b>Total:</b> $${total}</div> <div><b>Status:</b> ${statusString}</div>`
+
+  };
+  return mailOptions;
+ }
 
 const calculateTotal = (cartItems) =>{
   let subTotal=0

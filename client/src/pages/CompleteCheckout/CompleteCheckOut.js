@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import {default as Stepper} from '../../components/Stepper/Stepper'
 import ThankYou from '../ThankYou/ThankYou'
 import CheckoutAddressForm from '../../components/CheckoutAddressForm/CheckoutAddressForm'
@@ -14,6 +15,8 @@ class CompleteCheckout extends React.Component{
 
     state = {
         step:1,
+        billingName:'',
+        billingEmail: '',
         recipientName:'',
         shippingStreetAddress:'',
         shippingCity:'',
@@ -21,7 +24,13 @@ class CompleteCheckout extends React.Component{
         shippingZipcode:'',
         shippingMethod:''
     }
-
+    
+    
+componentDidMount(){
+  const order = this.props.location.state
+        const email= order.billingEmail
+        this.setState({billingEmail:email})
+}
     
     // go back to previous step
 prevStep = () => {
@@ -39,9 +48,13 @@ nextStep = () => {
 handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   }
+
     render(){
-        const {step, recipientName, shippingStreetAddress, shippingCity, shippingState, shippingZipcode, shippingMethod} = this.state
+      const order = this.props.location.state
+        const {step, billingName,billingEmail,recipientName, shippingStreetAddress, shippingCity, shippingState, shippingZipcode, shippingMethod} = this.state
         const values={
+            billingName,
+            billingEmail,
             recipientName,
             shippingStreetAddress,
             shippingCity,
@@ -50,7 +63,9 @@ handleChange = input => e => {
             shippingMethod,
             currentUser:this.state.currentUser
         }
-        const order = this.props.location.customNameData
+        
+        
+        // if(order.currentUser) this.setState({billingEmail:order.currentUser.email})
         switch (step) {
             case 1: 
               return (
@@ -67,6 +82,7 @@ handleChange = input => e => {
                 handleChange={this.handleChange}
                 prevStep={this.prevStep}
                 values={values}
+                order={order}
                 />
               )
             case 3: 
@@ -79,12 +95,15 @@ handleChange = input => e => {
               return (
                 <ThankYou order={order}/>
               )
-            // never forget the default case, otherwise VS code would be mad!
+           
             default: 
                // do nothing
           }
     }
     
 }
+const mapStateToProps= state=>({
+  currentUser:state.currentUser
+})
 
-export default CompleteCheckout
+export default connect (mapStateToProps)(CompleteCheckout)
