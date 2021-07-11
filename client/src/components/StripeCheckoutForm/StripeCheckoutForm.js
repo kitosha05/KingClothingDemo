@@ -12,9 +12,10 @@ import './StripeCheckoutForm.scss'
 import Image from 'react-bootstrap/Image'
 import Card  from "react-bootstrap/Card";
 import Button from '../CustomButton/CustomButton'
-import { updateOrder } from "../../firebase/firebase.utils";
+import { updateOrder, updateProduct } from "../../firebase/firebase.utils";
 import {clearCart} from '../../redux/cart/cartActions'
 import { clearCheckout } from "../../redux/orders/orderActions";
+import { selectProducts } from "../../redux/shop/shopSelector";
 
 const renderItems = (items) =>{
     return items.map(item=>{
@@ -36,7 +37,7 @@ const renderItems = (items) =>{
     })
 }
 
-const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>{
+const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout, products}) =>{
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -143,6 +144,8 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       }
       const orderId = params.orderId
       const updatedOrder = updateOrder({order, orderId})
+      updateInventory(cartItems)
+     
       sendOrderConfirmation({orderId, order})
       clearCart()
       clearCheckout()
@@ -150,6 +153,32 @@ const CheckoutForm=({values, nextStep, clearCart, checkoutId, clearCheckout}) =>
       
     }
   };
+
+  const updateInventory=async (cartItems)=>{
+  await  cartItems.map(cartItem=>{
+      const {optionCombo, quantity}= cartItem
+      const productId = cartItem.id
+      if(optionCombo){
+        const { optionComboId} = optionCombo
+        const {inventoryByOptions} = products.find(product=>product.id===cartItem.id)
+        const objIndex = inventoryByOptions.findIndex((obj => obj.optionComboId === optionComboId))
+        const inventory= parseInt(inventoryByOptions[objIndex].inventory)
+        inventoryByOptions[objIndex].inventory=inventory-quantity
+        const product={inventoryByOptions}
+        console.log( product)
+        updateProduct({product, productId})
+      }else{
+        
+        const objIndex = products.findIndex((obj => obj.id=== cartItem.id))
+        products[objIndex].inventory-=quantity
+        const product = products[objIndex]
+        updateProduct({product,productId})
+
+      }
+      
+     
+    })
+  }
 
   const sendOrderConfirmation=({orderId, order})=>{
     const confirmedOrder ={id:orderId, ...order}
@@ -254,6 +283,7 @@ const mapDispatchToProps = dispatch =>({
   clearCheckout:()=>dispatch(clearCheckout())
 })
 const mapStateToProps = state=>({
-  checkoutId:state.order.checkoutId
+  checkoutId:state.order.checkoutId,
+  products:state.shop.products
 })
 export default connect(mapStateToProps,mapDispatchToProps)(CheckoutForm)

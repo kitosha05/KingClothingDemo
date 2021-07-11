@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect,  useSelector} from 'react-redux'
-import Link from '@material-ui/core/Link';
+import {Link} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -167,6 +167,7 @@ const sendShippingConfirmation=(order)=>{
             <TableCell>Status</TableCell>
             <TableCell>Next Step</TableCell>
             <TableCell align="right">Sale Amount</TableCell>
+            <TableCell align="right">Details</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -188,6 +189,7 @@ const sendShippingConfirmation=(order)=>{
 
               </TableCell>
               <TableCell align="right">${row.total}</TableCell>
+              <TableCell><Link to={`/admin/orders/${row.id}`}>VIEW</Link></TableCell>
               <CustomModal
                 handleClose={handleClose}  
                 cartItems={row.cartItems} 

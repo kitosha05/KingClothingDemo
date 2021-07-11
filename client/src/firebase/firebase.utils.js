@@ -99,6 +99,7 @@ export const updateOrder= async({order, orderId})=>{
       })  
       
 }
+
 export const fetchSpecificOrder= async(orderId)=>{
     const orderRef= await firestore.collection('orders').doc(orderId).get()
     return {id:orderRef.id, ...orderRef.data()}

@@ -4,14 +4,14 @@ export const toggleCartHidden = () => ({
     type: cartActionTypes.TOGGLE_CART_HIDDEN
 })
 
-export const addItem = item =>({
+export const addItem = ({product, optionCombo}) =>({
     type: cartActionTypes.ADD_ITEM,
-    payload: item
+    payload: ({product, optionCombo})
 })
 
-export const addOneOrMoreOfAnItem = (item, quantity) =>({
+export const addOneOrMoreOfAnItem = (product, quantity) =>({
     type: cartActionTypes.ADD_ONE_OR_MORE_OF_AN_ITEM,
-    payload: {item, quantity}
+    payload: {product, quantity}
 })
 
 export const removeItemFromCart = item =>({

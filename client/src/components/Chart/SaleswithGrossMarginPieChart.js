@@ -68,11 +68,11 @@ export default class SalesWithGrossMarginPieChart extends PureComponent {
   };
 
   render() {
-const colors=['red','green']
+const colors=['pink','red','green']
  const pieData = this.props.pieData
     return (
       
-        <PieChart width={400} height={400}>
+        <PieChart width={600} height={400}>
           <Pie
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}

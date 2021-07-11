@@ -212,8 +212,7 @@ const prepareRadarData =(orders)=>{
 
   })
 })
-console.log(hatsGrossSales)
-console.log(hatsCOGS)
+
 const{cogs, grossMargin} = accumulateMarginAndCogs(orders)
 const grossSales = cogs+grossMargin
 const radarData=[
@@ -243,8 +242,8 @@ return radarData
 }
 
 const preparePieData = (orders)=>{
-   const {cogs, grossMargin} = accumulateMarginAndCogs(orders)
-    const pieData=[{name:'Cost of Goods Sold', value: cogs}, {name: 'Gross Margin', value: grossMargin}]
+   const {cogs, grossMargin, shippingCosts} = accumulateMarginAndCogs(orders)
+    const pieData=[{name:'Shipping Costs', value: shippingCosts},{name:'Cost of Goods Sold', value: cogs}, {name: 'Gross Margin', value: grossMargin}]
     const totalSales=cogs+grossMargin
     setGrossSales(totalSales)
     return pieData
@@ -252,11 +251,13 @@ const preparePieData = (orders)=>{
 const accumulateMarginAndCogs=(orders)=>{
   let cogs =0
   let grossMargin=0
+  let shippingCosts=0
   orders.map(order=>{
       cogs+=order.orderCOGS
       grossMargin+=order.orderGrossMargin
+      shippingCosts+=order.shippingCost
   })
-  return {cogs, grossMargin}
+  return {cogs, grossMargin, shippingCosts}
 }
 const isThisWeek=(date) =>{
     const todayObj = new Date();
@@ -314,7 +315,9 @@ const isThisWeek=(date) =>{
  
  const ordersThisMonth =()=>{
     const orderData= allOrders.filter(order=>order.status!=="started").map(order=>{
-            const {orderDate, cartItems, total} = order
+            const {orderDate, cartItems, total, shippingFee, shippingMethod} = order
+            let shippingCost=0
+            if(shippingMethod!=='pickUp') shippingCost = order.actualShippingCost
     
                 if (isThisMonth(orderDate.toDate())){
                     let orderCOGS=0
@@ -325,8 +328,8 @@ const isThisWeek=(date) =>{
 
                      })
                      
-                     const orderGrossMargin =total - orderCOGS
-                    return {orderDate, orderCOGS, orderGrossMargin, cartItems}
+                     const orderGrossMargin =total - orderCOGS - shippingCost
+                    return {orderDate, orderCOGS, orderGrossMargin, cartItems, shippingMethod,shippingCost, shippingFee}
                 }
             return null
      })
@@ -335,7 +338,9 @@ const isThisWeek=(date) =>{
 
 const  ordersThisYear = ()=>{
    const orderData= allOrders.filter(order=>order.status!=='started').map(order=>{
-        const {orderDate, cartItems, total} = order
+        const {orderDate, cartItems, total, shippingMethod,shippingFee} = order
+        let shippingCost=0
+        if(shippingMethod!=='pickUp') shippingCost = order.actualShippingCost
         if (isThisYear(orderDate.toDate())){
             let orderCOGS=0
             cartItems.map(item=>{
@@ -345,8 +350,8 @@ const  ordersThisYear = ()=>{
 
             })
             
-            const orderGrossMargin =total - orderCOGS
-           return {orderDate, orderCOGS, orderGrossMargin, cartItems}
+            const orderGrossMargin =total - orderCOGS - shippingCost
+           return {orderDate, orderCOGS, orderGrossMargin, cartItems, shippingMethod, shippingCost, shippingFee}
        }
    return null
 })
@@ -365,12 +370,18 @@ const getDailyTotals = (orders)=>{
          const dailyOrders = orders.filter(order=>isTargetDate(targetDate, order.orderDate))
         let dailyCOGS = 0
         let dailyGrossMargin = 0
+        let dailyShippingCost=0
+        let dailyShippingFee=0
         dailyOrders.map(order=>{
             dailyCOGS+=order.orderCOGS
             dailyGrossMargin+=order.orderGrossMargin
+            if(order.shippingMethod!=='pickUp'){
+              dailyShippingCost += order.shippingCost
+              dailyShippingFee+= order.shippingFee
+            }
         })
         const dateString = targetDate.getDate()
-        dailyTotals.push({date:dateString, cogs: dailyCOGS, grossMargin:dailyGrossMargin})  
+        dailyTotals.push({date:dateString, COGS: dailyCOGS, grossMargin:dailyGrossMargin, shippingCosts: dailyShippingCost,shippingFees:dailyShippingFee})  
     }
     return dailyTotals
 }
@@ -387,13 +398,19 @@ const getMonthlyTotals = (orders)=>{
          const monthlyOrders = orders.filter(order=>isSameMonth(targetDate, order.orderDate))
         let monthlyCOGS = 0
         let monthlyGrossMargin = 0
+        let monthlyShippingFee=0
+        let monthlyShippingCost=0
         monthlyOrders.map(order=>{
             monthlyCOGS+=order.orderCOGS
             monthlyGrossMargin+=order.orderGrossMargin
+            if(order.shippingMethod!=='pickUp'){
+              monthlyShippingCost += order.shippingCost
+            monthlyShippingFee+= order.shippingFee
+            }
         })
         const MONTHS =['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         const dateString = MONTHS[targetDate.getMonth()]
-        monthlyTotals.push({date:dateString, cogs: monthlyCOGS, grossMargin:monthlyGrossMargin})  
+        monthlyTotals.push({date:dateString, COGS: monthlyCOGS, grossMargin:monthlyGrossMargin, shippingFees:monthlyShippingFee, shippingCosts:monthlyShippingCost})  
     }
     
     return monthlyTotals

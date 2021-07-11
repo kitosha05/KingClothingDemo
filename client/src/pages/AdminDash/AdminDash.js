@@ -8,6 +8,7 @@ import ProductAdminPanel from '../../components/ProductAdminPanel/ProductAdminPa
 import PagesAdminPanel from '../../components/PagesAdminPanel/PagesAdminPanel'
 import ReportsAdminPanel from '../../components/ReportsAdminPanel/ReportsAdminPanel';
 import BlogAdminPanel from '../../components/BlogAdminPanel/BlogAdminPanel';
+import OrderDetailAdminPanel from '../../components/OrderDetailAdminPanel/OrderDetailAdminPanel';
 import {fetchCollectionsStart} from '../../redux/shop/shopActions'
 import {fetchOrdersStart} from '../../redux/orders/orderActions'
 
@@ -25,6 +26,8 @@ const AdminDash =({fetchOrdersStart, fetchCollectionsStart, allOrders, match, co
       <div>
                 <Route exact path={`${match.path}`} render={({props}) => <Dashboard allOrders={allOrders}/>} />
                 <Route exact path={`${match.path}/orders`} render={({props}) => <OrderAdminPanel allOrders={allOrders} />} />
+                <Route exact path={`${match.path}/orders/:orderId`} render={({props}) => <OrderDetailAdminPanel allOrders={allOrders} orderId={match.params.orderId} />} />
+
                 <Route exact path={`${match.path}/products`} render={({props}) => <ProductAdminPanel collections={collections} />} />
                 <Route exact path={`${match.path}/pages`} render={({props}) => <PagesAdminPanel />} />
                 <Route exact path={`${match.path}/reports`} render={({props}) => <ReportsAdminPanel allOrders={allOrders}  />} />

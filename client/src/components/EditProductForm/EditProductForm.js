@@ -1,27 +1,65 @@
 import React from 'react'
-import {auth, createUserProfileDocument} from '../../firebase/firebase.utils.js'
+import {updateProduct} from '../../firebase/firebase.utils.js'
 import Form from 'react-bootstrap/Form'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
-import {fetchCollectionsStart} from '../../redux/shop/shopActions'
+import {fetchCollectionsStart, fetchProductsStart} from '../../redux/shop/shopActions'
 import {editProductStart} from '../../redux/admin/adminActions'
 import Button from '../CustomButton/CustomButton.js'
 import {selectCollection, selectCollections} from '../../redux/shop/shopSelector'
 import Card from 'react-bootstrap/Card'
-
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 class EditProductForm extends React.Component{
-    state={name:"",price:'',imageUrl:'', id:'', collection:"", description:'', selectedProduct:'', selectedCollection:''}
+    state={options:[],editOptionsMode:false,newOptionName:'', newOptionValues:'',name:"",price:'',imageUrl:'', id:'', collection:"", description:'', selectedProduct:'', selectedCollection:''}
      componentDidMount(){
          this.props.fetchCollectionsStart()
          
      }
-  
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min); 
+      }
     onSubmit = async e => {
         e.preventDefault();
         const {name, price, imageUrl, collection, description, id} = this.state
-        const product = {name, price, imageUrl, collection, description, id}
-        this.props.editProductStart(product)
-        
+       //if more than one option exists get option combination input names and grab inventory values from state
+       let inventoryByOptions =[]
+       if(this.state.options.length>1){
+            this.getOptionCombinations().map(optionString=>{
+                let inputName=optionString.join('').replace(/\s/g, '').toLowerCase()
+                const quant = this.state[inputName]
+                const optionComboId = this.getRandomInt(1000000,9000000)
+                   inventoryByOptions.push( {optionValues:optionString,inventory:quant, optionComboId})
+            })
+        }
+        if(this.state.options.length===1){
+               const {optionName, optionValues}= this.state.options[0]
+               optionValues.map(value=>{
+                   const quant = this.state[value]
+                   const optionComboId = this.getRandomInt(1000000,9000000)
+                   inventoryByOptions.push( {optionValues:value,inventory:quant, optionComboId})
+
+               })
+
+
+
+            }
+
+        const product = {name, price, imageUrl, collection, description, id, inventoryByOptions}
+        this.props.editProductStart(product)   
+    }
+    saveProductOption=async e=>{
+        e.preventDefault();
+        const {newOptionName, newOptionValues} = this.state
+        const values = newOptionValues.split(",")
+        const newOption ={optionName:newOptionName, optionValues:values}
+        const product = {options:[newOption, ...this.state.options]}
+        const productId = this.state.selectedProduct
+       await updateProduct({product, productId})
+        await this.props.fetchProductsStart()
+        this.setState({editOptionsMode:false})
     }
     onChange =  async e => {
         const {value, name} = e.target
@@ -37,8 +75,18 @@ class EditProductForm extends React.Component{
         await this.setState({selectedProduct:value})
         const {selectedProduct, selectedCollection}= this.state
         const product = this.props.products.find(({id})=> id === selectedProduct)
-        const {price, imageUrl, description, id, name} = product
-        await this.setState({price, id, imageUrl, name, collection: selectedCollection})
+        const {price, imageUrl, description, id, name, options, inventoryByOptions} = product
+        if(options) {
+            this.setState({options})
+        }else{
+            this.setState({options:[]})
+        }
+        if (inventoryByOptions){
+            inventoryByOptions.map(option=>{
+                Object.entries(option).map(([key, value]) => this.setState({[key]:value}))
+            })
+        }
+        await this.setState({price, id, imageUrl, name, description, collection: selectedCollection})
     }
     renderCollectionTitles(collections){
         let collectionTitles = []
@@ -59,9 +107,29 @@ class EditProductForm extends React.Component{
             return <option value={product.id}>{product.name}</option>
         })
     }
+
+    getOptionCombinations(){
+        let optionCombinations=[]
+        
+       this.state.options[0].optionValues.map(optionOneVal=>{
+          
+            const {optionName} = this.state.options[0]
+            const secondOptionName = this.state.options[1].optionName
+            this.state.options[1].optionValues.map(secondVal=>{
+                const optionCombo= {[optionName]:optionOneVal, [secondOptionName]:secondVal}
+                const optionString = Object.entries(optionCombo).map(([key, value]) => `${value} `)
+                optionCombinations.push(optionString)
+            })
+
+            
+        })
+        
+        return optionCombinations
+    }
     
       
     render(){
+      
          const {name,price,imageUrl, id, collection, description, selectedProduct, selectedCollection} = this.state
          const {collections, products} = this.props
          
@@ -139,7 +207,117 @@ class EditProductForm extends React.Component{
                           value={this.state.imageUrl}
                           required/>
         </Form.Group>
-        <Button>Save Changes</Button>
+        <h3>Product Options</h3>
+       
+        {
+            this.state.editOptionsMode ? (
+                <div>
+                    <h4>Add Product Option</h4>
+                   <Form.Group>
+                         <Form.Label>Option Name (ex: Size OR Color)</Form.Label>
+                        <Form.Control type="text" name="newOptionName" onChange={this.onChange} 
+                          value={this.state.newOptionName}
+                          />
+                   </Form.Group>
+                   <Form.Group>
+                    <Form.Label>Option Values Separated By Commas(ex: Small, Medium, Large OR Red, White, Blue</Form.Label>
+                   <Form.Control type="text" name="newOptionValues" onChange={this.onChange} 
+                     value={this.state.newOptionValues}
+                     />
+                    </Form.Group>
+                    <Button onClick={(e)=>this.saveProductOption(e)}>
+                      Save Product Option
+                </Button>
+              </div>
+            )
+            :(
+                <div>
+                    {this.state.options.length>0 ? <h5> Inventory By Product Option</h5> :null}
+                    {this.state.options.length>0 ? (
+                    //    renderProductOptions()
+                               
+                        this.state.options.length>1 ?
+                           this.getOptionCombinations().map(optionString=>{
+                                 let inputName=optionString.join('').replace(/\s/g, '').toLowerCase()
+                                console.log(optionString)
+                                return(
+                                  
+                                   
+                                        
+                                        <Row>
+                                            <Col>
+                                            {optionString}
+                                            </Col>
+                                            <Col>
+                                            <Form.Group>
+                                            <Row>
+                                                <Col>
+                                                     <Form.Label>Adjust Inventory</Form.Label>
+                                                </Col>
+                                                <Col>
+                                                   <Form.Control type="text" name={inputName} onChange={(e)=>{
+                                                       this.setState({[inputName]:e.target.value})
+                                                        console.log(this.state)} }
+                                                     value={this.state[inputName] ? this.state[inputName] : 0}
+                                                     />
+                                                </Col>
+                                            </Row>
+                                            </Form.Group>
+                                            </Col>
+                                        </Row>
+                                       
+                                   
+                       
+                                )
+                            }):(
+                                this.state.options[0].optionValues.map(value=>{
+                                    return(
+                                        <Row>
+                                        <Col>
+                                        {value}
+                                        </Col>
+                                        <Col>
+                                        <Form.Group>
+                                        <Row>
+                                            <Col>
+                                                 <Form.Label>Adjust Inventory</Form.Label>
+                                            </Col>
+                                            <Col>
+                                               <Form.Control type="text" name={value} onChange={(e)=>{
+                                                   this.setState({[value]:e.target.value})
+                                                    console.log(this.state)} }
+                                                 value={this.state[value] ? this.state[value] : 0}
+                                                 />
+                                            </Col>
+                                        </Row>
+                                        </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    )
+                                })
+                               
+                            
+                            
+                                )
+                    )
+                    :
+                    (
+                        <h5>Product Has No Options</h5>
+                    )}
+                    {this.state.options.length<2 ? (
+                    <Button onClick={(e)=>{
+                  e.preventDefault()
+                  this.setState({editOptionsMode:true})}}>
+                     Add Product Option (eg: size or color)
+                </Button>
+                    ):null}
+                </div>
+               
+            )
+        }
+       <Row className='mt-5 justify-content-center'>
+       <Button>Save Changes</Button>
+           </Row>
     </Form>
 
 
@@ -150,6 +328,7 @@ class EditProductForm extends React.Component{
 
             
 </div>
+
         )
 
 
@@ -162,7 +341,8 @@ const mapStateToProps =(state)=>({
 
 const mapDispatchToProps = dispatch => ({
     fetchCollectionsStart: ()=>dispatch(fetchCollectionsStart()),
-    editProductStart: (product)=>dispatch(editProductStart(product))
+    editProductStart: (product)=>dispatch(editProductStart(product)),
+    fetchProductsStart:()=>dispatch(fetchProductsStart())
   })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProductForm)

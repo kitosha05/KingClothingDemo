@@ -9,6 +9,7 @@ import {toggleCartHidden} from '../../redux/cart/cartActions'
  import './CartDropDown.scss'
 
  const CartDropDown = ({cartItems, history, dispatch})=>{
+  
     const node = useRef();
     
    

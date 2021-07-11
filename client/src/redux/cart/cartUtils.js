@@ -1,13 +1,14 @@
 
-export const addItemToCart = (cartItems, cartItemToAdd) => {
-    const existingCartItem = cartItems.find(cartItem=>cartItem.id===cartItemToAdd.id)
+export const addItemToCart = (cartItems, product, optionCombo) => {
+   
+    const existingCartItem = cartItems.find(cartItem=>cartItem.id===product.id)
     if(existingCartItem){
         return cartItems.map(cartItem=>
-            (cartItem.id===cartItemToAdd.id) ? {...cartItem, quantity: cartItem.quantity+1} : cartItem
+            (cartItem.id===product.id) ? {...cartItem, optionCombo, quantity: cartItem.quantity+1} : cartItem
         )
     }
 
-    return [...cartItems, {...cartItemToAdd, quantity:1}]
+    return [...cartItems, {...product,optionCombo , quantity:1}]
 }
 
 export const reduceItemByOne = (cartItems, itemToBeReduced) =>{

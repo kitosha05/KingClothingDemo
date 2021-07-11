@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {selectProduct} from '../../redux/shop/shopSelector'
 import CustomButton from '../../components/CustomButton/CustomButton'
-import {addItem, addOneOrMoreOfAnItem} from '../../redux/cart/cartActions'
+import {addItem} from '../../redux/cart/cartActions'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -19,21 +19,35 @@ import PlainSpinner from '../../components/PlainSpinner/PlainSpinner'
 import './ProductPage.scss'
 import {fetchReviewsStart} from '../../redux/reviews/reviewActions'
 import WriteReviewForm from '../../components/WriteReviewForm/WriteReviewForm'
+import Form from 'react-bootstrap/Form'
 
-
-const ProductPage =({ product, addItem, currentUser,allReviews}) =>{
+const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
     
     const [quantity,setQuantity] = useState(1)
     const [productReviews, setProductReviews]=useState([])
+    const [showError, setShowError]= useState(false)
+    const [optionsState, setOptionsState] = useState(()=>{
+        if(product){
+            if(product.options){
+                let optionsObject={}
+                product.options.map(option=>{
+                    const {optionName} = option
+                    const keyString = "selected" + optionName
+                    optionsObject={...optionsObject, [keyString]: null } 
+
+                })
+                return optionsObject
+            }
+        }
+        return null
+    })
     const dropDownLabel = `Quantity: ${quantity}`
     const handleSelect = (e) => {
-        console.log(e)
-        setQuantity(e)
-        
+        setQuantity(e) 
     }
 
   useEffect(()=>{
-      filterReviews()
+      if(product)filterReviews()
 
   },[allReviews,product])
 
@@ -41,6 +55,40 @@ const ProductPage =({ product, addItem, currentUser,allReviews}) =>{
      const productReviews=!allReviews ? [] : allReviews.filter(review=>review.productId===product.id)
      setProductReviews(productReviews)
   }
+
+  const addToCart=()=>{
+      //handle products with options by finding and adding option combo to cart item
+      let optionCombo=null
+    if (optionsState){
+        const values=Object.entries(optionsState).map(([key, value])=>`${value}`)
+       
+        if(values.includes(`null`)){
+            setShowError(true)
+            return
+        }
+        
+        if(values.length===1){
+         optionCombo = product.inventoryByOptions.find(optionCombo=>optionCombo.optionValues.includes(values[0]+' '))
+        }
+        if(values.length===2){
+           optionCombo = product.inventoryByOptions.find(optionCombo=>optionCombo.optionValues.includes(values[0]+ ' ') &&optionCombo.optionValues.includes(values[1] + ' '))
+        }
+      
+       for(let i=1; i<=quantity;i++){
+           addItem({product, optionCombo})
+       }
+    }else{
+         //handle products with no options
+         for(let i=1; i<=quantity;i++){
+            addItem({product, optionCombo})
+        }
+    }
+   
+
+
+}
+    
+  
   
    if(!product)  return<PlainSpinner/>
     return(
@@ -70,6 +118,44 @@ const ProductPage =({ product, addItem, currentUser,allReviews}) =>{
                                         <h3 className='item-price'>Price: ${product.price}</h3>
                                     </Row>
                                     <Row>
+                                        <CustomButton onClick={()=>addToCart()}
+                                        >Add To Cart</CustomButton>
+                                        {showError ? <span className='missing-options-error-msg'>Please Select Options</span> : null}
+                                    </Row>
+                                    {product.options ? (
+                                        product.options.map(option=>{
+                                            const {optionName} = option
+                                            const keyString = "selected" + optionName
+                                        
+                                            return(
+                                                <Row className='product-options-row'>
+                                                    
+                                                    <span>{optionName}: </span>
+                                                    
+                                                    <Form>
+                                                        {option.optionValues.map(value=>{
+                                                            return(
+                                                                <Form.Check  inline label={value} name={value} onChange={(e)=>{
+                                                                    setOptionsState(prevState => ({ ...prevState, [keyString]: value }))
+                                
+                                                                }}
+                                                                checked={optionsState ? optionsState[keyString]===value : false}
+                                                                type="radio" id={value} />
+
+                                                            )
+                                                        })}
+                                                </Form>
+                                                   
+                                                
+                                                
+                                                 </Row>
+                                             )
+                                        })
+                                       
+                                    ):
+                                    null
+                                    }
+                                    <Row>
                                     <div className='adjust-quantity'>
                                     <Dropdown onSelect={handleSelect}>
                                         <Dropdown.Toggle variant='light' id="dropdown-basic">
@@ -89,15 +175,7 @@ const ProductPage =({ product, addItem, currentUser,allReviews}) =>{
                                     </Row>
                                     
                                 </Col>
-                                <Col>
-                                <div className='add-to-cart-button'>
-                                    <CustomButton onClick={()=>{
-                                        for (let i = 1; i <= quantity; i++){
-                                            addItem(product)
-                                        }
-                                    }}>ADD TO CART</CustomButton>
-                                </div>
-                                </Col>
+                              
                                
                                
                             </Row>

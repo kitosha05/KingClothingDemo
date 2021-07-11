@@ -70,7 +70,8 @@ export default class SalesWithNetMarginChart extends PureComponent {
           <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="cogs" stackId="1" stroke="#8884d8" fill="#8884d8" />
+          <Area type="monotone" dataKey="COGS" stackId="1" stroke="#8884d8" fill="#8884d8" />
+          <Area type="monotone" dataKey="shippingCosts" stackId="1" stroke="#82ca9d" fill="red" />
           <Area type="monotone" dataKey="grossMargin" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
          
         </AreaChart>

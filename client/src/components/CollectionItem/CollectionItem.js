@@ -83,7 +83,7 @@ const onDivClick=(e)=>{
             <Button onClick={(e)=>{
                e.preventDefault();
                e.stopPropagation();
-                addItem(item)
+                // addItem(item)
             }}
                 inverted>
                     Add To Cart

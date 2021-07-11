@@ -88,7 +88,18 @@ const BulkEditInventory = ({products, collections, fetchProductsStart})=>{
     await setCurrentCOGS(event.target.value)
 }
 
-   
+//    const renderInventoryByOptionInputs = (product)=>{
+//        const productOptions = product.options
+//        const numberOfOptions=productOptions.length
+//        productOptions[0].optionValues.map(value=>{
+//         for (let i=1;i<numberOfOptions; i++){
+//             re
+//         }
+
+//        })
+        
+
+//    }
 
     return(
         <div>

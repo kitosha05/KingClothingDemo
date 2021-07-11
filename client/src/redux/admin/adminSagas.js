@@ -90,8 +90,8 @@ export function* editProductStart(){
 
 export function* editProduct(action){
     try {
-    const {name, collection, price, imageUrl, description, id} = yield action.payload
-    const product={name, collection, price, imageUrl, description}
+    const {name, collection, price, imageUrl, description, id, inventoryByOptions} = yield action.payload
+    const product={name, collection, price, imageUrl, description, inventoryByOptions}
     
     const productRef = yield firestore.collection('products').doc(id)
     const response = yield productRef.update(product)
