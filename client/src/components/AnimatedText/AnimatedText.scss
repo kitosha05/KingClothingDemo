@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap");
+
+.typing {
+  font-size: 48px;
+  font-family: "IM Fell English", serif;
+  background-image: repeating-linear-gradient(
+    60deg,
+    #000 0px,
+    #222 2px,
+    #000 4px
+  );
+  color: #fff;
+  min-height: 25vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+
+  &::before {
+    content: "";
+    animation: text 10s step-end infinite;
+    margin-right: 0px;
+  }
+
+  @keyframes text {
+    0% {
+      content: "";
+    }
+    2% {
+      content: "F";
+    }
+    3% {
+      content: "Fr";
+    }
+    4% {
+      content: "Fre";
+    }
+    6% {
+      content: "Free";
+    }
+    7% {
+      content: "Free ";
+    }
+    9% {
+      content: "Free S";
+    }
+    11% {
+      content: "Free Sh";
+    }
+    12% {
+      content: "Free Shi";
+    }
+    13% {
+      content: "Free Ship";
+    }
+    14% {
+      content: "Free Shipp";
+    }
+    16% {
+      content: "Free Shippi";
+    }
+    18% {
+      content: "Free Shippin";
+    }
+    20% {
+      content: "Free Shipping";
+    }
+    22% {
+      content: "Free Shipping ";
+    }
+    24% {
+      content: "Free Shipping O";
+    }
+    26% {
+      content: "Free Shipping On";
+    }
+    27% {
+      content: "Free Shipping On ";
+    }
+    28% {
+      content: "Free Shipping On ";
+    }
+    29% {
+      content: "Free Shipping On O";
+    }
+    31% {
+      content: "Free Shipping On Or";
+    }
+    33% {
+      content: "Free Shipping On Ord";
+    }
+    34% {
+      content: "Free Shipping On Orde";
+    }
+    35% {
+      content: "Free Shipping On Order";
+    }
+    37% {
+      content: "Free Shipping On Orders";
+    }
+    38% {
+      content: "Free Shipping On Orders ";
+    }
+    39% {
+      content: "Free Shipping On Orders O";
+    }
+    40% {
+      content: "Free Shipping On Orders Ov";
+    }
+    41% {
+      content: "Free Shipping On Orders Ove";
+    }
+    42% {
+      content: "Free Shipping On Orders Over";
+    }
+    43% {
+      content: "Free Shipping On Orders Over ";
+    }
+    44% {
+      content: "Free Shipping On Orders Over $";
+    }
+    45% {
+      content: "Free Shipping On Orders Over $5";
+    }
+    46% {
+      content: "Free Shipping On Orders Over $50";
+    }
+    48% {
+      content: "Free Shipping On Orders Over $50!";
+    }
+    55% {
+      content: "Free Shipping On Orders Over $5";
+    }
+    57% {
+      content: "Free Shipping On Orders Over $";
+    }
+    58% {
+      content: "Free Shipping On Orders Over ";
+    }
+    59% {
+      content: "Free Shipping On Orders Over";
+    }
+    60% {
+      content: "Free Shipping On Orders Ove";
+    }
+    61% {
+      content: "Free Shipping On Orders Ov";
+    }
+    63% {
+      content: "Free Shipping On Orders O";
+    }
+    64% {
+      content: "Free Shipping On Orders ";
+    }
+    65% {
+      content: "Free Shipping On Orders";
+    }
+    66% {
+      content: "Free Shipping On Order";
+    }
+    67% {
+      content: "Free Shipping On Orde";
+    }
+    69% {
+      content: "Free Shipping On Ord";
+    }
+    70% {
+      content: "Free Shipping On Or";
+    }
+    71% {
+      content: "Free Shipping On O";
+    }
+    72% {
+      content: "Free Shipping On ";
+    }
+    74% {
+      content: "Free Shipping On";
+    }
+    75% {
+      content: "Free Shipping O";
+    }
+    76% {
+      content: "Free Shipping ";
+    }
+    77% {
+      content: "Free Shipping";
+    }
+    78% {
+      content: "Free Shippin";
+    }
+    79% {
+      content: "Free Shippi";
+    }
+    80% {
+      content: "Free Shipp";
+    }
+    82% {
+      content: "Free Ship";
+    }
+    83% {
+      content: "Free Shi";
+    }
+    84% {
+      content: "Free Sh";
+    }
+    86% {
+      content: "Free S";
+    }
+    88% {
+      content: "Free ";
+    }
+    90% {
+      content: "Free";
+    }
+    91% {
+      content: "Fre";
+    }
+    93% {
+      content: "Fr";
+    }
+    95% {
+      content: "F";
+    }
+    98% {
+      content: "";
+    }
+  }
+
+  &::after {
+    content: "";
+    display: inline-block;
+    width: 0.1em;
+    height: 0.75em;
+    margin-left: 2px;
+    background-color: #fff;
+    animation: blink 0.75s ease-in-out infinite;
+
+    @keyframes blink {
+      0%,
+      25%,
+      100% {
+        opacity: 1;
+      }
+      50%,
+      75% {
+        opacity: 0;
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
   transition: background-color 0.5s ease;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgb(0, 0, 0) 0%, rgb(75, 75, 75) 100%);
+  background: repeating-linear-gradient(60deg, #000 0px, #222 2px, #000 4px);
 
   #responsive-navbar-nav {
     div.dropdown-menu.show {

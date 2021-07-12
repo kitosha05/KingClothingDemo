@@ -11,7 +11,11 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import { setFavItemStart, removeFavItemStart, checkUserSession } from '../../redux/user/userActions'
 import { removeFavItem } from '../../redux/user/userSagas'
 import Zoom from 'react-reveal/Zoom';
-
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Image from 'react-bootstrap/Image'
 
 const configStars = {
     size: 25,
@@ -20,6 +24,24 @@ const configStars = {
 
 const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, averageRating, currentUser, favItems, setFavItemStart,  removeFavItemStart}) => {
     const history = useHistory();
+    const [showModal, setShowModal]= useState('')
+    const [showErrorMessage, setShowErrorMessage]=useState(false)
+    const [optionsState, setOptionsState] = useState(()=>{
+        if(item){
+            if(item.options){
+                let optionsObject={}
+                item.options.map(option=>{
+                    const {optionName} = option
+                    const keyString = "selected" + optionName
+                    optionsObject={...optionsObject, [keyString]: null } 
+
+                })
+                return optionsObject
+            }
+        }
+        return null
+    })
+    
     const [isFavorite, setIsFavorite] = useState(()=>{
         if (currentUser) {
         if (currentUser.favItems){
@@ -29,7 +51,7 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
         return false
     })
   
-    const {id, name, price, imageUrl} = item
+    const {id, name, price, imageUrl, options, inventoryByOptions} = item
     const productUrl = name.toLowerCase().replace(/\b \b/g, "-")
 
     useEffect(()=>{  
@@ -46,14 +68,37 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
         
     }
     
-const onDivClick=(e)=>{
+    const onDivClick=(e)=>{
    
-    history.push(`/shop/${collectionRoute}/${productUrl}`)
-}
+      history.push(`/shop/${collectionRoute}/${productUrl}`)
+    }
+
+    const addToCart=()=>{
+        let optionCombo=null
+            const values=Object.entries(optionsState).map(([key, value])=>`${value}`)
+           console.log(values)
+            if(values.includes(`null`)){
+                setShowErrorMessage(true)
+                return
+            }
+            setShowErrorMessage(false)
+            if(values.length===1){
+             optionCombo = item.inventoryByOptions.find(optionCombo=>optionCombo.optionValues.includes(values[0]+' '))
+            }
+            if(values.length===2){
+               optionCombo = item.inventoryByOptions.find(optionCombo=>optionCombo.optionValues.includes(values[0]+ ' ') &&optionCombo.optionValues.includes(values[1] + ' '))
+            }
+          
+           
+            addItem({product:item, optionCombo})
+            setOptionsState({})
+            setShowModal('')
+           
+    }
     
     return(
         <Zoom bottom>
-<div className='collection-item' onClick={(e)=>onDivClick(e)}>
+<div className='collection-item' >
                 <div className='image'
                     style={{backgroundImage: `url(${imageUrl})`}}
                  />
@@ -83,11 +128,69 @@ const onDivClick=(e)=>{
             <Button onClick={(e)=>{
                e.preventDefault();
                e.stopPropagation();
-                // addItem(item)
+               if(inventoryByOptions){
+                   setShowModal(id)
+                   return
+               }
+                addItem({product:item, optionCombo:null})
             }}
                 inverted>
                     Add To Cart
                     </Button>
+                    {options && inventoryByOptions ? (
+                            <Modal dialogClassName='options-modal' show={showModal===id} onHide={()=>{
+                                setShowErrorMessage(false)
+                                setShowModal('')}}>
+                            <Modal.Header closeButton>
+                                 <Modal.Title>Select Product Options</Modal.Title>
+                             </Modal.Header>
+                            <Modal.Body>
+                                <Row className='modal-image-row'>
+                                  <Image className='collection-item-modal-image' src={imageUrl}/>
+                                </Row>
+                                
+                                {item.options.map(option=>{
+                                                    const {optionName} = option
+                                                    const keyString = "selected" + optionName
+                                                
+                                                    return(
+                                                        <Row className='product-options-row'>
+                                                            <span>{optionName}: </span>
+                                                            <Form>
+                                                                {option.optionValues.map(value=>{
+                                                                    return(
+                                                                        <Form.Check  inline label={value} name={value} onChange={(e)=>{
+                                                                            setOptionsState(prevState => ({ ...prevState, [keyString]: value }))
+                                        
+                                                                        }}
+                                                                        checked={optionsState ? optionsState[keyString]===value : false}
+                                                                        type="radio" id={value} />
+        
+                                                                    )
+                                                                })}
+                                                        </Form>
+                                                        
+                                                         </Row>
+                                                     )
+                                                })}
+                                 {showErrorMessage ? <span>Please Select Product Options</span> : null}
+                            </Modal.Body>
+                             <Modal.Footer>
+                                 <Button variant="secondary" onClick={()=>{
+                                     setShowModal('')
+                                     setShowErrorMessage(false)}}>
+                                    Cancel
+                                </Button>
+                                 <Button variant="primary" onClick={()=>{
+                                     addToCart()
+                                    
+                                 }}>
+                                    Add To Cart
+                                  </Button>
+                             </Modal.Footer>
+                            </Modal>
+                    ) : null}
+                    
         </div>
 
         </Zoom>

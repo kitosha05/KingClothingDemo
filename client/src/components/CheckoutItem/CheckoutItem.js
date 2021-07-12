@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col'
 import './CheckoutItem.scss'
 
 const CheckoutItem = ({ cartItem, clearItem, reduceItem, addItem }) => {
-  const { name, imageUrl, price, quantity } = cartItem;
+  const { name, imageUrl, price, quantity, optionCombo } = cartItem;
   return (
     <Row className='checkout-item text-center justify-content-center'>
       <Col className='text-center'>
@@ -20,6 +20,12 @@ const CheckoutItem = ({ cartItem, clearItem, reduceItem, addItem }) => {
       </Col>
       <Col className='text-center'>
          <span className='name'>{name}</span>
+      </Col>
+      <Col className='text-center'>
+        {!optionCombo ? null : optionCombo.optionValues.map(optionValue=>{
+             return <li key={optionValue} className='options'>{optionValue}</li>
+        })}
+         
       </Col>
       <Col className='text-center'>
       <span className='quantity'>

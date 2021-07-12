@@ -129,9 +129,7 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
                                         
                                             return(
                                                 <Row className='product-options-row'>
-                                                    
                                                     <span>{optionName}: </span>
-                                                    
                                                     <Form>
                                                         {option.optionValues.map(value=>{
                                                             return(
@@ -145,9 +143,6 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
                                                             )
                                                         })}
                                                 </Form>
-                                                   
-                                                
-                                                
                                                  </Row>
                                              )
                                         })

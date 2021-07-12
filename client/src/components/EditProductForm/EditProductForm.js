@@ -82,9 +82,7 @@ class EditProductForm extends React.Component{
             this.setState({options:[]})
         }
         if (inventoryByOptions){
-            inventoryByOptions.map(option=>{
-                Object.entries(option).map(([key, value]) => this.setState({[key]:value}))
-            })
+            this.setState({inventoryByOptions})
         }
         await this.setState({price, id, imageUrl, name, description, collection: selectedCollection})
     }
@@ -239,11 +237,7 @@ class EditProductForm extends React.Component{
                         this.state.options.length>1 ?
                            this.getOptionCombinations().map(optionString=>{
                                  let inputName=optionString.join('').replace(/\s/g, '').toLowerCase()
-                                console.log(optionString)
                                 return(
-                                  
-                                   
-                                        
                                         <Row>
                                             <Col>
                                             {optionString}

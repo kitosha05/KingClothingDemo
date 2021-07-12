@@ -14,6 +14,7 @@ const BlogPreviewCard =({post, route})=>{
         history.push(route)
     }
     return(
+     
         <Col key={id} xs='12' sm='6' md='4' lg='3' className='text-center mt-5 mb-5'>
                 <Card className='blog-preview-card'>
                 <Link className='blog-image-container' to={route}><Image className='blog-preview-image'src={imageUrl} fluid/></Link>
@@ -31,6 +32,7 @@ const BlogPreviewCard =({post, route})=>{
                 </Card.Body>
               </Card>
               </Col>
+             
     )
 }
 export default BlogPreviewCard

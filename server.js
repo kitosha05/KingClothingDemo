@@ -80,7 +80,7 @@ app.post("/create-payment-intent", async (req, res) => {
 
 app.post('/email/order-confirmation', async(req, res)=>{
   const order = req.body;
-console.log(order)
+
 try {
   const mailOptions= createOrderConfirmationEmail(order)
   transporter.sendMail(mailOptions, function(error, info){
@@ -199,8 +199,14 @@ const createReadyForPickUpEmail=(order)=>{
      return `${item.name} x ${item.quantity}`
    })
    const itemListItems = cartItems.map(item=>{
+     let options = ''
+    if(item.optionCombo){
+      item.optionCombo.optionValues.map(optionValue=>{
+        options+=optionValue
+      })
+     }
      return(
-      `<li>${item.name} x ${item.quantity}</li>`
+      `<li>${item.name} - ${options} x ${item.quantity}</li>`
      )
    })
   const mailOptions = {

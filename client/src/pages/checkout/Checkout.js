@@ -49,6 +49,9 @@ const CheckoutPage = ({cartItems, total, newOrderStart, currentUser}) =>{
                 <Col className='text-center header-block'>
                      <span>Description</span>
                  </Col>
+                 <Col className='text-center header-block'>
+                     <span>Options</span>
+                 </Col>
                 <Col className=' text-center header-block'>
                      <span>Quantity</span>
                  </Col>
