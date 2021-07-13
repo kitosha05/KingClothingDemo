@@ -1,0 +1,16 @@
+.carousel-root {
+  .carousel-slider {
+    max-height: 80vh;
+
+    // @media screen and (max-width: 800px) {
+    //   max-height: 40vh;
+    //   width: auto;
+    // }
+  }
+  .thumbs-wrapper {
+    margin: 10px 10px;
+  }
+  .thumbs.animated {
+    margin-bottom: 0px;
+  }
+}

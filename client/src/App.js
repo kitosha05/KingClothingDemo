@@ -12,6 +12,7 @@ import Header from './components/header/Header.js'
 import PlainSpinner from './components/PlainSpinner/PlainSpinner'
 import Footer from './components/Footer/Footer'
 import AdminDash from './pages/AdminDash/AdminDash'
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 const ThankYou = lazy(()=>import('./pages/ThankYou/ThankYou'))
 const HomePage = lazy(()=>import('./pages/homepage/homepage.js'))
 const ShopPage = lazy(()=>import('./pages/shop/shop.js'))
@@ -48,7 +49,8 @@ class App extends React.Component {
       
       <div >
         <BrowserRouter> 
-        <GlobalStyle/>       
+        <GlobalStyle/>   
+        <ScrollToTop/>    
         <Switch>
         
              <Route path='/admin' render={({match}) => this.props.currentUser ? this.props.currentUser.isAdmin ? (<AdminDash match={match}/>): (<Redirect to='/'/>): 

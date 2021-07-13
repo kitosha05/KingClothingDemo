@@ -147,6 +147,36 @@ try {
 }
 
 })
+app.post('/email/new-subscriber', async(req, res)=>{
+  const {subscriber} = req.body;
+  console.log(req.body);
+try {
+  const mailOptions= createNewSubscriberEmail(subscriber)
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+    console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  
+} catch (error) {
+  console.log(error);
+}
+
+})
+const createNewSubscriberEmail=(subscriber)=>{
+  const {userId, email, name}= subscriber;
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: `Welcome To The King Clothing Newsletter!`,
+    text: `Hi, ${name}! Thanks for joining our newsletter. You'll be the first to know about new product drops and sales!`,
+    html: `<p>Hi, ${name}! Thanks for joining our newsletter. You'll be the first to know about new product drops and sales!<p>`
+  };
+  return mailOptions
+}
 const createPickedUpConfirmation=(order)=>{
   const {id, billingName, billingEmail}= order;
 

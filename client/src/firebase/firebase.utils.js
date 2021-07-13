@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import "firebase/storage"
-
+import axios from 'axios'
 
 
 const config= {
@@ -123,6 +123,26 @@ var metadata = {
 return  storageRef.child('images/' + currentUser.id + '/' + file.name).put(file, metadata)
 .then((snapshot)=>snapshot.ref.getDownloadURL());
 
+}
+
+export const addSubscriber =async (subscriber)=>{
+    const {userId, email} = subscriber
+    const ref = await firestore.collection('subscribers')
+    const snapshot = await ref.where('email','==', email).get()
+    if(snapshot.empty){
+        await firestore.collection('subscribers').add(subscriber)
+        sendNewSubscriberEmail(subscriber)
+      return true
+    }else{
+       return false
+    }
+}
+const sendNewSubscriberEmail=async subscriber=>{
+     await axios.post(`/email/new-subscriber`, { subscriber })
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
 }
 
 

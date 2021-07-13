@@ -40,6 +40,12 @@ const userReducer = (state=INITIAL_STATE, action)=>{
                 ...state, 
                 error: action.payload
             }
+        case userActionTypes.SUBSCRIBE_NEWSLETTER_SUCCESS:
+            return{
+                ...state,
+                error:null
+            }
+        case userActionTypes.SUBSCRIBE_NEWSLETTER_FAILURE:
         case userActionTypes.REMOVE_FAV_ITEM_FAILURE:
         case userActionTypes.SET_FAV_ITEM_FAILURE:
         case userActionTypes.CHANGE_AVATAR_FAILURE:

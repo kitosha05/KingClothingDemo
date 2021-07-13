@@ -1,7 +1,7 @@
 import {takeLatest, put, all, call, take} from 'redux-saga/effects'
 import userActionTypes from './userActionTypes'
-import {firestore,auth, googleProvider, createUserProfileDocument, getCurrentUser, uploadFile} from '../../firebase/firebase.utils'
-import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess, checkUserSession, setFavItemFailure, setFavItemSuccess, removeFavItemFailure, removeFavItemSuccess} from './userActions'
+import {firestore,auth, googleProvider, createUserProfileDocument, getCurrentUser, uploadFile, addSubscriber} from '../../firebase/firebase.utils'
+import { fetchUserOrdersSuccess, fetchUserOrdersFailure,signInSuccess, signInFailure, signOutSuccess, signOutFailure, changeAvatarFailure, changeAvatarSuccess, checkUserSession, setFavItemFailure, setFavItemSuccess, removeFavItemFailure, removeFavItemSuccess, subscribeNewsletterSuccess, subscribeNewsletterFailure, subscribeNewsletterStart} from './userActions'
 
 // export function* onFetchOrdersStart(){
 //     yield takeLatest(userActionTypes.FETCH_USER_ORDERS_START, fetchUserOrders)
@@ -160,10 +160,28 @@ export function* removeFavItem(action){
         yield put(removeFavItemFailure(error))
     }
 }
+export function* onSubscribeNewsletterStart(){
+    yield takeLatest(userActionTypes.SUBSCRIBE_NEWSLETTER_START, newSubscriber)
+}
+export function* newSubscriber(action){
+    try {
+        const subscriber= action.payload
+       const subscriberAdded = yield call (addSubscriber, subscriber)
+       yield console.log(subscriberAdded)
+        if(subscriberAdded){
+            yield put(subscribeNewsletterSuccess())
+        }else{
+            yield put(subscribeNewsletterFailure("Email Address Is Already Subscribed"))
+        }
+    } catch (error) {
+        yield put(subscribeNewsletterFailure(error))
+    }
+}
 
 
 export function* userSagas(){
     yield all([
+        call(onSubscribeNewsletterStart),
         call(onGoogleSignInStart), 
         call(onEmailSignInStart), 
         call(onCheckUserSession),

@@ -83,5 +83,18 @@ export const removeFavItemFailure = (err)=>({
     type: userActionTypes.REMOVE_FAV_ITEM_FAILURE,
     payload: err
 })
+export const subscribeNewsletterStart=(subscriber)=>({
+    type:userActionTypes.SUBSCRIBE_NEWSLETTER_START,
+    payload:subscriber
+})
+export const subscribeNewsletterFailure=(err)=>({
+    type:userActionTypes.SUBSCRIBE_NEWSLETTER_FAILURE,
+    payload: err
+})
+export const subscribeNewsletterSuccess=()=>({
+    type:userActionTypes.SUBSCRIBE_NEWSLETTER_SUCCESS
+   
+})
+
 
 

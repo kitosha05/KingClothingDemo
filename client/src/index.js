@@ -8,10 +8,12 @@ import 'grapesjs/dist/css/grapes.min.css'
 import App from './App';
 import {store, persistor} from './redux/store'
 
+
 ReactDOM.render(
  <Provider store={store}>
     <BrowserRouter>
       <PersistGate persistor={persistor}>
+       
        <App />
       </PersistGate>     
     </BrowserRouter>

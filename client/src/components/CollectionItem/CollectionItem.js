@@ -113,6 +113,9 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
             <div className='stars'>
             <ReactStars {...configStars} value={averageRating}/>
             </div>
+            <Row className='view-product mb-2 mt-2 justify-content-center align-items-center'>
+                <Button className='view-product-button custom-button inverted' onClick={()=>history.push(`/shop/${collectionRoute}/${productUrl}`)}>View Item</Button>
+            </Row>
             {currentUser ? (
                  <span className='fave-item-span' onClick={e=>onClick(e)}>
                  {isFavorite ? <FavoriteIcon className='fav-icon-filled'/> : <FavoriteBorderIcon className='fav-icon-open'/>}
@@ -125,7 +128,7 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
             
             
             
-            <Button onClick={(e)=>{
+            <Button  className='custom-button add-to-cart inverted'onClick={(e)=>{
                e.preventDefault();
                e.stopPropagation();
                if(inventoryByOptions){
@@ -136,7 +139,7 @@ const CollectionItem = ({checkUserSession, item, addItem, collectionRoute, avera
             }}
                 inverted>
                     Add To Cart
-                    </Button>
+            </Button>
                     {options && inventoryByOptions ? (
                             <Modal dialogClassName='options-modal' show={showModal===id} onHide={()=>{
                                 setShowErrorMessage(false)

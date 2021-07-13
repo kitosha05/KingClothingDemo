@@ -48,6 +48,7 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
 
   useEffect(()=>{
       if(product)filterReviews()
+      console.log(optionsState)
 
   },[allReviews,product])
 
@@ -57,10 +58,18 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
   }
 
   const addToCart=()=>{
+    if(!optionsState){
+        setShowError(true)
+        return
+    }
+    console.log(optionsState)
       //handle products with options by finding and adding option combo to cart item
       let optionCombo=null
-    if (optionsState){
-        const values=Object.entries(optionsState).map(([key, value])=>`${value}`)
+    if (product.options){
+        let keys=[]
+        const values=Object.entries(optionsState).map(([key, value])=>{
+            keys.push(key)
+            return `${value}`})
        
         if(values.includes(`null`)){
             setShowError(true)
@@ -76,7 +85,14 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
       
        for(let i=1; i<=quantity;i++){
            addItem({product, optionCombo})
+           console.log('item added!')
+           console.log(optionsState)
+
        }
+       keys.map(key=>setOptionsState(prevState => ({ ...prevState, [key]: null })))
+       setShowError(false)
+      
+      
     }else{
          //handle products with no options
          for(let i=1; i<=quantity;i++){
@@ -96,9 +112,9 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
                 
                
                <Card className='text-center product-card'>  
-                    <Row>
-                        <Col md='6'>
-                            <Container>
+                    <Row className='justify-content-center'>
+                        <Col xs='8'lg='6' className='col-xs-8 offset-xs-2 mb-1'>
+                            <Container >
                                 <ImageGallery imageUrl={product.imageUrl}/>
                                 {/* <Card.Img   src={product.imageUrl} />  */}
                             </Container>
@@ -107,50 +123,18 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
                         
                       
                         <Col md='6'>
-                        <Card.Body>
+                        <Card.Body className='product-details'>
                         <Row className="mt-3 mb-3 justify-content-center align-items-center">
                        <Card.Title className='product-page-title' as='h1'>{product.name}</Card.Title>
-                    </Row> 
-                        
-                            <Row className='justify-content-around align-items-center mb-5'>
-                                <Col>
-                                    <Row>
+                      </Row> 
+                      <Row>
                                         <h3 className='item-price'>Price: ${product.price}</h3>
                                     </Row>
-                                    <Row>
-                                        <CustomButton onClick={()=>addToCart()}
-                                        >Add To Cart</CustomButton>
-                                        {showError ? <span className='missing-options-error-msg'>Please Select Options</span> : null}
-                                    </Row>
-                                    {product.options ? (
-                                        product.options.map(option=>{
-                                            const {optionName} = option
-                                            const keyString = "selected" + optionName
+                            <Row className='mb-5'>
+                                <Col className='justify-content-center'>
+                                    <Row className='mt-2 mb-3'>
                                         
-                                            return(
-                                                <Row className='product-options-row'>
-                                                    <span>{optionName}: </span>
-                                                    <Form>
-                                                        {option.optionValues.map(value=>{
-                                                            return(
-                                                                <Form.Check  inline label={value} name={value} onChange={(e)=>{
-                                                                    setOptionsState(prevState => ({ ...prevState, [keyString]: value }))
-                                
-                                                                }}
-                                                                checked={optionsState ? optionsState[keyString]===value : false}
-                                                                type="radio" id={value} />
-
-                                                            )
-                                                        })}
-                                                </Form>
-                                                 </Row>
-                                             )
-                                        })
-                                       
-                                    ):
-                                    null
-                                    }
-                                    <Row>
+                                        <Col>
                                     <div className='adjust-quantity'>
                                     <Dropdown onSelect={handleSelect}>
                                         <Dropdown.Toggle variant='light' id="dropdown-basic">
@@ -167,7 +151,55 @@ const ProductPage =({ product, currentUser,allReviews, addItem}) =>{
                                     </Dropdown>
                                 </div>
 
+                                    </Col>
+                                    <Col>
+                                    <CustomButton onClick={()=>addToCart()}
+                                        >Add To Cart</CustomButton>
+                                        {showError ? <span className='missing-options-error-msg'>Please Select Options</span> : null}
+
+                                    </Col>
+                        
                                     </Row>
+                                    
+                                    {product.options ?  <h4>Select Options</h4> : null}
+                                    {product.options ? (
+                                        product.options.map(option=>{
+                                            const {optionName} = option
+                                            const keyString = "selected" + optionName
+                                        
+                                            return(
+                                                <Row className='product-options-row justify-content-center'>
+                                                   
+                                                    <Col xs='2'>
+                                                    {optionName}:
+                                                    </Col>
+                                                    <Col xs='8' className='product-option-radio-buttons'>  
+                                                    <Row className='text-left'>
+                                                    <Form>
+                                                        {option.optionValues.map(value=>{
+                                                            return(
+                                                                <Form.Check  inline label={value} name={value} onChange={(e)=>{
+                                                                    setOptionsState(prevState => ({ ...prevState, [keyString]: value }))
+                                
+                                                                }}
+                                                                checked={optionsState ? optionsState[keyString]===value : false}
+                                                                type="radio" id={value} />
+                                                            )
+                                                        })}
+                                                   </Form>
+                                                    
+                                                    </Row>  
+                                                    
+                                                    </Col>
+                                          
+                                                 </Row>
+                                             )
+                                        })
+                                       
+                                    ):
+                                    null
+                                    }
+                                  
                                     
                                 </Col>
                               

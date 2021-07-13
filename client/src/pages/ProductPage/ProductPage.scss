@@ -7,10 +7,17 @@
   .card-header .btn-link {
     color: black;
   }
-  .card-img {
-    max-height: 100vh;
+  .product-details {
+    padding-top: 0px;
   }
-
+  .product-options-row {
+    width: auto;
+    margin: 0 auto;
+  }
+  .product-option-radio-buttons {
+    margin-right: auto;
+    width: auto;
+  }
   .quantity {
     display: flex;
 

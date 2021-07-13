@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import grapesjs from 'grapesjs';
 import gjsPresetWebpage from 'grapesjs-preset-webpage'
-import gjsFirestore from 'grapesjs-firestore'
-import firebase from '../../firebase/firebase.utils'
+
 import {newPageStart, fetchPagesStart, savePageStart} from '../../redux/admin/adminActions'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'

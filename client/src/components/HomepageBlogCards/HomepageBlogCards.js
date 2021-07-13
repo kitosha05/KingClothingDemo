@@ -19,7 +19,7 @@ const HomepageBlogCards = ({fetchPostsStart, blogPosts})=>{
             </Row>
         <Row>
             {blogPosts.slice(0,4).map(post=>{
-                return <BlogPreviewCard post={post} route={`/blog/${post.id}`}/>
+                return <BlogPreviewCard post={post} key={post.id} route={`/blog/${post.id}`}/>
             })}
         </Row>
 
