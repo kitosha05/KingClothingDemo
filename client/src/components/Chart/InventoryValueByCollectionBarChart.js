@@ -11,6 +11,7 @@ export default class Example extends PureComponent {
         let jacketsInventory=0
         let mensInventory=0
         let womensInventory=0
+       if(products){
         products.map(product=>{
             const {collection, inventory, cogs, inventoryByOptions} = product
             if(collection==='Hats')hatsInventory+=this.getProductInventoryValue(product)
@@ -21,6 +22,8 @@ export default class Example extends PureComponent {
 
 
         })
+
+       }
         const inventoryData = [
             {
                 Collection:'Hats',
