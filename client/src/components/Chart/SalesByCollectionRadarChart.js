@@ -1,11 +1,18 @@
-import React, { PureComponent } from 'react';
-import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import React, { PureComponent } from 'react'
+import {
+    Radar,
+    RadarChart,
+    PolarGrid,
+    Legend,
+    PolarAngleAxis,
+    PolarRadiusAxis,
+} from 'recharts'
 
 // const data = [
 //   {
 //     subject: 'Hats',
 //     A: 45
-    
+
 //   },
 //   {
 //     subject: 'Jackets',
@@ -26,23 +33,31 @@ import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis, PolarRadiusAxis, 
 // ];
 
 export default class SalesByCollectionRadarChart extends PureComponent {
-  
+    render() {
+        const data = this.props.data
 
-  render() {
-      const data = this.props.data
-      
-    return (
-     
-        <RadarChart  width={500} height={400}cx="50%" cy="50%" outerRadius="80%" data={data}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey="collection" />
-          <PolarRadiusAxis angle={45} domain={[0, 50]} />
-          <Radar name="% of Sales" dataKey="A" stroke="#8884d8" fill="blue" fillOpacity={0.6} />
+        return (
+            <RadarChart
+                width={500}
+                height={400}
+                cx="50%"
+                cy="50%"
+                outerRadius="80%"
+                data={data}
+            >
+                <PolarGrid />
+                <PolarAngleAxis dataKey="collection" />
+                <PolarRadiusAxis angle={45} domain={[0, 50]} />
+                <Radar
+                    name="% of Sales"
+                    dataKey="A"
+                    stroke="#8884d8"
+                    fill="blue"
+                    fillOpacity={0.6}
+                />
 
-        
-          <Legend />
-        </RadarChart>
-   
-    );
-  }
+                <Legend />
+            </RadarChart>
+        )
+    }
 }

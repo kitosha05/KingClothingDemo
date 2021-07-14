@@ -2,12 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import CollectionItem from '../../components/CollectionItem/CollectionItem'
-import ImageWithOverlay from '../../components/ImageWithOverlay/ImageWithOverlay'
 
-import {
-    selectCollection,
-    selectProductsByCollection,
-} from '../../redux/shop/shopSelector'
+import { selectCollection } from '../../redux/shop/shopSelector'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import './CollectionPage.scss'
