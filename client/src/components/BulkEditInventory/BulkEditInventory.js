@@ -19,16 +19,39 @@ const BulkEditInventory = ({ products, collections, fetchProductsStart }) => {
 
     const [currentInventory, setCurrentInventory] = useState(null)
     const [currentCOGS, setCurrentCOGS] = useState(null)
+    const [inventoryByOptionsState, setInventoryByOptionsState] = useState(null)
 
     useEffect(() => {
         if (!products) fetchProductsStart()
     }, [products, selectedCollection, inEditMode])
 
     const onSave = async ({ id, newInventory, newCOGS }) => {
-        // updateInventory({id, newUnitPrice});
         const productId = id
-        const inventory = newInventory
         const cogs = newCOGS
+
+        //if product has options, update inventory per option
+        if (inventoryByOptionsState) {
+            const newInventoryByOptions = []
+            for (const [key, value] of Object.entries(
+                inventoryByOptionsState
+            )) {
+                const product = products.find((product) => product.id === id)
+                const optionCombo = product.inventoryByOptions.find(
+                    (optionCombo) =>
+                        optionCombo.optionComboId.toString() === key
+                )
+
+                optionCombo.inventory = value
+                newInventoryByOptions.push(optionCombo)
+            }
+            const product = { inventoryByOptions: newInventoryByOptions, cogs }
+            await updateProduct({ productId, product })
+            onCancel()
+            return
+        }
+
+        const inventory = newInventory
+
         const product = {
             inventory,
             cogs,
@@ -46,6 +69,7 @@ const BulkEditInventory = ({ products, collections, fetchProductsStart }) => {
         // reset the unit price state value
         setCurrentInventory(null)
         setCurrentCOGS(null)
+        setInventoryByOptionsState(null)
     }
     const onEdit = ({ id, currentInventory, currentCOGS }) => {
         console.log('edit clicked')
@@ -53,6 +77,19 @@ const BulkEditInventory = ({ products, collections, fetchProductsStart }) => {
             status: true,
             rowKey: id,
         })
+        const product = products.find((product) => product.id === id)
+        const { inventoryByOptions } = product
+        if (inventoryByOptions) {
+            inventoryByOptions.forEach((optionCombo) => {
+                const key = optionCombo.optionComboId
+                setInventoryByOptionsState((prevState) => ({
+                    ...prevState,
+                    [key]: optionCombo.inventory,
+                }))
+            })
+            setCurrentCOGS(currentCOGS)
+            return
+        }
         setCurrentInventory(currentInventory)
         setCurrentCOGS(currentCOGS)
     }
@@ -78,18 +115,6 @@ const BulkEditInventory = ({ products, collections, fetchProductsStart }) => {
     const changeCOGS = async (event) => {
         await setCurrentCOGS(event.target.value)
     }
-
-    //    const renderInventoryByOptionInputs = (product)=>{
-    //        const productOptions = product.options
-    //        const numberOfOptions=productOptions.length
-    //        productOptions[0].optionValues.map(value=>{
-    //         for (let i=1;i<numberOfOptions; i++){
-    //             re
-    //         }
-
-    //        })
-
-    //    }
 
     return (
         <div>
@@ -139,16 +164,95 @@ const BulkEditInventory = ({ products, collections, fetchProductsStart }) => {
                                               {inEditMode.status &&
                                               inEditMode.rowKey ===
                                                   product.id ? (
-                                                  <input
-                                                      value={currentInventory}
-                                                      onChange={(event) =>
-                                                          changeInventory(event)
-                                                      }
-                                                  />
+                                                  product.inventoryByOptions ? (
+                                                      product.inventoryByOptions.map(
+                                                          (optionCombo) => {
+                                                              const optionString =
+                                                                  optionCombo.optionValues.join(
+                                                                      ' '
+                                                                  )
+                                                              const id =
+                                                                  optionCombo.optionComboId
+                                                              return (
+                                                                  <Form.Group>
+                                                                      <Form.Label>
+                                                                          {
+                                                                              optionString
+                                                                          }
+                                                                      </Form.Label>
+                                                                      <Form.Control
+                                                                          name={
+                                                                              id
+                                                                          }
+                                                                          value={
+                                                                              inventoryByOptionsState[
+                                                                                  id
+                                                                              ]
+                                                                          }
+                                                                          onChange={(
+                                                                              e
+                                                                          ) => {
+                                                                              setInventoryByOptionsState(
+                                                                                  (
+                                                                                      prevState
+                                                                                  ) => ({
+                                                                                      ...prevState,
+                                                                                      [id]: e
+                                                                                          .target
+                                                                                          .value,
+                                                                                  })
+                                                                              )
+                                                                              console.log(
+                                                                                  inventoryByOptionsState
+                                                                              )
+                                                                          }}
+                                                                          type="text"
+                                                                      />
+                                                                  </Form.Group>
+                                                              )
+                                                          }
+                                                      )
+                                                  ) : (
+                                                      <input
+                                                          value={
+                                                              currentInventory
+                                                          }
+                                                          onChange={(event) =>
+                                                              changeInventory(
+                                                                  event
+                                                              )
+                                                          }
+                                                      />
+                                                  )
+                                              ) : product.inventoryByOptions ? (
+                                                  <ul>
+                                                      {product.inventoryByOptions.map(
+                                                          (optionCombo) => {
+                                                              const optionString =
+                                                                  optionCombo.optionValues.join(
+                                                                      ' '
+                                                                  )
+                                                              const {
+                                                                  inventory,
+                                                              } = optionCombo
+                                                              return (
+                                                                  <li>
+                                                                      {
+                                                                          optionString
+                                                                      }{' '}
+                                                                      -{' '}
+                                                                      {
+                                                                          inventory
+                                                                      }
+                                                                  </li>
+                                                              )
+                                                          }
+                                                      )}
+                                                  </ul>
                                               ) : product.inventory ? (
                                                   product.inventory
                                               ) : (
-                                                  ''
+                                                  0
                                               )}
                                           </TableCell>
                                           <TableCell>
@@ -180,7 +284,9 @@ const BulkEditInventory = ({ products, collections, fetchProductsStart }) => {
                                                               onSave({
                                                                   id: product.id,
                                                                   newInventory:
-                                                                      currentInventory,
+                                                                      currentInventory
+                                                                          ? currentInventory
+                                                                          : null,
                                                                   newCOGS:
                                                                       currentCOGS,
                                                               })

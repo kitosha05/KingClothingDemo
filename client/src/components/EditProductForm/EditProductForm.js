@@ -62,7 +62,7 @@ class EditProductForm extends React.Component {
                 const quant = this.state[value]
                 const optionComboId = this.getRandomInt(1000000, 9000000)
                 inventoryByOptions.push({
-                    optionValues: value,
+                    optionValues: [value],
                     inventory: quant,
                     optionComboId,
                 })

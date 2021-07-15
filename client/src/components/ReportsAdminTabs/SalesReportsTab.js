@@ -121,9 +121,16 @@ const SalesReportsTab = ({ allOrders, products }) => {
             { name: 'Gross Margin', value: grossMargin },
         ]
         const totalSales = cogs + grossMargin
-        setGrossSales(totalSales)
+        setGrossSales(formatter.format(totalSales))
         return pieData
     }
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })
     const accumulateMarginAndCogs = (orders) => {
         let cogs = 0
         let grossMargin = 0
@@ -131,8 +138,10 @@ const SalesReportsTab = ({ allOrders, products }) => {
         orders.map((order) => {
             cogs += order.orderCOGS
             grossMargin += order.orderGrossMargin
-            shippingCosts += order.shippingCost
+            shippingCosts =
+                parseInt(order.shippingCost) + parseInt(shippingCosts)
         })
+
         return { cogs, grossMargin, shippingCosts }
     }
     const isThisWeek = (date) => {
@@ -382,7 +391,7 @@ const SalesReportsTab = ({ allOrders, products }) => {
                 <Col className="text-center">
                     <h2>Margin vs Cost Of Goods Sold</h2>
                     <SalesWithGrossMarginPieChart pieData={pieData} />
-                    <h4>Total Sales: ${grossSales}</h4>
+                    <h4>Total Sales: {grossSales}</h4>
                 </Col>
             </Row>
             <Row>

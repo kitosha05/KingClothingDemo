@@ -52,15 +52,17 @@ const ProductPage = ({ product, currentUser, allReviews, addItem }) => {
     }
 
     const addToCart = () => {
-        if (!optionsState) {
-            setShowError(true)
-            return
-        }
-        console.log(optionsState)
+        //check quantity vs inventory
+
         //handle products with options by finding and adding option combo to cart item
         let optionCombo = null
         if (product.options) {
             let keys = []
+            if (!optionsState) {
+                setShowError(true)
+                return
+            }
+
             const values = Object.entries(optionsState).map(([key, value]) => {
                 keys.push(key)
                 return `${value}`
@@ -73,7 +75,7 @@ const ProductPage = ({ product, currentUser, allReviews, addItem }) => {
 
             if (values.length === 1) {
                 optionCombo = product.inventoryByOptions.find((optionCombo) =>
-                    optionCombo.optionValues.includes(values[0] + ' ')
+                    optionCombo.optionValues.includes(values[0])
                 )
             }
             if (values.length === 2) {
@@ -82,6 +84,10 @@ const ProductPage = ({ product, currentUser, allReviews, addItem }) => {
                         optionCombo.optionValues.includes(values[0] + ' ') &&
                         optionCombo.optionValues.includes(values[1] + ' ')
                 )
+            }
+            if (quantity > optionCombo.inventory) {
+                setShowError(true)
+                return
             }
 
             for (let i = 1; i <= quantity; i++) {

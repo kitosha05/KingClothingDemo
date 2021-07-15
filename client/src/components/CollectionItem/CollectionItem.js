@@ -78,30 +78,41 @@ const CollectionItem = ({
     }
 
     const addToCart = () => {
-        let optionCombo = null
-        const values = Object.entries(optionsState).map(
-            ([key, value]) => `${value}`
-        )
-        console.log(values)
-        if (values.includes(`null`)) {
-            setShowErrorMessage(true)
+        if (item.inventoryByOptions) {
+            if (!optionsState) {
+                setShowErrorMessage(true)
+                return
+            }
+            let optionCombo = null
+
+            const values = Object.entries(optionsState).map(
+                ([key, value]) => `${value}`
+            )
+            console.log(values)
+            if (values.includes(`null`)) {
+                setShowErrorMessage(true)
+                return
+            }
+            setShowErrorMessage(false)
+            if (values.length === 1) {
+                optionCombo = item.inventoryByOptions.find((optionCombo) =>
+                    optionCombo.optionValues.includes(values[0] + ' ')
+                )
+            }
+            if (values.length === 2) {
+                optionCombo = item.inventoryByOptions.find(
+                    (optionCombo) =>
+                        optionCombo.optionValues.includes(values[0] + ' ') &&
+                        optionCombo.optionValues.includes(values[1] + ' ')
+                )
+            }
+            addItem({ product: item, optionCombo })
+            setOptionsState({})
+            setShowModal('')
             return
         }
-        setShowErrorMessage(false)
-        if (values.length === 1) {
-            optionCombo = item.inventoryByOptions.find((optionCombo) =>
-                optionCombo.optionValues.includes(values[0] + ' ')
-            )
-        }
-        if (values.length === 2) {
-            optionCombo = item.inventoryByOptions.find(
-                (optionCombo) =>
-                    optionCombo.optionValues.includes(values[0] + ' ') &&
-                    optionCombo.optionValues.includes(values[1] + ' ')
-            )
-        }
 
-        addItem({ product: item, optionCombo })
+        addItem({ product: item, optionCombo: null })
         setOptionsState({})
         setShowModal('')
     }
